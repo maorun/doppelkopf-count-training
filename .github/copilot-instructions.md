@@ -1,3 +1,5 @@
+# Copilot Instructions
+
 **Always reference these instructions first and fallback to search or bash comma
 nds only when you encounter unexpected information that does not match the info
 here.**
@@ -68,7 +70,7 @@ et timeout to 2+ minutes.
   - **Requires**: `npm install` must be run first
 - **Development server**: `npm run dev` -- starts in 5-6 seconds. NEVER CANCEL.
 Set timeout to 2+ minutes.
-  - Runs on http://localhost:5173 (Vite default port)
+  - Runs on <http://localhost:5173> (Vite default port)
   - Hot module reloading works correctly
   - Will show Vite development server output
   - **Requires**: `npm install` must be run first
@@ -115,7 +117,7 @@ i is **COMPLETE**
 After making changes, ALWAYS test the complete user workflow:
 
 1. **Start the application**: `npm run dev`
-2. **Navigate to http://localhost:5173** and verify the page loads
+2. **Navigate to <http://localhost:5173>** and verify the page loads
 
 ### Essential Commands for Development
 
@@ -220,14 +222,14 @@ s)
 
 ## Deployment Information
 
-- **Production URL**: https://zinszins-simulation.vercel.app/
+- **Production URL**: <https://zinszins-simulation.vercel.app/>
 - **Platform**: Vercel (configured for Vite/React deployment)
 - **Build**: Uses Vite build process (`npm run build`)
 - **Analytics**: Vercel Analytics integrated (causes expected console warnings)
 
 ## Development Workflow with Code Review
 
-**IMPORTANT: Use Context7 for Development Documentation**
+### IMPORTANT: Use Context7 for Development Documentation
 
 When developing new features or making changes to this codebase, always use **Co
 ntext7** to access up-to-date documentation and examples:
@@ -537,7 +539,7 @@ warnings)
 
 After all steps are completed:
 
-5. **Comprehensive Code Review**
+1. **Comprehensive Code Review**
    - Review all changes across all commits thoroughly
    - **Crucially, verify that the testing requirements have been met for each st
 ep.**
@@ -548,7 +550,7 @@ s
 et
    - **If issues are found**: Address them in additional individual commits
 
-6. **Complete Manual Validation**
+2. **Complete Manual Validation**
    - Start the development server: `npm run dev`
    - Test the complete user workflow as documented in "Manual Validation Require
 ments"

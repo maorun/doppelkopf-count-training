@@ -1,0 +1,16 @@
+node_modules
+
+/.cache
+/build
+/public/build
+.env
+
+# Test coverage
+coverage/
+.vercel
+
+# Build output
+dist/
+
+# Log files
+*.log
