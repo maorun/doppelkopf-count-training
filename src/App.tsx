@@ -1,8 +1,8 @@
+import DoppelkopfGame from './components/DoppelkopfGame'
+
 function App() {
   return (
-    <>
-      <h1>Doppelkopf Count Training</h1>
-    </>
+    <DoppelkopfGame />
   )
 }
 
