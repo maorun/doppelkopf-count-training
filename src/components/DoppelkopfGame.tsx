@@ -24,7 +24,7 @@ const GameScreen: React.FC<{
   handleCardClick: () => void
 }> = ({ currentCard, handleCardClick }) => (
   <div
-    className="w-64 h-96 bg-white rounded-lg shadow-lg flex items-center justify-center cursor-pointer"
+    className="w-64 h-96 bg-card text-card-foreground rounded-lg shadow-lg flex items-center justify-center cursor-pointer"
     onClick={handleCardClick}
     role="button"
     data-testid="game-card"
