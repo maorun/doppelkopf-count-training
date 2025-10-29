@@ -3,6 +3,28 @@ import { useState, useEffect, useCallback } from 'react'
 import { Card, createDeck, shuffleDeck } from '../lib/doppelkopf'
 import { GameSettings } from './useSettings'
 
+const handleTimer = (
+  measureTime: boolean,
+  startTime: number | null,
+  setStartTime: (time: number) => void,
+) => {
+  if (measureTime && startTime === null) {
+    setStartTime(Date.now())
+  }
+}
+
+const revealNextCard = (
+  deck: Card[],
+  revealedCards: Card[],
+  setRevealedCards: (cards: Card[]) => void,
+  totalScore: number,
+  setTotalScore: (score: number) => void,
+) => {
+  const nextCard = deck[revealedCards.length]
+  setRevealedCards([...revealedCards, nextCard])
+  setTotalScore(totalScore + nextCard.value)
+}
+
 export const useDoppelkopfGame = (settings: GameSettings) => {
   const [deck, setDeck] = useState<Card[]>([])
   const [revealedCards, setRevealedCards] = useState<Card[]>([])
@@ -31,9 +53,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
   const handleCardClick = () => {
     if (isFinished) return
 
-    if (settings.measureTime && startTime === null) {
-      setStartTime(Date.now())
-    }
+    handleTimer(settings.measureTime, startTime, setStartTime)
 
     if (revealedCards.length >= cardsToReveal - 1) {
       setIsFinished(true)
@@ -43,9 +63,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     }
 
     if (revealedCards.length < cardsToReveal) {
-      const nextCard = deck[revealedCards.length]
-      setRevealedCards([...revealedCards, nextCard])
-      setTotalScore(totalScore + nextCard.value)
+      revealNextCard(deck, revealedCards, setRevealedCards, totalScore, setTotalScore)
     }
   }
 
