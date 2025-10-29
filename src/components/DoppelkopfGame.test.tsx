@@ -32,4 +32,24 @@ describe('DoppelkopfGame', () => {
     expect(screen.getByText('Game Over')).toBeInTheDocument()
     expect(screen.getByText(/Total Score:/)).toBeInTheDocument()
   })
+
+  it('displays the elapsed time when the game is over', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByRole('button')
+    for (let i = 0; i < 21; i++) {
+      fireEvent.click(cardElement)
+    }
+    expect(screen.getByText(/Time:/)).toBeInTheDocument()
+  })
+
+  it('resets the game when the "Repeat" button is clicked', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByRole('button')
+    for (let i = 0; i < 21; i++) {
+      fireEvent.click(cardElement)
+    }
+    const repeatButton = screen.getByText('Repeat')
+    fireEvent.click(repeatButton)
+    expect(screen.getByTestId('card-back')).toBeInTheDocument()
+  })
 })
