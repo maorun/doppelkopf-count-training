@@ -6,6 +6,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        background: '#ffffff',
+        card: '#f1f5f9',
+        primary: '#1e293b',
+        secondary: '#e2e8f0',
+      },
       animation: {
         'fade-in-slow': 'fade-in 0.5s ease-in-out',
       },
