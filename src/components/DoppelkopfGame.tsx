@@ -27,7 +27,7 @@ const GameScreen: React.FC<{
   >
     {currentCard ? (
       <div
-        className="w-full h-full p-4 flex flex-col justify-between animate-in fade-in"
+        className="w-full h-full p-4 flex flex-col justify-between animate-fade-in-slow"
         key={currentCard.suit + currentCard.rank}
       >
         <span className="text-2xl font-bold">{currentCard.rank}</span>
