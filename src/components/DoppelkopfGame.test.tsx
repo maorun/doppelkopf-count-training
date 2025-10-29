@@ -17,16 +17,31 @@ describe('DoppelkopfGame', () => {
 
   it('reveals a card on the first click', () => {
     render(<DoppelkopfGame />)
-    const cardElement = screen.getByRole('button')
+    const cardElement = screen.getByTestId('game-card')
     fireEvent.click(cardElement)
     // After the first click, the card back should not be visible
     expect(screen.queryByTestId('card-back')).not.toBeInTheDocument()
   })
 
-  it('shows the final score after 21 clicks', () => {
+  it('opens the settings modal when the "Settings" button is clicked', () => {
     render(<DoppelkopfGame />)
-    const cardElement = screen.getByRole('button')
-    for (let i = 0; i < 21; i++) {
+    const settingsButton = screen.getByRole('button', { name: 'Settings' })
+    fireEvent.click(settingsButton)
+    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+  })
+
+  it('displays the card count', () => {
+    render(<DoppelkopfGame />)
+    expect(screen.getByText(/Card 0 of 20/)).toBeInTheDocument()
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+    expect(screen.getByText(/Card 1 of 20/)).toBeInTheDocument()
+  })
+
+  it('shows the final score after 20 clicks with default settings', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+    for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
     expect(screen.getByText('Game Over')).toBeInTheDocument()
@@ -35,8 +50,8 @@ describe('DoppelkopfGame', () => {
 
   it('displays the elapsed time when the game is over', () => {
     render(<DoppelkopfGame />)
-    const cardElement = screen.getByRole('button')
-    for (let i = 0; i < 21; i++) {
+    const cardElement = screen.getByTestId('game-card')
+    for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
     expect(screen.getByText(/Time:/)).toBeInTheDocument()
@@ -44,8 +59,8 @@ describe('DoppelkopfGame', () => {
 
   it('resets the game when the "Repeat" button is clicked', () => {
     render(<DoppelkopfGame />)
-    const cardElement = screen.getByRole('button')
-    for (let i = 0; i < 21; i++) {
+    const cardElement = screen.getByTestId('game-card')
+    for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
     const repeatButton = screen.getByText('Repeat')

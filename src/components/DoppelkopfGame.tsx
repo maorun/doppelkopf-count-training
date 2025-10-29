@@ -1,7 +1,10 @@
 // src/components/DoppelkopfGame.tsx
 import React from 'react'
 import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
+import { useSettings } from '../hooks/useSettings'
 import { Card, Suit } from '../lib/doppelkopf'
+import { SettingsModal } from './SettingsModal'
+import { Button } from './ui/button'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -24,6 +27,7 @@ const GameScreen: React.FC<{
     className="w-64 h-96 bg-white rounded-lg shadow-lg flex items-center justify-center cursor-pointer"
     onClick={handleCardClick}
     role="button"
+    data-testid="game-card"
   >
     {currentCard ? (
       <div className="w-full h-full p-4 flex flex-col justify-between">
@@ -65,6 +69,7 @@ const GameOverScreen: React.FC<{
 )
 
 const DoppelkopfGame: React.FC = () => {
+  const { settings, setSettings } = useSettings()
   const {
     currentCard,
     isFinished,
@@ -72,7 +77,9 @@ const DoppelkopfGame: React.FC = () => {
     elapsedTime,
     handleCardClick,
     resetGame,
-  } = useDoppelkopfGame()
+    revealedCards,
+    cardsToReveal,
+  } = useDoppelkopfGame(settings)
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -80,7 +87,23 @@ const DoppelkopfGame: React.FC = () => {
       {isFinished ? (
         <GameOverScreen totalScore={totalScore} elapsedTime={elapsedTime} resetGame={resetGame} />
       ) : (
-        <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
+        <>
+          <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
+          <p className="text-xl mt-4">
+            Card
+            {' '}
+            {revealedCards.length}
+            {' '}
+            of
+            {' '}
+            {cardsToReveal}
+          </p>
+          <div className="mt-4">
+            <SettingsModal settings={settings} setSettings={setSettings}>
+              <Button>Settings</Button>
+            </SettingsModal>
+          </div>
+        </>
       )}
     </div>
   )

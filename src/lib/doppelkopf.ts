@@ -19,10 +19,11 @@ const ranks: Array<{ rank: Rank, value: number }> = [
   { rank: '9', value: 0 },
 ]
 
-export const createDeck = (): Card[] => {
+export const createDeck = (includeNines = false): Card[] => {
   const singleDeck: Card[] = []
+  const ranksToUse = includeNines ? ranks : ranks.filter(r => r.rank !== '9')
   for (const suit of suits) {
-    for (const rank of ranks) {
+    for (const rank of ranksToUse) {
       singleDeck.push({ suit, rank: rank.rank, value: rank.value })
     }
   }
