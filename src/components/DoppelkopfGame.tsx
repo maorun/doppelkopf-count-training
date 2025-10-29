@@ -26,7 +26,10 @@ const GameScreen: React.FC<{
     role="button"
   >
     {currentCard ? (
-      <div className="w-full h-full p-4 flex flex-col justify-between">
+      <div
+        className="w-full h-full p-4 flex flex-col justify-between animate-in fade-in"
+        key={currentCard.suit + currentCard.rank}
+      >
         <span className="text-2xl font-bold">{currentCard.rank}</span>
         <span className="text-4xl self-center">{getSuitSymbol(currentCard.suit)}</span>
         <span className="text-2xl font-bold self-end transform rotate-180">{currentCard.rank}</span>
