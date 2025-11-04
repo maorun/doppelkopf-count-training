@@ -19,6 +19,10 @@ const getSuitSymbol = (suit: Suit): string => {
   }
 }
 
+const isRedSuit = (suit: Suit): boolean => {
+  return suit === 'Herz' || suit === 'Karo'
+}
+
 const GameScreen: React.FC<{
   currentCard: Card | null
   handleCardClick: () => void
@@ -35,7 +39,7 @@ const GameScreen: React.FC<{
         key={currentCard.suit + currentCard.rank}
       >
         <span className="text-2xl font-bold">{currentCard.rank}</span>
-        <span className="text-4xl self-center">{getSuitSymbol(currentCard.suit)}</span>
+        <span className={`text-4xl self-center ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{getSuitSymbol(currentCard.suit)}</span>
         <span className="text-2xl font-bold self-end transform rotate-180">{currentCard.rank}</span>
       </div>
     ) : (
