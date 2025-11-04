@@ -67,4 +67,36 @@ describe('DoppelkopfGame', () => {
     fireEvent.click(repeatButton)
     expect(screen.getByTestId('card-back')).toBeInTheDocument()
   })
+
+  it('applies red color to Herz and Karo suits', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+
+    let foundRedSuit = false
+    let foundBlackSuit = false
+
+    // Click through cards to find both red and black suits
+    for (let i = 0; i < 20 && (!foundRedSuit || !foundBlackSuit); i++) {
+      fireEvent.click(cardElement)
+
+      // Check if we have a card with a suit symbol
+      const suitElement = screen.queryByText(/[♥♦♠♣]/)
+      if (suitElement) {
+        const suitSymbol = suitElement.textContent
+
+        if (suitSymbol === '♥' || suitSymbol === '♦') {
+          expect(suitElement).toHaveClass('text-red-600')
+          foundRedSuit = true
+        }
+        else if (suitSymbol === '♠' || suitSymbol === '♣') {
+          expect(suitElement).not.toHaveClass('text-red-600')
+          foundBlackSuit = true
+        }
+      }
+    }
+
+    // Ensure we tested both red and black suits
+    expect(foundRedSuit).toBe(true)
+    expect(foundBlackSuit).toBe(true)
+  })
 })
