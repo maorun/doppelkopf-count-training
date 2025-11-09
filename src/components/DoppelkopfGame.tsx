@@ -38,9 +38,9 @@ const GameScreen: React.FC<{
         className="w-full h-full p-4 flex flex-col justify-between animate-fade-in-slow"
         key={currentCard.suit + currentCard.rank}
       >
-        <span className="text-2xl font-bold">{currentCard.rank}</span>
+        <span className={`text-2xl font-bold ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{currentCard.rank}</span>
         <span className={`text-4xl self-center ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{getSuitSymbol(currentCard.suit)}</span>
-        <span className="text-2xl font-bold self-end transform rotate-180">{currentCard.rank}</span>
+        <span className={`text-2xl font-bold self-end transform rotate-180 ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{currentCard.rank}</span>
       </div>
     ) : (
       <div data-testid="card-back" className="w-full h-full bg-blue-500 rounded-lg border-4 border-white"></div>

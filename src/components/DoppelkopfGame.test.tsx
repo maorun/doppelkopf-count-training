@@ -99,4 +99,44 @@ describe('DoppelkopfGame', () => {
     expect(foundRedSuit).toBe(true)
     expect(foundBlackSuit).toBe(true)
   })
+
+  it('applies red color to rank text for Herz and Karo suits', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+
+    let foundRedSuit = false
+    let foundBlackSuit = false
+
+    // Click through cards to find both red and black suits
+    for (let i = 0; i < 20 && (!foundRedSuit || !foundBlackSuit); i++) {
+      fireEvent.click(cardElement)
+
+      // Check if we have a card with a suit symbol and rank text
+      const suitElement = screen.queryByText(/[♥♦♠♣]/)
+      if (suitElement) {
+        const suitSymbol = suitElement.textContent
+        // Get all text elements that are rank names (not the suit symbol)
+        const rankElements = screen.queryAllByText(/^(Ass|10|König|Dame|Bube|9)$/)
+
+        if (suitSymbol === '♥' || suitSymbol === '♦') {
+          // For red suits, all rank elements should have red color
+          rankElements.forEach((rankElement) => {
+            expect(rankElement).toHaveClass('text-red-600')
+          })
+          foundRedSuit = true
+        }
+        else if (suitSymbol === '♠' || suitSymbol === '♣') {
+          // For black suits, rank elements should not have red color
+          rankElements.forEach((rankElement) => {
+            expect(rankElement).not.toHaveClass('text-red-600')
+          })
+          foundBlackSuit = true
+        }
+      }
+    }
+
+    // Ensure we tested both red and black suits
+    expect(foundRedSuit).toBe(true)
+    expect(foundBlackSuit).toBe(true)
+  })
 })
