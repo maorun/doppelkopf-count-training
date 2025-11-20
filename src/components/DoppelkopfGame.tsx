@@ -1,5 +1,5 @@
 // src/components/DoppelkopfGame.tsx
-import React from 'react'
+import React, { useState } from 'react'
 import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
 import { useSettings } from '../hooks/useSettings'
 import { useHighscores } from '../hooks/useHighscores'
@@ -7,6 +7,7 @@ import { Card, Suit } from '../lib/doppelkopf'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
 import { GameOverScreen } from './GameOverScreen'
+import { HighscoreList } from './HighscoreList'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -50,9 +51,11 @@ const GameScreen: React.FC<{
   </div>
 )
 
+/* eslint-disable max-lines-per-function */
 const DoppelkopfGame: React.FC = () => {
   const { settings, setSettings } = useSettings()
-  const { addHighscore } = useHighscores()
+  const { addHighscore, getTop, clearHighscores } = useHighscores()
+  const [showHighscores, setShowHighscores] = useState(false)
   const {
     currentCard,
     isFinished,
@@ -64,36 +67,53 @@ const DoppelkopfGame: React.FC = () => {
     cardsToReveal,
   } = useDoppelkopfGame(settings)
 
+  const topHighscores = getTop(10)
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8">
       <h1 className="text-4xl font-bold mb-8">Doppelkopf Game</h1>
-      {isFinished ? (
-        <GameOverScreen
-          totalScore={totalScore}
-          elapsedTime={elapsedTime}
-          cardsCount={cardsToReveal}
-          timeWasMeasured={settings.measureTime}
-          resetGame={resetGame}
-          onHighscoreSubmit={addHighscore}
-        />
-      ) : (
-        <>
-          <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
-          <p className="text-xl mt-4">
-            Card
-            {' '}
-            {revealedCards.length}
-            {' '}
-            of
-            {' '}
-            {cardsToReveal}
-          </p>
-          <div className="mt-4">
-            <SettingsModal settings={settings} setSettings={setSettings}>
-              <Button>Settings</Button>
-            </SettingsModal>
-          </div>
-        </>
+
+      <div className="mb-8">
+        {isFinished ? (
+          <GameOverScreen
+            totalScore={totalScore}
+            elapsedTime={elapsedTime}
+            cardsCount={cardsToReveal}
+            timeWasMeasured={settings.measureTime}
+            resetGame={resetGame}
+            onHighscoreSubmit={addHighscore}
+          />
+        ) : (
+          <>
+            <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
+            <p className="text-xl mt-4 text-center">
+              Card
+              {' '}
+              {revealedCards.length}
+              {' '}
+              of
+              {' '}
+              {cardsToReveal}
+            </p>
+            <div className="mt-4 flex gap-2 justify-center">
+              <SettingsModal settings={settings} setSettings={setSettings}>
+                <Button>Settings</Button>
+              </SettingsModal>
+              <Button
+                variant="outline"
+                onClick={() => setShowHighscores(!showHighscores)}
+              >
+                {showHighscores ? 'Hide Highscores' : 'Show Highscores'}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {showHighscores && (
+        <div className="w-full px-4">
+          <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+        </div>
       )}
     </div>
   )
