@@ -8,6 +8,11 @@ Training application to practice counting cards in the game Doppelkopf.
   total score
 - **Result Validation**: After completing a round, enter your calculated total
   and receive immediate feedback on whether you were correct
+- **Highscore System**: Earn points based on accuracy, difficulty, and speed
+  - Correct answers earn base points plus difficulty bonus (based on card count)
+  - Time bonus for fast calculations (when time tracking is enabled)
+  - Local highscore leaderboard shows your top 10 performances
+  - Clear all highscores option available
 - **Customizable Settings**:
   - Include or exclude 9s from the deck
   - Configure the number of cards to reveal (card count range)
@@ -27,8 +32,27 @@ Training application to practice counting cards in the game Doppelkopf.
    - Bube (Jack): 2 points
    - 9: 0 points
 3. After all cards are revealed, enter your calculated total in the input field
-4. Click "Check Result" to see if your answer is correct
+4. Click "Check Result" to see if your answer is correct and view your score
 5. Click "Play Again" to start a new round
+6. Click "Show Highscores" to view your top performances
+
+## Scoring System
+
+Your score is calculated based on:
+
+- **Base Points**: 100 points for a correct answer, 0 for incorrect
+- **Difficulty Bonus**: 10 points per card counted (e.g., 20 cards = 200 bonus points)
+- **Time Bonus** (only when time tracking is enabled):
+  - Fast (< 1 second per card): +50 points
+  - Normal (1-2 seconds per card): +25 points
+  - Slow (> 2 seconds per card): +0 points
+
+**Example Scores**:
+
+- 20 cards, correct answer, 15 seconds (0.75s/card): 100 + 200 + 50 = **350 points**
+- 20 cards, correct answer, 30 seconds (1.5s/card): 100 + 200 + 25 = **325 points**
+- 20 cards, correct answer, time tracking off: 100 + 200 = **300 points**
+- Any incorrect answer: **0 points**
 
 ## Development
 

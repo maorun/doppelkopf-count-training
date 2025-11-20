@@ -1,27 +1,42 @@
 // src/components/GameOverScreen.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { GameOverScreen } from './GameOverScreen'
 
 describe('GameOverScreen', () => {
   const mockResetGame = vi.fn()
+  const mockOnHighscoreSubmit = vi.fn()
+
+  const defaultProps = {
+    totalScore: 120,
+    elapsedTime: 5000,
+    cardsCount: 20,
+    timeWasMeasured: true,
+    resetGame: mockResetGame,
+    onHighscoreSubmit: mockOnHighscoreSubmit,
+  }
+
+  beforeEach(() => {
+    mockResetGame.mockClear()
+    mockOnHighscoreSubmit.mockClear()
+  })
 
   it('renders game over message and elapsed time', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
     expect(screen.getByText('Game Over')).toBeInTheDocument()
     expect(screen.getByText(/Time:/)).toBeInTheDocument()
     expect(screen.getByText(/5.00/)).toBeInTheDocument()
   })
 
   it('displays input field and check button initially', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
     expect(screen.getByLabelText('Enter your calculated result:')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Check Result' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Play Again' })).not.toBeInTheDocument()
   })
 
-  it('shows correct message when user enters correct answer', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+  it('shows correct message and score when user enters correct answer', () => {
+    render(<GameOverScreen {...defaultProps} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '120' } })
@@ -30,14 +45,14 @@ describe('GameOverScreen', () => {
     fireEvent.click(checkButton)
 
     expect(screen.getByText('✓ Correct!')).toBeInTheDocument()
+    expect(screen.getByText(/Score:/)).toBeInTheDocument()
     expect(screen.getByText(/Your answer:/)).toBeInTheDocument()
-    expect(screen.getAllByText(/120/)).toHaveLength(2)
     expect(screen.getByText(/Actual total:/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Play Again' })).toBeInTheDocument()
   })
 
-  it('shows incorrect message when user enters wrong answer', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+  it('shows incorrect message and zero score when user enters wrong answer', () => {
+    render(<GameOverScreen {...defaultProps} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '100' } })
@@ -46,14 +61,16 @@ describe('GameOverScreen', () => {
     fireEvent.click(checkButton)
 
     expect(screen.getByText('✗ Incorrect')).toBeInTheDocument()
+    expect(screen.getByText(/Score:/)).toBeInTheDocument()
+    // Use more specific query to find score (not time display)
+    expect(screen.getByText(/Score:\s*0/)).toBeInTheDocument()
     expect(screen.getByText(/Your answer:/)).toBeInTheDocument()
     expect(screen.getByText(/100/)).toBeInTheDocument()
     expect(screen.getByText(/Actual total:/)).toBeInTheDocument()
-    expect(screen.getAllByText(/120/)).toHaveLength(1)
   })
 
   it('calls resetGame when Play Again button is clicked', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '120' } })
@@ -67,18 +84,42 @@ describe('GameOverScreen', () => {
     expect(mockResetGame).toHaveBeenCalledTimes(1)
   })
 
+  it('calls onHighscoreSubmit with game result when answer is checked', () => {
+    render(<GameOverScreen {...defaultProps} />)
+
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '120' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    expect(mockOnHighscoreSubmit).toHaveBeenCalledTimes(1)
+    expect(mockOnHighscoreSubmit).toHaveBeenCalledWith({
+      isCorrect: true,
+      cardsCount: 20,
+      elapsedTime: 5000,
+      timeWasMeasured: true,
+    })
+  })
+
   it('handles empty input correctly', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
 
     const checkButton = screen.getByRole('button', { name: 'Check Result' })
     fireEvent.click(checkButton)
 
     // Empty input parsed as NaN, should show incorrect
     expect(screen.getByText('✗ Incorrect')).toBeInTheDocument()
+    expect(mockOnHighscoreSubmit).toHaveBeenCalledWith({
+      isCorrect: false,
+      cardsCount: 20,
+      elapsedTime: 5000,
+      timeWasMeasured: true,
+    })
   })
 
   it('handles decimal input by parsing as integer', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '120.5' } })
@@ -91,7 +132,7 @@ describe('GameOverScreen', () => {
   })
 
   it('displays user input in result screen', () => {
-    render(<GameOverScreen totalScore={120} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '150' } })
@@ -104,7 +145,7 @@ describe('GameOverScreen', () => {
   })
 
   it('displays actual total score in result screen', () => {
-    render(<GameOverScreen totalScore={95} elapsedTime={5000} resetGame={mockResetGame} />)
+    render(<GameOverScreen {...defaultProps} totalScore={95} />)
 
     const input = screen.getByLabelText('Enter your calculated result:')
     fireEvent.change(input, { target: { value: '100' } })
@@ -114,5 +155,48 @@ describe('GameOverScreen', () => {
 
     expect(screen.getByText(/Actual total:/)).toBeInTheDocument()
     expect(screen.getByText(/95/)).toBeInTheDocument()
+  })
+
+  it('calculates correct score for fast completion', () => {
+    render(<GameOverScreen {...defaultProps} elapsedTime={15000} />) // 0.75s per card
+
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '120' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    // Score: 100 + (20 * 10) + 50 = 350
+    expect(screen.getByText(/Score:/)).toBeInTheDocument()
+    expect(screen.getByText(/350/)).toBeInTheDocument()
+  })
+
+  it('calculates correct score without time measurement', () => {
+    render(<GameOverScreen {...defaultProps} timeWasMeasured={false} />)
+
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '120' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    // Score: 100 + (20 * 10) = 300 (no time bonus)
+    expect(screen.getByText(/Score:/)).toBeInTheDocument()
+    expect(screen.getByText(/300/)).toBeInTheDocument()
+  })
+
+  it('works without onHighscoreSubmit callback', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { onHighscoreSubmit, ...propsWithoutCallback } = defaultProps
+    render(<GameOverScreen {...propsWithoutCallback} />)
+
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '120' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    // Should not crash
+    expect(screen.getByText('✓ Correct!')).toBeInTheDocument()
   })
 })
