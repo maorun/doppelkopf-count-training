@@ -48,6 +48,7 @@ Your score is calculated based on:
   - Slow (> 2 seconds per card): +0 points
 
 **Example Scores**:
+
 - 20 cards, correct answer, 15 seconds (0.75s/card): 100 + 200 + 50 = **350 points**
 - 20 cards, correct answer, 30 seconds (1.5s/card): 100 + 200 + 25 = **325 points**
 - 20 cards, correct answer, time tracking off: 100 + 200 = **300 points**
