@@ -5,6 +5,7 @@ import { useSettings } from '../hooks/useSettings'
 import { Card, Suit } from '../lib/doppelkopf'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
+import { GameOverScreen } from './GameOverScreen'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -45,33 +46,6 @@ const GameScreen: React.FC<{
     ) : (
       <div data-testid="card-back" className="w-full h-full bg-blue-500 rounded-lg border-4 border-white"></div>
     )}
-  </div>
-)
-
-const GameOverScreen: React.FC<{
-  totalScore: number
-  elapsedTime: number
-  resetGame: () => void
-}> = ({ totalScore, elapsedTime, resetGame }) => (
-  <div className="text-center">
-    <h2 className="text-2xl font-bold">Game Over</h2>
-    <p className="text-xl">
-      Total Score:
-      {' '}
-      {totalScore}
-    </p>
-    <p className="text-lg">
-      Time:
-      {' '}
-      {(elapsedTime / 1000).toFixed(2)}
-      s
-    </p>
-    <button
-      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-      onClick={resetGame}
-    >
-      Repeat
-    </button>
   </div>
 )
 
