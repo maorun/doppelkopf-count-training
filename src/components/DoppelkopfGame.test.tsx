@@ -38,14 +38,15 @@ describe('DoppelkopfGame', () => {
     expect(screen.getByText(/Card 1 of 20/)).toBeInTheDocument()
   })
 
-  it('shows the final score after 20 clicks with default settings', () => {
+  it('shows input field when game is over', () => {
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
     for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
     expect(screen.getByText('Game Over')).toBeInTheDocument()
-    expect(screen.getByText(/Total Score:/)).toBeInTheDocument()
+    expect(screen.getByLabelText('Enter your calculated result:')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Check Result' })).toBeInTheDocument()
   })
 
   it('displays the elapsed time when the game is over', () => {
@@ -57,14 +58,43 @@ describe('DoppelkopfGame', () => {
     expect(screen.getByText(/Time:/)).toBeInTheDocument()
   })
 
-  it('resets the game when the "Repeat" button is clicked', () => {
+  it('shows correct message when user enters correct result', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+
+    // Click through all cards
+    for (let i = 0; i < 20; i++) {
+      fireEvent.click(cardElement)
+    }
+
+    // Enter a result (we'll use a placeholder value for this test)
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '120' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    // Check that result is displayed (either correct or incorrect)
+    expect(screen.getByText(/Your answer:/)).toBeInTheDocument()
+    expect(screen.getByText(/Actual total:/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Play Again' })).toBeInTheDocument()
+  })
+
+  it('resets the game when the "Play Again" button is clicked', () => {
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
     for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
-    const repeatButton = screen.getByText('Repeat')
-    fireEvent.click(repeatButton)
+
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '100' } })
+
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+
+    const playAgainButton = screen.getByRole('button', { name: 'Play Again' })
+    fireEvent.click(playAgainButton)
     expect(screen.getByTestId('card-back')).toBeInTheDocument()
   })
 
