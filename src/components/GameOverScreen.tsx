@@ -1,8 +1,9 @@
 // src/components/GameOverScreen.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import { calculateScore, GameResult } from '../lib/highscore'
 
 const InputForm: React.FC<{
   userInput: string
@@ -31,11 +32,22 @@ const ResultDisplay: React.FC<{
   isCorrect: boolean
   userInput: string
   totalScore: number
+  gameScore: number
   resetGame: () => void
-}> = ({ isCorrect, userInput, totalScore, resetGame }) => (
+}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame }) => (
   <div className="space-y-4">
     <div className={`text-xl font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+    </div>
+    <div className="bg-blue-100 border-2 border-blue-400 rounded-lg p-4 space-y-2">
+      <p className="text-2xl font-bold text-blue-900">
+        Score:
+        {' '}
+        {gameScore}
+      </p>
+      <p className="text-sm text-blue-700">
+        {isCorrect ? 'Great job!' : 'Better luck next time!'}
+      </p>
     </div>
     <p className="text-xl">
       Your answer:
@@ -53,17 +65,45 @@ const ResultDisplay: React.FC<{
   </div>
 )
 
+/* eslint-disable max-lines-per-function */
 export const GameOverScreen: React.FC<{
   totalScore: number
   elapsedTime: number
+  cardsCount: number
+  timeWasMeasured: boolean
   resetGame: () => void
-}> = ({ totalScore, elapsedTime, resetGame }) => {
+  onHighscoreSubmit?: (result: GameResult) => void
+}> = ({ totalScore, elapsedTime, cardsCount, timeWasMeasured, resetGame, onHighscoreSubmit }) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
+  const [gameScore, setGameScore] = useState(0)
 
   const handleSubmit = () => {
     setShowResult(true)
+    const isCorrect = parseInt(userInput) === totalScore
+
+    const result: GameResult = {
+      isCorrect,
+      cardsCount,
+      elapsedTime,
+      timeWasMeasured,
+    }
+
+    const score = calculateScore(result)
+    setGameScore(score)
+
+    // Notify parent component
+    if (onHighscoreSubmit) {
+      onHighscoreSubmit(result)
+    }
   }
+
+  // Reset state when game is reset
+  useEffect(() => {
+    setUserInput('')
+    setShowResult(false)
+    setGameScore(0)
+  }, [totalScore, cardsCount]) // Reset when new game starts
 
   const isCorrect = showResult && parseInt(userInput) === totalScore
 
@@ -88,6 +128,7 @@ export const GameOverScreen: React.FC<{
           isCorrect={isCorrect}
           userInput={userInput}
           totalScore={totalScore}
+          gameScore={gameScore}
           resetGame={resetGame}
         />
       )}

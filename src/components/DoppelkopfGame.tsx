@@ -2,6 +2,7 @@
 import React from 'react'
 import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
 import { useSettings } from '../hooks/useSettings'
+import { useHighscores } from '../hooks/useHighscores'
 import { Card, Suit } from '../lib/doppelkopf'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
@@ -51,6 +52,7 @@ const GameScreen: React.FC<{
 
 const DoppelkopfGame: React.FC = () => {
   const { settings, setSettings } = useSettings()
+  const { addHighscore } = useHighscores()
   const {
     currentCard,
     isFinished,
@@ -66,7 +68,14 @@ const DoppelkopfGame: React.FC = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold mb-8">Doppelkopf Game</h1>
       {isFinished ? (
-        <GameOverScreen totalScore={totalScore} elapsedTime={elapsedTime} resetGame={resetGame} />
+        <GameOverScreen
+          totalScore={totalScore}
+          elapsedTime={elapsedTime}
+          cardsCount={cardsToReveal}
+          timeWasMeasured={settings.measureTime}
+          resetGame={resetGame}
+          onHighscoreSubmit={addHighscore}
+        />
       ) : (
         <>
           <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
