@@ -29,15 +29,6 @@
 - Display last N cards revealed
 - Optional card value reminders
 
-## Social Features
-
-### Leaderboard Enhancements
-
-- Online global leaderboard
-- Friend challenges
-- Weekly/monthly competitions
-- Achievement badges
-
 ## Visual Enhancements
 
 ### Theme Customization
@@ -55,9 +46,3 @@
 - Count only specific card types (e.g., only Aces and 10s)
 - Reverse counting (countdown from total)
 - Team play mode (multiple players)
-
-## Data Export
-
-- Export statistics to CSV/JSON
-- Share performance reports
-- Backup and restore highscores
