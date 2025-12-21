@@ -8,6 +8,13 @@ Training application to practice counting cards in the game Doppelkopf.
   total score
 - **Result Validation**: After completing a round, enter your calculated total
   and receive immediate feedback on whether you were correct
+- **Statistics and Progress Tracking**: Comprehensive performance analytics
+  - Track total games played and win rate
+  - Monitor your best and current streak of correct answers
+  - View average calculation time per card
+  - Analyze performance by difficulty level (card count ranges)
+  - See recent performance trends (last 10 games)
+  - Compare statistics across different difficulty levels
 - **Highscore System**: Earn points based on accuracy, difficulty, and speed
   - Correct answers earn base points plus difficulty bonus (based on card count)
   - Time bonus for fast calculations (when time tracking is enabled)
@@ -34,7 +41,10 @@ Training application to practice counting cards in the game Doppelkopf.
 3. After all cards are revealed, enter your calculated total in the input field
 4. Click "Check Result" to see if your answer is correct and view your score
 5. Click "Play Again" to start a new round
-6. Click "Show Highscores" to view your top performances
+6. Click "Show Stats" to view your performance statistics and highscores
+   - **Statistics Tab**: View comprehensive performance analytics including win
+     rate, streaks, average times, and performance by difficulty
+   - **Highscores Tab**: View your top 10 performances
 
 ## Scoring System
 

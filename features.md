@@ -1,16 +1,5 @@
 # Feature Ideas for Doppelkopf Count Training
 
-## Statistics and Progress Tracking
-
-Track player performance over time with detailed statistics:
-
-- Total games played
-- Win rate (percentage of correct answers)
-- Average calculation time per card
-- Best streak of consecutive correct answers
-- Performance trends over time (daily/weekly charts)
-- Difficulty level statistics (performance by card count)
-
 ## Practice Modes
 
 ### Timed Challenge Mode
