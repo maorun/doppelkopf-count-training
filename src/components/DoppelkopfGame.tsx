@@ -3,11 +3,14 @@ import React, { useState } from 'react'
 import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
 import { useSettings } from '../hooks/useSettings'
 import { useHighscores } from '../hooks/useHighscores'
+import { useStatistics } from '../hooks/useStatistics'
 import { Card, Suit } from '../lib/doppelkopf'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
 import { GameOverScreen } from './GameOverScreen'
 import { HighscoreList } from './HighscoreList'
+import { StatisticsView } from './StatisticsView'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -54,8 +57,9 @@ const GameScreen: React.FC<{
 /* eslint-disable max-lines-per-function */
 const DoppelkopfGame: React.FC = () => {
   const { settings, setSettings } = useSettings()
-  const { addHighscore, getTop, clearHighscores } = useHighscores()
+  const { addHighscore, getTop, clearHighscores, highscores } = useHighscores()
   const [showHighscores, setShowHighscores] = useState(false)
+  const { statistics, recentTrend } = useStatistics(highscores)
   const {
     currentCard,
     isFinished,
@@ -103,7 +107,7 @@ const DoppelkopfGame: React.FC = () => {
                 variant="outline"
                 onClick={() => setShowHighscores(!showHighscores)}
               >
-                {showHighscores ? 'Hide Highscores' : 'Show Highscores'}
+                {showHighscores ? 'Hide Stats' : 'Show Stats'}
               </Button>
             </div>
           </>
@@ -111,8 +115,19 @@ const DoppelkopfGame: React.FC = () => {
       </div>
 
       {showHighscores && (
-        <div className="w-full px-4">
-          <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+        <div className="w-full max-w-6xl px-4">
+          <Tabs defaultValue="statistics" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="statistics">Statistics</TabsTrigger>
+              <TabsTrigger value="highscores">Highscores</TabsTrigger>
+            </TabsList>
+            <TabsContent value="statistics">
+              <StatisticsView statistics={statistics} recentTrend={recentTrend} />
+            </TabsContent>
+            <TabsContent value="highscores">
+              <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+            </TabsContent>
+          </Tabs>
         </div>
       )}
     </div>
