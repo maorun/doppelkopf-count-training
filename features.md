@@ -31,10 +31,9 @@
 
 ## Visual Enhancements
 
-### Theme Customization
+### Card Design Options
 
-- Dark mode / light mode toggle
-- Card design options (classic, modern, minimalist)
+- Different card styles (classic, modern, minimalist)
 - Color scheme customization
 - Accessibility options (high contrast, larger text)
 
