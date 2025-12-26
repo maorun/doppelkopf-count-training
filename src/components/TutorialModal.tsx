@@ -340,7 +340,7 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto dark:bg-gray-900 dark:border-gray-700">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl dark:text-gray-100">
             {currentTutorialStep.title}
