@@ -13,6 +13,7 @@ import { StatisticsView } from './StatisticsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { ThemeToggle } from './ThemeToggle'
 import { TutorialModal } from './TutorialModal'
+import { HintDialog } from './HintDialog'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -117,9 +118,23 @@ const DoppelkopfGame: React.FC = () => {
               >
                 {showHighscores ? 'Hide Stats' : 'Show Stats'}
               </Button>
+              <HintDialog
+                revealedCards={revealedCards}
+                totalScore={totalScore}
+                onHintUsed={useHint}
+              >
+                <Button variant="secondary" disabled={revealedCards.length === 0}>
+                  Hint
+                  {hintsUsed > 0 && (
+                    <span className="ml-1 text-xs">
+                      (
+                      {hintsUsed}
+                      )
+                    </span>
+                  )}
+                </Button>
+              </HintDialog>
               <ThemeToggle />
-              {/* Hint button will be added in Step 2 */}
-              {revealedCards.length > 0 && <Button variant="secondary" onClick={useHint}>Hint</Button>}
             </div>
           </>
         )}
