@@ -5,21 +5,29 @@ import { render, screen } from '@testing-library/react'
 import { StatisticsView } from './StatisticsView'
 import { Statistics } from '../lib/statistics'
 
+// Helper function to create statistics with default hint values
+const createStats = (partial: Partial<Statistics>): Statistics => ({
+  totalGames: 0,
+  correctAnswers: 0,
+  incorrectAnswers: 0,
+  winRate: 0,
+  averageTimePerCard: 0,
+  bestStreak: 0,
+  currentStreak: 0,
+  totalCardsPlayed: 0,
+  averageScore: 0,
+  bestScore: 0,
+  performanceByDifficulty: {},
+  totalHintsUsed: 0,
+  averageHintsPerGame: 0,
+  gamesWithHints: 0,
+  gamesWithoutHints: 0,
+  ...partial,
+})
+
 describe('StatisticsView', () => {
   it('should show message when no games played', () => {
-    const emptyStats: Statistics = {
-      totalGames: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      winRate: 0,
-      averageTimePerCard: 0,
-      bestStreak: 0,
-      currentStreak: 0,
-      totalCardsPlayed: 0,
-      averageScore: 0,
-      bestScore: 0,
-      performanceByDifficulty: {},
-    }
+    const emptyStats = createStats({})
 
     render(<StatisticsView statistics={emptyStats} recentTrend={0} />)
 
@@ -27,7 +35,7 @@ describe('StatisticsView', () => {
   })
 
   it('should display overview statistics', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 10,
       correctAnswers: 7,
       incorrectAnswers: 3,
@@ -38,8 +46,7 @@ describe('StatisticsView', () => {
       totalCardsPlayed: 200,
       averageScore: 300,
       bestScore: 350,
-      performanceByDifficulty: {},
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={80} />)
 
@@ -50,7 +57,7 @@ describe('StatisticsView', () => {
   })
 
   it('should display performance metrics', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 5,
       correctAnswers: 4,
       incorrectAnswers: 1,
@@ -61,8 +68,7 @@ describe('StatisticsView', () => {
       totalCardsPlayed: 100,
       averageScore: 320,
       bestScore: 350,
-      performanceByDifficulty: {},
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={100} />)
 
@@ -73,7 +79,7 @@ describe('StatisticsView', () => {
   })
 
   it('should display difficulty statistics when available', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 10,
       correctAnswers: 8,
       incorrectAnswers: 2,
@@ -96,7 +102,7 @@ describe('StatisticsView', () => {
           averageTime: 1.2,
         },
       },
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={75} />)
 
@@ -106,7 +112,7 @@ describe('StatisticsView', () => {
   })
 
   it('should display current streak in subtitle', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 10,
       correctAnswers: 7,
       incorrectAnswers: 3,
@@ -117,8 +123,7 @@ describe('StatisticsView', () => {
       totalCardsPlayed: 200,
       averageScore: 300,
       bestScore: 350,
-      performanceByDifficulty: {},
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={80} />)
 
@@ -126,7 +131,7 @@ describe('StatisticsView', () => {
   })
 
   it('should show correct and incorrect count in subtitle', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 10,
       correctAnswers: 7,
       incorrectAnswers: 3,
@@ -137,8 +142,7 @@ describe('StatisticsView', () => {
       totalCardsPlayed: 200,
       averageScore: 300,
       bestScore: 350,
-      performanceByDifficulty: {},
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={80} />)
 
@@ -146,7 +150,7 @@ describe('StatisticsView', () => {
   })
 
   it('should not show average time when not measured', () => {
-    const stats: Statistics = {
+    const stats = createStats({
       totalGames: 5,
       correctAnswers: 4,
       incorrectAnswers: 1,
@@ -157,11 +161,43 @@ describe('StatisticsView', () => {
       totalCardsPlayed: 100,
       averageScore: 300,
       bestScore: 350,
-      performanceByDifficulty: {},
-    }
+    })
 
     render(<StatisticsView statistics={stats} recentTrend={100} />)
 
     expect(screen.queryByText(/Avg Time\/Card/)).not.toBeInTheDocument()
+  })
+
+  it('should display hint statistics when hints are used', () => {
+    const stats = createStats({
+      totalGames: 10,
+      correctAnswers: 7,
+      incorrectAnswers: 3,
+      winRate: 70,
+      totalHintsUsed: 15,
+      averageHintsPerGame: 1.5,
+      gamesWithHints: 6,
+      gamesWithoutHints: 4,
+    })
+
+    render(<StatisticsView statistics={stats} recentTrend={80} />)
+
+    expect(screen.getByText('Hint Usage')).toBeInTheDocument()
+    expect(screen.getByText('15')).toBeInTheDocument()
+    expect(screen.getByText('1.5')).toBeInTheDocument()
+    expect(screen.getByText('6')).toBeInTheDocument()
+    expect(screen.getByText('4')).toBeInTheDocument()
+  })
+
+  it('should not show hint statistics when no hints used', () => {
+    const stats = createStats({
+      totalGames: 5,
+      correctAnswers: 4,
+      totalHintsUsed: 0,
+    })
+
+    render(<StatisticsView statistics={stats} recentTrend={80} />)
+
+    expect(screen.queryByText('Hint Usage')).not.toBeInTheDocument()
   })
 })

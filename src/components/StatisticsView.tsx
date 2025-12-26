@@ -151,6 +151,33 @@ export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, rece
           </div>
         </div>
       )}
+
+      {/* Hint Usage Statistics */}
+      {statistics.totalHintsUsed > 0 && (
+        <div>
+          <h3 className="text-lg font-semibold mb-3">Hint Usage</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard
+              title="Total Hints Used"
+              value={statistics.totalHintsUsed}
+            />
+            <StatCard
+              title="Avg Hints/Game"
+              value={statistics.averageHintsPerGame.toFixed(1)}
+            />
+            <StatCard
+              title="Games with Hints"
+              value={statistics.gamesWithHints}
+              subtitle={`${((statistics.gamesWithHints / statistics.totalGames) * 100).toFixed(0)}% of all games`}
+            />
+            <StatCard
+              title="Games without Hints"
+              value={statistics.gamesWithoutHints}
+              subtitle={`${((statistics.gamesWithoutHints / statistics.totalGames) * 100).toFixed(0)}% of all games`}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
