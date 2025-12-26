@@ -80,20 +80,44 @@ const CountingExampleStep: React.FC = () => (
   </div>
 )
 
+const getColorClasses = (color: string) => {
+  const colorMap = {
+    blue: {
+      bg: 'bg-blue-50 dark:bg-blue-900/20',
+      title: 'text-blue-900 dark:text-blue-300',
+      text: 'text-blue-800 dark:text-blue-200',
+    },
+    green: {
+      bg: 'bg-green-50 dark:bg-green-900/20',
+      title: 'text-green-900 dark:text-green-300',
+      text: 'text-green-800 dark:text-green-200',
+    },
+    purple: {
+      bg: 'bg-purple-50 dark:bg-purple-900/20',
+      title: 'text-purple-900 dark:text-purple-300',
+      text: 'text-purple-800 dark:text-purple-200',
+    },
+  }
+  return colorMap[color as keyof typeof colorMap] || colorMap.blue
+}
+
 const TipsSection: React.FC<{
   title: string
   color: string
   children: React.ReactNode
-}> = ({ title, color, children }) => (
-  <div className={`bg-${color}-50 dark:bg-${color}-900/20 p-4 rounded-lg`}>
-    <h4 className={`font-bold text-${color}-900 dark:text-${color}-300 mb-2`}>
-      {title}
-    </h4>
-    <ul className={`space-y-2 text-sm text-${color}-800 dark:text-${color}-200`}>
-      {children}
-    </ul>
-  </div>
-)
+}> = ({ title, color, children }) => {
+  const colors = getColorClasses(color)
+  return (
+    <div className={`${colors.bg} p-4 rounded-lg`}>
+      <h4 className={`font-bold ${colors.title} mb-2`}>
+        {title}
+      </h4>
+      <ul className={`space-y-2 text-sm ${colors.text}`}>
+        {children}
+      </ul>
+    </div>
+  )
+}
 
 const TipsAndTricksStep: React.FC = () => (
   <div className="space-y-4">
@@ -121,21 +145,24 @@ const GameplayStepItem: React.FC<{
   title: string
   description: string
   color?: string
-}> = ({ number, title, description, color = 'blue' }) => (
-  <div className="flex gap-3">
-    <div className={`flex-shrink-0 w-8 h-8 bg-${color}-500 text-white rounded-full flex items-center justify-center font-bold`}>
-      {number}
+}> = ({ number, title, description, color = 'blue' }) => {
+  const bgColor = color === 'green' ? 'bg-green-500' : 'bg-blue-500'
+  return (
+    <div className="flex gap-3">
+      <div className={`flex-shrink-0 w-8 h-8 ${bgColor} text-white rounded-full flex items-center justify-center font-bold`}>
+        {number}
+      </div>
+      <div>
+        <h4 className="font-bold mb-1">
+          {title}
+        </h4>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          {description}
+        </p>
+      </div>
     </div>
-    <div>
-      <h4 className="font-bold mb-1">
-        {title}
-      </h4>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        {description}
-      </p>
-    </div>
-  </div>
-)
+  )
+}
 
 const GameplayStep: React.FC = () => (
   <div className="space-y-4">
