@@ -82,9 +82,12 @@ Your score is calculated based on:
 
 **Example Scores**:
 
-- 20 cards, correct answer, 15 seconds (0.75s/card), no hints: 100 + 200 + 50 = **350 points**
-- 20 cards, correct answer, 30 seconds (1.5s/card), 1 hint used: 100 + 200 + 25 - 20 = **305 points**
-- 20 cards, correct answer, time tracking off, 2 hints used: 100 + 200 - 40 = **260 points**
+- 20 cards, correct answer, 15 seconds (0.75s/card), no hints:
+  100 + 200 + 50 = **350 points**
+- 20 cards, correct answer, 30 seconds (1.5s/card), 1 hint used:
+  100 + 200 + 25 - 20 = **305 points**
+- 20 cards, correct answer, time tracking off, 2 hints used:
+  100 + 200 - 40 = **260 points**
 - Any incorrect answer: **0 points**
 
 ## Development
