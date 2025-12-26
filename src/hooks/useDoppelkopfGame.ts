@@ -33,6 +33,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
   const [startTime, setStartTime] = useState<number | null>(null)
   const [elapsedTime, setElapsedTime] = useState<number>(0)
   const [cardsToReveal, setCardsToReveal] = useState(20)
+  const [hintsUsed, setHintsUsed] = useState<number>(0)
 
   const resetGame = useCallback(() => {
     const [min, max] = settings.cardCountRange
@@ -44,6 +45,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     setIsFinished(false)
     setStartTime(null)
     setElapsedTime(0)
+    setHintsUsed(0)
   }, [settings])
 
   useEffect(() => {
@@ -57,9 +59,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
 
     if (revealedCards.length >= cardsToReveal - 1) {
       setIsFinished(true)
-      if (settings.measureTime && startTime) {
-        setElapsedTime(Date.now() - startTime)
-      }
+      if (settings.measureTime && startTime) setElapsedTime(Date.now() - startTime)
     }
 
     if (revealedCards.length < cardsToReveal) {
@@ -67,10 +67,10 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     }
   }
 
-  const currentCard = revealedCards.length > 0 ? revealedCards[revealedCards.length - 1] : null
+  const useHint = useCallback(() => setHintsUsed(prev => prev + 1), [])
 
   return {
-    currentCard,
+    currentCard: revealedCards.length > 0 ? revealedCards[revealedCards.length - 1] : null,
     isFinished,
     totalScore,
     elapsedTime,
@@ -78,5 +78,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     resetGame,
     revealedCards,
     cardsToReveal,
+    hintsUsed,
+    useHint,
   }
 }

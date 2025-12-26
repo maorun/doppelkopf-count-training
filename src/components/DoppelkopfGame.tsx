@@ -71,6 +71,8 @@ const DoppelkopfGame: React.FC = () => {
     resetGame,
     revealedCards,
     cardsToReveal,
+    hintsUsed,
+    useHint,
   } = useDoppelkopfGame(settings)
 
   const topHighscores = getTop(10)
@@ -88,6 +90,7 @@ const DoppelkopfGame: React.FC = () => {
             timeWasMeasured={settings.measureTime}
             resetGame={resetGame}
             onHighscoreSubmit={addHighscore}
+            hintsUsed={hintsUsed}
           />
         ) : (
           <>
@@ -115,6 +118,8 @@ const DoppelkopfGame: React.FC = () => {
                 {showHighscores ? 'Hide Stats' : 'Show Stats'}
               </Button>
               <ThemeToggle />
+              {/* Hint button will be added in Step 2 */}
+              {revealedCards.length > 0 && <Button variant="secondary" onClick={useHint}>Hint</Button>}
             </div>
           </>
         )}

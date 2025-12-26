@@ -73,7 +73,8 @@ export const GameOverScreen: React.FC<{
   timeWasMeasured: boolean
   resetGame: () => void
   onHighscoreSubmit?: (result: GameResult) => void
-}> = ({ totalScore, elapsedTime, cardsCount, timeWasMeasured, resetGame, onHighscoreSubmit }) => {
+  hintsUsed?: number
+}> = ({ totalScore, elapsedTime, cardsCount, timeWasMeasured, resetGame, onHighscoreSubmit, hintsUsed = 0 }) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
   const [gameScore, setGameScore] = useState(0)
@@ -87,6 +88,7 @@ export const GameOverScreen: React.FC<{
       cardsCount,
       elapsedTime,
       timeWasMeasured,
+      hintsUsed,
     }
 
     const score = calculateScore(result)
