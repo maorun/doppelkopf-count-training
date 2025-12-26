@@ -36,25 +36,25 @@ const ResultDisplay: React.FC<{
   resetGame: () => void
 }> = ({ isCorrect, userInput, totalScore, gameScore, resetGame }) => (
   <div className="space-y-4">
-    <div className={`text-xl font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+    <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
     </div>
-    <div className="bg-blue-100 border-2 border-blue-400 rounded-lg p-4 space-y-2">
-      <p className="text-2xl font-bold text-blue-900">
+    <div className="bg-blue-100 dark:bg-blue-900 border-2 border-blue-400 dark:border-blue-600 rounded-lg p-4 space-y-2 transition-colors">
+      <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
         Score:
         {' '}
         {gameScore}
       </p>
-      <p className="text-sm text-blue-700">
+      <p className="text-sm text-blue-700 dark:text-blue-300">
         {isCorrect ? 'Great job!' : 'Better luck next time!'}
       </p>
     </div>
-    <p className="text-xl">
+    <p className="text-xl text-gray-900 dark:text-gray-100">
       Your answer:
       {' '}
       {userInput}
     </p>
-    <p className="text-xl">
+    <p className="text-xl text-gray-900 dark:text-gray-100">
       Actual total:
       {' '}
       {totalScore}
@@ -109,8 +109,8 @@ export const GameOverScreen: React.FC<{
 
   return (
     <div className="text-center space-y-4">
-      <h2 className="text-2xl font-bold">Game Over</h2>
-      <p className="text-lg">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Game Over</h2>
+      <p className="text-lg text-gray-900 dark:text-gray-100">
         Time:
         {' '}
         {(elapsedTime / 1000).toFixed(2)}

@@ -11,6 +11,7 @@ import { GameOverScreen } from './GameOverScreen'
 import { HighscoreList } from './HighscoreList'
 import { StatisticsView } from './StatisticsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
+import { ThemeToggle } from './ThemeToggle'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -34,7 +35,7 @@ const GameScreen: React.FC<{
   handleCardClick: () => void
 }> = ({ currentCard, handleCardClick }) => (
   <div
-    className="w-64 h-96 bg-white rounded-lg shadow-lg flex items-center justify-center cursor-pointer"
+    className="w-64 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-colors"
     onClick={handleCardClick}
     role="button"
     data-testid="game-card"
@@ -44,12 +45,12 @@ const GameScreen: React.FC<{
         className="w-full h-full p-4 flex flex-col justify-between animate-fade-in-slow"
         key={currentCard.suit + currentCard.rank}
       >
-        <span className={`text-2xl font-bold ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{currentCard.rank}</span>
-        <span className={`text-4xl self-center ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{getSuitSymbol(currentCard.suit)}</span>
-        <span className={`text-2xl font-bold self-end transform rotate-180 ${isRedSuit(currentCard.suit) ? 'text-red-600' : ''}`}>{currentCard.rank}</span>
+        <span className={`text-2xl font-bold ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{currentCard.rank}</span>
+        <span className={`text-4xl self-center ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{getSuitSymbol(currentCard.suit)}</span>
+        <span className={`text-2xl font-bold self-end transform rotate-180 ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{currentCard.rank}</span>
       </div>
     ) : (
-      <div data-testid="card-back" className="w-full h-full bg-blue-500 rounded-lg border-4 border-white"></div>
+      <div data-testid="card-back" className="w-full h-full bg-blue-500 dark:bg-blue-700 rounded-lg border-4 border-white dark:border-gray-600 transition-colors"></div>
     )}
   </div>
 )
@@ -74,8 +75,8 @@ const DoppelkopfGame: React.FC = () => {
   const topHighscores = getTop(10)
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8">
-      <h1 className="text-4xl font-bold mb-8">Doppelkopf Game</h1>
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-8 transition-colors">
+      <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">Doppelkopf Game</h1>
 
       <div className="mb-8">
         {isFinished ? (
@@ -90,7 +91,7 @@ const DoppelkopfGame: React.FC = () => {
         ) : (
           <>
             <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
-            <p className="text-xl mt-4 text-center">
+            <p className="text-xl mt-4 text-center text-gray-900 dark:text-gray-100">
               Card
               {' '}
               {revealedCards.length}
@@ -109,6 +110,7 @@ const DoppelkopfGame: React.FC = () => {
               >
                 {showHighscores ? 'Hide Stats' : 'Show Stats'}
               </Button>
+              <ThemeToggle />
             </div>
           </>
         )}

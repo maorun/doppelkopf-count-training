@@ -8,6 +8,8 @@ Training application to practice counting cards in the game Doppelkopf.
   total score
 - **Result Validation**: After completing a round, enter your calculated total
   and receive immediate feedback on whether you were correct
+- **Dark Mode / Light Mode**: Switch between dark and light themes for comfortable
+  viewing in any lighting condition. Your preference is automatically saved.
 - **Statistics and Progress Tracking**: Comprehensive performance analytics
   - Track total games played and win rate
   - Monitor your best and current streak of correct answers
