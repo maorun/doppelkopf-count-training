@@ -32,6 +32,12 @@ Training application to practice counting cards in the game Doppelkopf.
   - Include or exclude 9s from the deck
   - Configure the number of cards to reveal (card count range)
   - Optional time tracking to measure your calculation speed
+- **Hint System**: Get help during gameplay with optional hints
+  - Show current running total at any time
+  - View the last 5 cards revealed with their values
+  - Display card value reminders
+  - Each hint costs 20 points from your final score
+  - Hint usage tracked in statistics
 - **Interactive Feedback**: Get clear visual feedback (✓ Correct or ✗
   Incorrect) when checking your answer
 - **Play Again**: Quickly start a new round with a fresh shuffled deck
@@ -48,13 +54,18 @@ Training application to practice counting cards in the game Doppelkopf.
    - Dame (Queen): 3 points
    - Bube (Jack): 2 points
    - 9: 0 points
-4. After all cards are revealed, enter your calculated total in the input field
-5. Click "Check Result" to see if your answer is correct and view your score
-6. Click "Play Again" to start a new round
-7. Click "Tutorial" anytime to review card values and get helpful tips
-8. Click "Show Stats" to view your performance statistics and highscores
+4. **Need help?** Click the "Hint" button to get assistance:
+   - View your current running total
+   - See the last 5 cards revealed
+   - Display card value reminders
+   - Each hint costs 20 points from your final score
+5. After all cards are revealed, enter your calculated total in the input field
+6. Click "Check Result" to see if your answer is correct and view your score
+7. Click "Play Again" to start a new round
+8. Click "Tutorial" anytime to review card values and get helpful tips
+9. Click "Show Stats" to view your performance statistics and highscores
    - **Statistics Tab**: View comprehensive performance analytics including win
-     rate, streaks, average times, and performance by difficulty
+     rate, streaks, average times, performance by difficulty, and hint usage
    - **Highscores Tab**: View your top 10 performances
 
 ## Scoring System
@@ -67,12 +78,13 @@ Your score is calculated based on:
   - Fast (< 1 second per card): +50 points
   - Normal (1-2 seconds per card): +25 points
   - Slow (> 2 seconds per card): +0 points
+- **Hint Penalty**: -20 points per hint used
 
 **Example Scores**:
 
-- 20 cards, correct answer, 15 seconds (0.75s/card): 100 + 200 + 50 = **350 points**
-- 20 cards, correct answer, 30 seconds (1.5s/card): 100 + 200 + 25 = **325 points**
-- 20 cards, correct answer, time tracking off: 100 + 200 = **300 points**
+- 20 cards, correct answer, 15 seconds (0.75s/card), no hints: 100 + 200 + 50 = **350 points**
+- 20 cards, correct answer, 30 seconds (1.5s/card), 1 hint used: 100 + 200 + 25 - 20 = **305 points**
+- 20 cards, correct answer, time tracking off, 2 hints used: 100 + 200 - 40 = **260 points**
 - Any incorrect answer: **0 points**
 
 ## Development
