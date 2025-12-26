@@ -14,14 +14,6 @@
 - Track longest survival streak
 - Increasing difficulty with each correct answer
 
-## Learning Features
-
-### Hint System
-
-- Show current running total on demand (with point penalty)
-- Display last N cards revealed
-- Optional card value reminders
-
 ## Visual Enhancements
 
 ### Card Design Options
