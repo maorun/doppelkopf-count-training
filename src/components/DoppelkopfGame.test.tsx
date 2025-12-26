@@ -169,4 +169,102 @@ describe('DoppelkopfGame', () => {
     expect(foundRedSuit).toBe(true)
     expect(foundBlackSuit).toBe(true)
   })
+
+  it('shows hint button after first card is revealed', () => {
+    render(<DoppelkopfGame />)
+    const hintButton = screen.getByRole('button', { name: 'Hint' })
+    expect(hintButton).toBeInTheDocument()
+    expect(hintButton).toBeDisabled() // Disabled before any cards are revealed
+
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+
+    expect(hintButton).not.toBeDisabled() // Enabled after first card
+  })
+
+  it('opens hint dialog when hint button is clicked', () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+
+    const hintButton = screen.getByRole('button', { name: 'Hint' })
+    fireEvent.click(hintButton)
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByText('Hinweise')).toBeInTheDocument()
+  })
+
+  it('displays hint count on button after using hints', async () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+
+    const hintButton = screen.getByRole('button', { name: 'Hint' })
+    fireEvent.click(hintButton)
+
+    // Wait for dialog to open and use a hint
+    const totalHintButton = await screen.findByRole('button', { name: /Aktuelle Punktzahl anzeigen/ })
+    fireEvent.click(totalHintButton)
+
+    // Close dialog by pressing escape
+    fireEvent.keyDown(document, { key: 'Escape' })
+
+    // Hint count should be displayed on the button
+    expect(screen.getByRole('button', { name: /Hint \(1\)/ })).toBeInTheDocument()
+  })
+
+  it('hint count persists across multiple hint uses', async () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+
+    // First hint
+    let hintButton = screen.getByRole('button', { name: 'Hint' })
+    fireEvent.click(hintButton)
+    const totalHintButton = await screen.findByRole('button', { name: /Aktuelle Punktzahl anzeigen/ })
+    fireEvent.click(totalHintButton)
+    fireEvent.keyDown(document, { key: 'Escape' })
+
+    // Second hint
+    hintButton = screen.getByRole('button', { name: /Hint \(1\)/ })
+    fireEvent.click(hintButton)
+    const lastCardsHintButton = await screen.findByRole('button', { name: /Letzte 5 Karten anzeigen/ })
+    fireEvent.click(lastCardsHintButton)
+    fireEvent.keyDown(document, { key: 'Escape' })
+
+    // Hint count should show 2 hints used
+    expect(screen.getByRole('button', { name: /Hint \(2\)/ })).toBeInTheDocument()
+  })
+
+  it('hint count resets when starting a new game', async () => {
+    render(<DoppelkopfGame />)
+    const cardElement = screen.getByTestId('game-card')
+    fireEvent.click(cardElement)
+
+    // Use a hint
+    const hintButton = screen.getByRole('button', { name: 'Hint' })
+    fireEvent.click(hintButton)
+    const totalHintButton = await screen.findByRole('button', { name: /Aktuelle Punktzahl anzeigen/ })
+    fireEvent.click(totalHintButton)
+    fireEvent.keyDown(document, { key: 'Escape' })
+
+    expect(screen.getByRole('button', { name: /Hint \(1\)/ })).toBeInTheDocument()
+
+    // Finish the game
+    for (let i = 1; i < 20; i++) {
+      fireEvent.click(cardElement)
+    }
+
+    // Submit an answer and play again
+    const input = screen.getByLabelText('Enter your calculated result:')
+    fireEvent.change(input, { target: { value: '100' } })
+    const checkButton = screen.getByRole('button', { name: 'Check Result' })
+    fireEvent.click(checkButton)
+    const playAgainButton = screen.getByRole('button', { name: 'Play Again' })
+    fireEvent.click(playAgainButton)
+
+    // Hint count should be reset (no count displayed)
+    expect(screen.getByRole('button', { name: 'Hint' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Hint \(1\)/ })).not.toBeInTheDocument()
+  })
 })
