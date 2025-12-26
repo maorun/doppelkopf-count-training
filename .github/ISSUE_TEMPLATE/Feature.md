@@ -11,35 +11,45 @@ assignees: 'Copilot'
 
 ### 📋 Instructions for Copilot
 
-**CRITICAL: Read the complete `.github/copilot-instructions.md` file before starting development.**
+**CRITICAL: Read the complete `.github/copilot-instructions.md` file before
+starting development.**
 
 ### 🎯 Feature Selection
 
-Select the most promising feature from `features.md` and implement it. After successful implementation:
+Select the most promising feature from `features.md` and implement it. After
+successful implementation:
+
 1. **Remove the implemented feature from `features.md`**
-2. **Do NOT add comments like "implemented" or "done" in `features.md`** - just remove the feature completely
-3. **Update the `README.md`** to document the new feature in the appropriate section
+2. **Do NOT add comments like "implemented" or "done" in `features.md`** -
+   just remove the feature completely
+3. **Update the `README.md`** to document the new feature in the appropriate
+   section
 
 ### 📝 Implementation Requirements
 
 #### 1. Analysis Phase
+
 - [ ] Read and understand the selected feature from `features.md`
 - [ ] Review existing code patterns and architecture
 - [ ] Identify all files that need to be modified
 - [ ] Plan the minimal changes needed
 
 #### 2. Development Phase
+
 - [ ] **MANDATORY: Run `npm install` first** (required in fresh clone)
 - [ ] Implement the feature following existing code patterns
 - [ ] Use **shadcn/ui components** from `src/components/ui/` for any UI elements
-- [ ] Use **TypeScript** with proper types (no `any` types without justification)
-- [ ] Use **Tailwind CSS utility classes only** (no custom CSS classes or files)
+- [ ] Use **TypeScript** with proper types (no `any` types without
+      justification)
+- [ ] Use **Tailwind CSS utility classes only** (no custom CSS classes or
+      files)
 - [ ] Follow the **step-by-step commit approach** (Teilschritt commits)
   - Break work into 3-8 discrete steps
   - Use `report_progress` after each completed step
   - Update checklist to track progress
 
 #### 3. Testing Requirements - MANDATORY
+
 **This is NOT optional. Every feature change MUST have corresponding tests.**
 
 - [ ] Add new tests for the implemented feature
@@ -50,6 +60,7 @@ Select the most promising feature from `features.md` and implement it. After suc
 - [ ] Run `npm run build` - verify production build works
 
 #### 4. Documentation Requirements
+
 - [ ] Update `README.md` with new feature description
   - Add to the appropriate section (Features, How to Play, etc.)
   - Integrate naturally without "New" or "Neu" markers
@@ -58,8 +69,9 @@ Select the most promising feature from `features.md` and implement it. After suc
 - [ ] Update component documentation if needed
 
 #### 5. Manual Validation
+
 - [ ] Start development server: `npm run dev`
-- [ ] Navigate to http://localhost:5173
+- [ ] Navigate to <http://localhost:5173>
 - [ ] Test the complete user workflow
 - [ ] Verify feature works in both light and dark mode
 - [ ] Test responsive behavior (desktop and mobile)
@@ -67,6 +79,7 @@ Select the most promising feature from `features.md` and implement it. After suc
 - [ ] Check browser console for errors (ignore Vercel Analytics warnings)
 
 #### 6. Cleanup
+
 - [ ] Remove the implemented feature from `features.md`
 - [ ] Do NOT add implementation notes to `features.md`
 - [ ] Ensure no temporary files or test artifacts are committed
@@ -75,23 +88,29 @@ Select the most promising feature from `features.md` and implement it. After suc
 ### 🔧 Technical Guidelines
 
 #### Component Development
+
 - Use **React hooks** (useState, useEffect, useCallback) for state management
-- Use **useMemo** for stable IDs (see HTML ID Management in copilot-instructions.md)
-- Extract complex components into smaller, focused components if they exceed 500-800 lines
+- Use **useMemo** for stable IDs (see HTML ID Management in
+  copilot-instructions.md)
+- Extract complex components into smaller, focused components if they exceed
+  500-800 lines
 - Follow existing component patterns in `src/components/`
 
 #### Styling
+
 - Use **shadcn/ui components** for all new UI elements
 - Apply **Tailwind CSS utility classes** only
 - Never create custom CSS classes or separate CSS files
 - Maintain consistent styling with existing components
 
 #### State Management
+
 - Use React hooks for local component state
 - Client-side calculations with immediate updates
 - No external state management library needed
 
 #### ID Management (CRITICAL)
+
 - Use `generateFormId()` from `src/utils/unique-id.ts` for form elements
 - Use `useMemo` to ensure stable IDs within component lifecycle
 - Never create duplicate HTML IDs (accessibility violation)
@@ -136,7 +155,8 @@ Before considering the feature complete:
 
 ### 📚 Reference Documentation
 
-- **Development Guidelines**: `.github/copilot-instructions.md` (READ THIS FIRST)
+- **Development Guidelines**: `.github/copilot-instructions.md`
+  (READ THIS FIRST)
 - **Feature Ideas**: `features.md`
 - **Project Documentation**: `README.md`
 - **UI Components**: `src/components/ui/` (shadcn/ui)
@@ -144,4 +164,6 @@ Before considering the feature complete:
 
 ---
 
-**Remember**: This is a Doppelkopf card counting training application. Maintain focus on helping users practice counting cards effectively while keeping the UI clean, intuitive, and responsive.
+**Remember**: This is a Doppelkopf card counting training application. Maintain
+focus on helping users practice counting cards effectively while keeping the UI
+clean, intuitive, and responsive.
