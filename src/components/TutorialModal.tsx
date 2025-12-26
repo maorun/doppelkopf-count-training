@@ -140,13 +140,21 @@ const TipsAndTricksStep: React.FC = () => (
   </div>
 )
 
+const getStepItemColorClass = (color: string): string => {
+  const colorMap: Record<string, string> = {
+    blue: 'bg-blue-500',
+    green: 'bg-green-500',
+  }
+  return colorMap[color] || colorMap.blue
+}
+
 const GameplayStepItem: React.FC<{
   number: number
   title: string
   description: string
   color?: string
 }> = ({ number, title, description, color = 'blue' }) => {
-  const bgColor = color === 'green' ? 'bg-green-500' : 'bg-blue-500'
+  const bgColor = getStepItemColorClass(color)
   return (
     <div className="flex gap-3">
       <div className={`flex-shrink-0 w-8 h-8 ${bgColor} text-white rounded-full flex items-center justify-center font-bold`}>
@@ -298,6 +306,7 @@ const TutorialNavigation: React.FC<{
   )
 }
 
+/* eslint-disable max-lines-per-function */
 export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState(0)
 
@@ -321,7 +330,13 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
   }
 
   return (
-    <Dialog onOpenChange={open => !open && handleClose()}>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          handleClose()
+        }
+      }}
+    >
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
