@@ -12,6 +12,7 @@ import { HighscoreList } from './HighscoreList'
 import { StatisticsView } from './StatisticsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { ThemeToggle } from './ThemeToggle'
+import { TutorialModal } from './TutorialModal'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -101,6 +102,9 @@ const DoppelkopfGame: React.FC = () => {
               {cardsToReveal}
             </p>
             <div className="mt-4 flex gap-2 justify-center">
+              <TutorialModal>
+                <Button variant="outline">Tutorial</Button>
+              </TutorialModal>
               <SettingsModal settings={settings} setSettings={setSettings}>
                 <Button>Settings</Button>
               </SettingsModal>

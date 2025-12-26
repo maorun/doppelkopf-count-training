@@ -16,13 +16,6 @@
 
 ## Learning Features
 
-### Tutorial Mode
-
-- Step-by-step guide for beginners
-- Interactive explanations of card values
-- Practice rounds with hints
-- Gradual introduction to full card counting
-
 ### Hint System
 
 - Show current running total on demand (with point penalty)

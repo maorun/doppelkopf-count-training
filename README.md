@@ -4,6 +4,12 @@ Training application to practice counting cards in the game Doppelkopf.
 
 ## Features
 
+- **Tutorial Mode**: Interactive step-by-step guide for beginners
+  - Learn card values and their points in Doppelkopf
+  - See practical counting examples with explanations
+  - Understand the game flow with clear instructions
+  - Get helpful tips and strategies for faster counting
+  - Navigate at your own pace through 5 tutorial steps
 - **Card Counting Practice**: Reveal cards one by one and mentally track the
   total score
 - **Result Validation**: After completing a round, enter your calculated total
@@ -32,18 +38,21 @@ Training application to practice counting cards in the game Doppelkopf.
 
 ## How to Play
 
-1. Click on the card to reveal it
-2. Mentally track the cumulative score based on card values:
+1. **First time here?** Click the "Tutorial" button to learn the basics through an
+   interactive guide
+2. Click on the card to reveal it
+3. Mentally track the cumulative score based on card values:
    - Ass (Ace): 11 points
    - 10: 10 points
    - König (King): 4 points
    - Dame (Queen): 3 points
    - Bube (Jack): 2 points
    - 9: 0 points
-3. After all cards are revealed, enter your calculated total in the input field
-4. Click "Check Result" to see if your answer is correct and view your score
-5. Click "Play Again" to start a new round
-6. Click "Show Stats" to view your performance statistics and highscores
+4. After all cards are revealed, enter your calculated total in the input field
+5. Click "Check Result" to see if your answer is correct and view your score
+6. Click "Play Again" to start a new round
+7. Click "Tutorial" anytime to review card values and get helpful tips
+8. Click "Show Stats" to view your performance statistics and highscores
    - **Statistics Tab**: View comprehensive performance analytics including win
      rate, streaks, average times, and performance by difficulty
    - **Highscores Tab**: View your top 10 performances
