@@ -1,5 +1,5 @@
 // src/hooks/useTimedChallenge.test.ts
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { useTimedChallenge } from './useTimedChallenge'
 
@@ -14,7 +14,7 @@ describe('useTimedChallenge', () => {
 
   it('should initialize with default state', () => {
     const { result } = renderHook(() => useTimedChallenge(60))
-    
+
     expect(result.current.timedChallengeState.isActive).toBe(false)
     expect(result.current.timedChallengeState.timeRemaining).toBe(60)
     expect(result.current.timedChallengeState.timeLimitSeconds).toBe(60)
@@ -23,7 +23,7 @@ describe('useTimedChallenge', () => {
 
   it('should start challenge with correct initial time', () => {
     const { result } = renderHook(() => useTimedChallenge(90))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -35,7 +35,7 @@ describe('useTimedChallenge', () => {
 
   it('should countdown when challenge is active', async () => {
     const { result } = renderHook(() => useTimedChallenge(60))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -45,14 +45,12 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(5000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(55)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(55)
   })
 
   it('should mark time as up when countdown reaches zero', async () => {
     const { result } = renderHook(() => useTimedChallenge(3))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -62,16 +60,14 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(3000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(0)
-      expect(result.current.timedChallengeState.isTimeUp).toBe(true)
-      expect(result.current.timedChallengeState.isActive).toBe(false)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(0)
+    expect(result.current.timedChallengeState.isTimeUp).toBe(true)
+    expect(result.current.timedChallengeState.isActive).toBe(false)
   })
 
   it('should end challenge when endChallenge is called', () => {
     const { result } = renderHook(() => useTimedChallenge(60))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -87,7 +83,7 @@ describe('useTimedChallenge', () => {
 
   it('should reset challenge to initial state', async () => {
     const { result } = renderHook(() => useTimedChallenge(60))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -97,9 +93,7 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(10000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(50)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(50)
 
     act(() => {
       result.current.resetChallenge()
@@ -112,7 +106,7 @@ describe('useTimedChallenge', () => {
 
   it('should not countdown when challenge is not active', async () => {
     const { result } = renderHook(() => useTimedChallenge(60))
-    
+
     const initialTimeRemaining = result.current.timedChallengeState.timeRemaining
 
     // Fast-forward time without starting challenge
@@ -120,9 +114,7 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(5000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(initialTimeRemaining)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(initialTimeRemaining)
   })
 
   it('should update time limit when prop changes', () => {
@@ -130,7 +122,7 @@ describe('useTimedChallenge', () => {
       ({ timeLimitSeconds }) => useTimedChallenge(timeLimitSeconds),
       { initialProps: { timeLimitSeconds: 60 } },
     )
-    
+
     expect(result.current.timedChallengeState.timeLimitSeconds).toBe(60)
     expect(result.current.timedChallengeState.timeRemaining).toBe(60)
 
@@ -145,7 +137,7 @@ describe('useTimedChallenge', () => {
       ({ timeLimitSeconds }) => useTimedChallenge(timeLimitSeconds),
       { initialProps: { timeLimitSeconds: 60 } },
     )
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -155,9 +147,7 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(10000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(50)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(50)
 
     // Change time limit while active
     rerender({ timeLimitSeconds: 90 })
@@ -169,7 +159,7 @@ describe('useTimedChallenge', () => {
 
   it('should handle multiple start/stop cycles correctly', async () => {
     const { result } = renderHook(() => useTimedChallenge(30))
-    
+
     // First cycle
     act(() => {
       result.current.startChallenge()
@@ -179,9 +169,7 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(5000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(25)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(25)
 
     act(() => {
       result.current.endChallenge()
@@ -202,14 +190,12 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(3000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(27)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(27)
   })
 
   it('should stop countdown after time is up', async () => {
     const { result } = renderHook(() => useTimedChallenge(2))
-    
+
     act(() => {
       result.current.startChallenge()
     })
@@ -219,9 +205,7 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(2000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.isTimeUp).toBe(true)
-    })
+    expect(result.current.timedChallengeState.isTimeUp).toBe(true)
 
     const timeRemaining = result.current.timedChallengeState.timeRemaining
 
@@ -230,8 +214,6 @@ describe('useTimedChallenge', () => {
       vi.advanceTimersByTime(5000)
     })
 
-    await waitFor(() => {
-      expect(result.current.timedChallengeState.timeRemaining).toBe(timeRemaining)
-    })
+    expect(result.current.timedChallengeState.timeRemaining).toBe(timeRemaining)
   })
 })

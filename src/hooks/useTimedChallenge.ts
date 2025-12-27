@@ -15,23 +15,13 @@ const getDefaultState = (timeLimitSeconds: number): TimedChallengeState => ({
   isTimeUp: false,
 })
 
-export const useTimedChallenge = (timeLimitSeconds: number) => {
-  const [timedChallengeState, setTimedChallengeState] = useState<TimedChallengeState>(
-    () => getDefaultState(timeLimitSeconds),
-  )
-
-  // Update state when time limit changes
+const useCountdownTimer = (
+  isActive: boolean,
+  timeRemaining: number,
+  setTimedChallengeState: (value: TimedChallengeState | ((prev: TimedChallengeState) => TimedChallengeState)) => void,
+) => {
   useEffect(() => {
-    setTimedChallengeState(prev => ({
-      ...prev,
-      timeLimitSeconds,
-      timeRemaining: prev.isActive ? prev.timeRemaining : timeLimitSeconds,
-    }))
-  }, [timeLimitSeconds])
-
-  // Countdown timer effect
-  useEffect(() => {
-    if (!timedChallengeState.isActive || timedChallengeState.timeRemaining <= 0) {
+    if (!isActive || timeRemaining <= 0) {
       return
     }
 
@@ -56,7 +46,28 @@ export const useTimedChallenge = (timeLimitSeconds: number) => {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [timedChallengeState.isActive, timedChallengeState.timeRemaining])
+  }, [isActive, timeRemaining, setTimedChallengeState])
+}
+
+export const useTimedChallenge = (timeLimitSeconds: number) => {
+  const [timedChallengeState, setTimedChallengeState] = useState<TimedChallengeState>(
+    () => getDefaultState(timeLimitSeconds),
+  )
+
+  // Update state when time limit changes
+  useEffect(() => {
+    setTimedChallengeState(prev => ({
+      ...prev,
+      timeLimitSeconds,
+      timeRemaining: prev.isActive ? prev.timeRemaining : timeLimitSeconds,
+    }))
+  }, [timeLimitSeconds])
+
+  useCountdownTimer(
+    timedChallengeState.isActive,
+    timedChallengeState.timeRemaining,
+    setTimedChallengeState,
+  )
 
   const startChallenge = useCallback(() => {
     setTimedChallengeState(prev => ({
