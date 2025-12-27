@@ -125,6 +125,7 @@ Survival Mode offers an exciting challenge where you test your endurance and ski
 ### Survival Statistics
 
 Track your survival performance in the Survival tab:
+
 - **Current Streak**: How many rounds you've survived in your current run
 - **Longest Streak**: Your best performance ever
 - **Current Difficulty**: The number of cards in your current round
