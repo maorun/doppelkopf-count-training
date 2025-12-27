@@ -14,6 +14,7 @@ describe('useSettings', () => {
       includeNines: false,
       measureTime: true,
       cardCountRange: [20, 20],
+      gameMode: 'single',
     })
   })
 
@@ -22,6 +23,7 @@ describe('useSettings', () => {
       includeNines: true,
       measureTime: false,
       cardCountRange: [15, 25],
+      gameMode: 'single',
     }
     window.localStorage.setItem('gameSettings', JSON.stringify(storedSettings))
     const { result } = renderHook(() => useSettings())
@@ -34,6 +36,7 @@ describe('useSettings', () => {
       includeNines: true,
       measureTime: false,
       cardCountRange: [18, 22],
+      gameMode: 'survival',
     }
     act(() => {
       result.current.setSettings(newSettings)
