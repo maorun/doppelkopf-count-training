@@ -14,6 +14,10 @@ export interface Statistics {
   averageScore: number
   bestScore: number
   performanceByDifficulty: Record<string, DifficultyStats>
+  totalHintsUsed: number
+  averageHintsPerGame: number
+  gamesWithHints: number
+  gamesWithoutHints: number
 }
 
 export interface DifficultyStats {
@@ -87,25 +91,29 @@ const calculateDifficultyStats = (
   return performanceByDifficulty
 }
 
+const EMPTY_STATISTICS: Statistics = {
+  totalGames: 0,
+  correctAnswers: 0,
+  incorrectAnswers: 0,
+  winRate: 0,
+  averageTimePerCard: 0,
+  bestStreak: 0,
+  currentStreak: 0,
+  totalCardsPlayed: 0,
+  averageScore: 0,
+  bestScore: 0,
+  performanceByDifficulty: {},
+  totalHintsUsed: 0,
+  averageHintsPerGame: 0,
+  gamesWithHints: 0,
+  gamesWithoutHints: 0,
+}
+
 /**
  * Calculate comprehensive statistics from highscore entries
  */
 export const calculateStatistics = (entries: HighscoreEntry[]): Statistics => {
-  if (entries.length === 0) {
-    return {
-      totalGames: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      winRate: 0,
-      averageTimePerCard: 0,
-      bestStreak: 0,
-      currentStreak: 0,
-      totalCardsPlayed: 0,
-      averageScore: 0,
-      bestScore: 0,
-      performanceByDifficulty: {},
-    }
-  }
+  if (entries.length === 0) return EMPTY_STATISTICS
 
   const sortedEntries = [...entries].sort((a, b) => a.timestamp - b.timestamp)
 
@@ -125,6 +133,9 @@ export const calculateStatistics = (entries: HighscoreEntry[]): Statistics => {
   const bestScore = Math.max(...sortedEntries.map(e => e.score))
   const performanceByDifficulty = calculateDifficultyStats(sortedEntries)
 
+  const totalHintsUsed = sortedEntries.reduce((sum, e) => sum + (e.hintsUsed || 0), 0)
+  const gamesWithHints = sortedEntries.filter(e => (e.hintsUsed || 0) > 0).length
+
   return {
     totalGames,
     correctAnswers,
@@ -137,6 +148,10 @@ export const calculateStatistics = (entries: HighscoreEntry[]): Statistics => {
     averageScore,
     bestScore,
     performanceByDifficulty,
+    totalHintsUsed,
+    averageHintsPerGame: totalHintsUsed / totalGames,
+    gamesWithHints,
+    gamesWithoutHints: totalGames - gamesWithHints,
   }
 }
 

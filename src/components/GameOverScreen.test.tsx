@@ -99,6 +99,7 @@ describe('GameOverScreen', () => {
       cardsCount: 20,
       elapsedTime: 5000,
       timeWasMeasured: true,
+      hintsUsed: 0,
     })
   })
 
@@ -115,6 +116,7 @@ describe('GameOverScreen', () => {
       cardsCount: 20,
       elapsedTime: 5000,
       timeWasMeasured: true,
+      hintsUsed: 0,
     })
   })
 

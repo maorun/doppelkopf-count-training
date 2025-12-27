@@ -5,6 +5,7 @@ export interface GameResult {
   cardsCount: number
   elapsedTime: number // in milliseconds
   timeWasMeasured: boolean
+  hintsUsed?: number
 }
 
 export interface HighscoreEntry {
@@ -14,6 +15,7 @@ export interface HighscoreEntry {
   elapsedTime: number
   timeWasMeasured: boolean
   timestamp: number
+  hintsUsed?: number
 }
 
 /**
@@ -26,6 +28,7 @@ export interface HighscoreEntry {
  *   - Fast (< 1s per card): +50 points
  *   - Normal (1-2s per card): +25 points
  *   - Slow (> 2s per card): +0 points
+ * - Hint penalty: -20 points per hint used
  */
 export const calculateScore = (result: GameResult): number => {
   if (!result.isCorrect) {
@@ -50,7 +53,13 @@ export const calculateScore = (result: GameResult): number => {
     // Slow: no bonus
   }
 
-  return score
+  // Hint penalty
+  if (result.hintsUsed && result.hintsUsed > 0) {
+    score -= result.hintsUsed * 20
+  }
+
+  // Ensure score doesn't go below 0
+  return Math.max(0, score)
 }
 
 /**
@@ -64,6 +73,7 @@ export const createHighscoreEntry = (result: GameResult): HighscoreEntry => {
     elapsedTime: result.elapsedTime,
     timeWasMeasured: result.timeWasMeasured,
     timestamp: Date.now(),
+    hintsUsed: result.hintsUsed,
   }
 }
 
