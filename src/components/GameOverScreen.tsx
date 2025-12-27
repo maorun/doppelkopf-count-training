@@ -28,13 +28,25 @@ const InputForm: React.FC<{
   </div>
 )
 
+const getResultMessage = (isCorrect: boolean, isSurvivalMode: boolean): string => {
+  if (isCorrect) {
+    return isSurvivalMode ? 'Keep going! Next round is harder!' : 'Great job!'
+  }
+  return isSurvivalMode ? 'Survival mode ended. Try again!' : 'Better luck next time!'
+}
+
+const getButtonText = (isCorrect: boolean, isSurvivalMode: boolean): string => {
+  return isSurvivalMode && isCorrect ? 'Next Round' : 'Play Again'
+}
+
 const ResultDisplay: React.FC<{
   isCorrect: boolean
   userInput: string
   totalScore: number
   gameScore: number
   resetGame: () => void
-}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame }) => (
+  isSurvivalMode?: boolean
+}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame, isSurvivalMode = false }) => (
   <div className="space-y-4">
     <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
@@ -46,7 +58,7 @@ const ResultDisplay: React.FC<{
         {gameScore}
       </p>
       <p className="text-sm text-blue-700 dark:text-blue-300">
-        {isCorrect ? 'Great job!' : 'Better luck next time!'}
+        {getResultMessage(isCorrect, isSurvivalMode)}
       </p>
     </div>
     <p className="text-xl text-gray-900 dark:text-gray-100">
@@ -60,7 +72,7 @@ const ResultDisplay: React.FC<{
       {totalScore}
     </p>
     <Button onClick={resetGame}>
-      Play Again
+      {getButtonText(isCorrect, isSurvivalMode)}
     </Button>
   </div>
 )
@@ -74,7 +86,19 @@ export const GameOverScreen: React.FC<{
   resetGame: () => void
   onHighscoreSubmit?: (result: GameResult) => void
   hintsUsed?: number
-}> = ({ totalScore, elapsedTime, cardsCount, timeWasMeasured, resetGame, onHighscoreSubmit, hintsUsed = 0 }) => {
+  onSurvivalResult?: (isCorrect: boolean) => void
+  isSurvivalMode?: boolean
+}> = ({
+  totalScore,
+  elapsedTime,
+  cardsCount,
+  timeWasMeasured,
+  resetGame,
+  onHighscoreSubmit,
+  hintsUsed = 0,
+  onSurvivalResult,
+  isSurvivalMode = false,
+}) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
   const [gameScore, setGameScore] = useState(0)
@@ -94,9 +118,14 @@ export const GameOverScreen: React.FC<{
     const score = calculateScore(result)
     setGameScore(score)
 
-    // Notify parent component
+    // Notify parent component about highscore
     if (onHighscoreSubmit) {
       onHighscoreSubmit(result)
+    }
+
+    // Notify parent component about survival result
+    if (onSurvivalResult) {
+      onSurvivalResult(isCorrect)
     }
   }
 
@@ -132,6 +161,7 @@ export const GameOverScreen: React.FC<{
           totalScore={totalScore}
           gameScore={gameScore}
           resetGame={resetGame}
+          isSurvivalMode={isSurvivalMode}
         />
       )}
     </div>

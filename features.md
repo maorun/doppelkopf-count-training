@@ -8,12 +8,6 @@
 - Bonus points for faster completion
 - Progressive difficulty levels
 
-### Survival Mode
-
-- Keep playing until first mistake
-- Track longest survival streak
-- Increasing difficulty with each correct answer
-
 ## Visual Enhancements
 
 ### Card Design Options

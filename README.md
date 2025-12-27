@@ -4,6 +4,14 @@ Training application to practice counting cards in the game Doppelkopf.
 
 ## Features
 
+- **Game Modes**:
+  - **Single Game Mode**: Play one round at a time with customizable card counts
+  - **Survival Mode**: Test your endurance! Keep playing until your first mistake
+    - Start with 15 cards to count
+    - Difficulty increases by 2 cards after each correct answer
+    - Maximum difficulty of 40 cards
+    - Track your current streak and longest survival streak
+    - Progress saved automatically
 - **Tutorial Mode**: Interactive step-by-step guide for beginners
   - Learn card values and their points in Doppelkopf
   - See practical counting examples with explanations
@@ -29,8 +37,9 @@ Training application to practice counting cards in the game Doppelkopf.
   - Local highscore leaderboard shows your top 10 performances
   - Clear all highscores option available
 - **Customizable Settings**:
+  - Choose between Single Game and Survival Mode
   - Include or exclude 9s from the deck
-  - Configure the number of cards to reveal (card count range)
+  - Configure the number of cards to reveal (in Single Game mode)
   - Optional time tracking to measure your calculation speed
 - **Hint System**: Get help during gameplay with optional hints
   - Show current running total at any time
@@ -67,6 +76,8 @@ Training application to practice counting cards in the game Doppelkopf.
    - **Statistics Tab**: View comprehensive performance analytics including win
      rate, streaks, average times, performance by difficulty, and hint usage
    - **Highscores Tab**: View your top 10 performances
+   - **Survival Tab**: View survival mode statistics including current streak,
+     longest streak, and difficulty progression
 
 ## Scoring System
 
@@ -89,6 +100,35 @@ Your score is calculated based on:
 - 20 cards, correct answer, time tracking off, 2 hints used:
   100 + 200 - 40 = **260 points**
 - Any incorrect answer: **0 points**
+
+## Survival Mode
+
+Survival Mode offers an exciting challenge where you test your endurance and skills:
+
+### How It Works
+
+1. **Select Survival Mode** in Settings
+2. Click **Start Survival Mode** to begin
+3. Start with 15 cards to count
+4. Each correct answer increases difficulty by 2 cards
+5. Maximum difficulty caps at 40 cards
+6. **One wrong answer ends your streak!**
+7. Your longest survival streak is saved
+
+### Strategy Tips
+
+- Start carefully - accuracy is everything
+- Use hints wisely (they reduce your score but keep your streak alive)
+- As difficulty increases, take your time
+- Focus on building your longest streak record
+
+### Survival Statistics
+
+Track your survival performance in the Survival tab:
+
+- **Current Streak**: How many rounds you've survived in your current run
+- **Longest Streak**: Your best performance ever
+- **Current Difficulty**: The number of cards in your current round
 
 ## Development
 

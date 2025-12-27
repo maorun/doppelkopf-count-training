@@ -10,6 +10,7 @@ describe('SettingsModal', () => {
     includeNines: false,
     measureTime: true,
     cardCountRange: [20, 20],
+    gameMode: 'single',
   }
 
   it('should render the modal with the correct settings', () => {

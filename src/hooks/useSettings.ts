@@ -1,16 +1,20 @@
 // src/hooks/useSettings.ts
 import { useState, useEffect } from 'react'
 
+export type GameMode = 'single' | 'survival'
+
 export interface GameSettings {
   includeNines: boolean
   measureTime: boolean
   cardCountRange: [number, number]
+  gameMode: GameMode
 }
 
 const defaultSettings: GameSettings = {
   includeNines: false,
   measureTime: true,
   cardCountRange: [20, 20],
+  gameMode: 'single',
 }
 
 export const useSettings = () => {

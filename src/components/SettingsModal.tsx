@@ -1,6 +1,6 @@
 // src/components/SettingsModal.tsx
 import React from 'react'
-import { GameSettings } from '../hooks/useSettings'
+import { GameSettings, GameMode } from '../hooks/useSettings'
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import {
 import { Switch } from './ui/switch'
 import { Label } from './ui/label'
 import { Slider } from './ui/slider'
+import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 
 interface SettingsModalProps {
   children: React.ReactNode
@@ -74,6 +75,37 @@ const SettingSlider: React.FC<{
   </div>
 )
 
+const GameModeSelector: React.FC<{
+  value: GameMode
+  onValueChange: (value: GameMode) => void
+}> = ({ value, onValueChange }) => (
+  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+    <div className="space-y-0.5">
+      <Label className="text-base font-medium">
+        Game Mode
+      </Label>
+      <p className="text-sm text-slate-500">
+        Choose between single game or survival mode
+      </p>
+    </div>
+    <RadioGroup value={value} onValueChange={onValueChange}>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="single" id="mode-single" />
+        <Label htmlFor="mode-single" className="cursor-pointer">
+          Single Game - Play one round at a time
+        </Label>
+      </div>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="survival" id="mode-survival" />
+        <Label htmlFor="mode-survival" className="cursor-pointer">
+          Survival Mode - Keep playing until first mistake
+        </Label>
+      </div>
+    </RadioGroup>
+  </div>
+)
+
+/* eslint-disable max-lines-per-function */
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   children,
   settings,
@@ -90,6 +122,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 pt-4">
+          <GameModeSelector
+            value={settings.gameMode}
+            onValueChange={mode =>
+              setSettings({ ...settings, gameMode: mode })}
+          />
           <SettingSwitch
             id="include-nines"
             label="Include 9s"
@@ -106,13 +143,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onCheckedChange={checked =>
               setSettings({ ...settings, measureTime: checked })}
           />
-          <SettingSlider
-            label="Number of cards"
-            description="Set the range of cards to reveal during the game"
-            value={settings.cardCountRange}
-            onValueChange={value =>
-              setSettings({ ...settings, cardCountRange: [value[0], value[1]] })}
-          />
+          {settings.gameMode === 'single' && (
+            <SettingSlider
+              label="Number of cards"
+              description="Set the range of cards to reveal during the game"
+              value={settings.cardCountRange}
+              onValueChange={value =>
+                setSettings({ ...settings, cardCountRange: [value[0], value[1]] })}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

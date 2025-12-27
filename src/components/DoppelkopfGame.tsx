@@ -4,12 +4,15 @@ import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
 import { useSettings } from '../hooks/useSettings'
 import { useHighscores } from '../hooks/useHighscores'
 import { useStatistics } from '../hooks/useStatistics'
+import { useSurvivalMode } from '../hooks/useSurvivalMode'
 import { Card, Suit } from '../lib/doppelkopf'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
 import { GameOverScreen } from './GameOverScreen'
 import { HighscoreList } from './HighscoreList'
 import { StatisticsView } from './StatisticsView'
+import { SurvivalInfo } from './SurvivalInfo'
+import { SurvivalStatsView } from './SurvivalStatsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { ThemeToggle } from './ThemeToggle'
 import { TutorialModal } from './TutorialModal'
@@ -57,12 +60,13 @@ const GameScreen: React.FC<{
   </div>
 )
 
-/* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines-per-function, complexity */
 const DoppelkopfGame: React.FC = () => {
   const { settings, setSettings } = useSettings()
   const { addHighscore, getTop, clearHighscores, highscores } = useHighscores()
   const [showHighscores, setShowHighscores] = useState(false)
   const { statistics, recentTrend } = useStatistics(highscores)
+  const { survivalState, startSurvival } = useSurvivalMode()
   const {
     currentCard,
     isFinished,
@@ -74,13 +78,38 @@ const DoppelkopfGame: React.FC = () => {
     cardsToReveal,
     hintsUsed,
     useHint,
+    handleSurvivalResult,
   } = useDoppelkopfGame(settings)
 
   const topHighscores = getTop(10)
 
+  const handleStartSurvival = () => {
+    startSurvival()
+    resetGame()
+  }
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-8 transition-colors">
       <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">Doppelkopf Game</h1>
+
+      {settings.gameMode === 'survival' && survivalState.isActive && (
+        <SurvivalInfo
+          currentStreak={survivalState.currentStreak}
+          longestStreak={survivalState.longestStreak}
+          currentDifficulty={survivalState.currentDifficulty}
+        />
+      )}
+
+      {settings.gameMode === 'survival' && !survivalState.isActive && !isFinished && (
+        <div className="mb-8 text-center">
+          <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
+            Ready for Survival Mode?
+          </p>
+          <Button onClick={handleStartSurvival} size="lg">
+            Start Survival Mode
+          </Button>
+        </div>
+      )}
 
       <div className="mb-8">
         {isFinished ? (
@@ -92,6 +121,8 @@ const DoppelkopfGame: React.FC = () => {
             resetGame={resetGame}
             onHighscoreSubmit={addHighscore}
             hintsUsed={hintsUsed}
+            onSurvivalResult={handleSurvivalResult}
+            isSurvivalMode={settings.gameMode === 'survival'}
           />
         ) : (
           <>
@@ -143,15 +174,19 @@ const DoppelkopfGame: React.FC = () => {
       {showHighscores && (
         <div className="w-full max-w-6xl px-4">
           <Tabs defaultValue="statistics" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsList className="grid w-full grid-cols-3 mb-4">
               <TabsTrigger value="statistics">Statistics</TabsTrigger>
               <TabsTrigger value="highscores">Highscores</TabsTrigger>
+              <TabsTrigger value="survival">Survival</TabsTrigger>
             </TabsList>
             <TabsContent value="statistics">
               <StatisticsView statistics={statistics} recentTrend={recentTrend} />
             </TabsContent>
             <TabsContent value="highscores">
               <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+            </TabsContent>
+            <TabsContent value="survival">
+              <SurvivalStatsView />
             </TabsContent>
           </Tabs>
         </div>
