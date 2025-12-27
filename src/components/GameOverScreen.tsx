@@ -28,7 +28,17 @@ const InputForm: React.FC<{
   </div>
 )
 
-/* eslint-disable complexity */
+const getResultMessage = (isCorrect: boolean, isSurvivalMode: boolean): string => {
+  if (isCorrect) {
+    return isSurvivalMode ? 'Keep going! Next round is harder!' : 'Great job!'
+  }
+  return isSurvivalMode ? 'Survival mode ended. Try again!' : 'Better luck next time!'
+}
+
+const getButtonText = (isCorrect: boolean, isSurvivalMode: boolean): string => {
+  return isSurvivalMode && isCorrect ? 'Next Round' : 'Play Again'
+}
+
 const ResultDisplay: React.FC<{
   isCorrect: boolean
   userInput: string
@@ -48,9 +58,7 @@ const ResultDisplay: React.FC<{
         {gameScore}
       </p>
       <p className="text-sm text-blue-700 dark:text-blue-300">
-        {isCorrect
-          ? (isSurvivalMode ? 'Keep going! Next round is harder!' : 'Great job!')
-          : (isSurvivalMode ? 'Survival mode ended. Try again!' : 'Better luck next time!')}
+        {getResultMessage(isCorrect, isSurvivalMode)}
       </p>
     </div>
     <p className="text-xl text-gray-900 dark:text-gray-100">
@@ -64,7 +72,7 @@ const ResultDisplay: React.FC<{
       {totalScore}
     </p>
     <Button onClick={resetGame}>
-      {isSurvivalMode && isCorrect ? 'Next Round' : 'Play Again'}
+      {getButtonText(isCorrect, isSurvivalMode)}
     </Button>
   </div>
 )

@@ -593,6 +593,14 @@ ture
 I frameworks
 - **Styling Guidelines**: Use only Tailwind CSS utility classes - never create c
 ustom CSS classes or separate CSS files
+- **ESLint Rules**: **NEVER add `eslint-disable` comments during development**.
+Instead, refactor code to fix the underlying issue:
+  - For complexity warnings: Extract helper functions or break down conditional
+logic
+  - For max-lines-per-function: Break large functions into smaller, focused comp
+onents or helper functions
+  - For other warnings: Address the root cause rather than suppressing the warni
+ng
 - **Performance**: No unnecessary re-renders or expensive calculations
 - **Error Handling**: Appropriate error handling for user inputs and edge cases
 
