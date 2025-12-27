@@ -41,6 +41,14 @@ Training application to practice counting cards in the game Doppelkopf.
   - Include or exclude 9s from the deck
   - Configure the number of cards to reveal (in Single Game mode)
   - Optional time tracking to measure your calculation speed
+  - **Card Design Options**: Personalize the visual appearance of cards
+    - **Card Styles**: Choose between Classic (traditional), Modern (stylish
+      gradients), or Minimalist (clean and simple) designs
+    - **Color Schemes**: Select Traditional (red/black suits), Monochrome (uniform
+      colors), or Vibrant (colorful suits) color schemes
+    - **Accessibility Features**: 
+      - High Contrast mode for improved visibility
+      - Larger Text option for better readability
 - **Hint System**: Get help during gameplay with optional hints
   - Show current running total at any time
   - View the last 5 cards revealed with their values
@@ -72,12 +80,16 @@ Training application to practice counting cards in the game Doppelkopf.
 6. Click "Check Result" to see if your answer is correct and view your score
 7. Click "Play Again" to start a new round
 8. Click "Tutorial" anytime to review card values and get helpful tips
-9. Click "Show Stats" to view your performance statistics and highscores
-   - **Statistics Tab**: View comprehensive performance analytics including win
-     rate, streaks, average times, performance by difficulty, and hint usage
-   - **Highscores Tab**: View your top 10 performances
-   - **Survival Tab**: View survival mode statistics including current streak,
-     longest streak, and difficulty progression
+9. **Customize your experience**: Click "Settings" to personalize the game
+   - Adjust game mode and difficulty settings
+   - **Personalize card appearance**: Choose your preferred card style, color
+     scheme, and accessibility options to enhance your playing experience
+10. Click "Show Stats" to view your performance statistics and highscores
+    - **Statistics Tab**: View comprehensive performance analytics including win
+      rate, streaks, average times, performance by difficulty, and hint usage
+    - **Highscores Tab**: View your top 10 performances
+    - **Survival Tab**: View survival mode statistics including current streak,
+      longest streak, and difficulty progression
 
 ## Scoring System
 
