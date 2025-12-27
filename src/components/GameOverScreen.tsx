@@ -28,13 +28,15 @@ const InputForm: React.FC<{
   </div>
 )
 
+/* eslint-disable complexity */
 const ResultDisplay: React.FC<{
   isCorrect: boolean
   userInput: string
   totalScore: number
   gameScore: number
   resetGame: () => void
-}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame }) => (
+  isSurvivalMode?: boolean
+}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame, isSurvivalMode = false }) => (
   <div className="space-y-4">
     <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
@@ -46,7 +48,9 @@ const ResultDisplay: React.FC<{
         {gameScore}
       </p>
       <p className="text-sm text-blue-700 dark:text-blue-300">
-        {isCorrect ? 'Great job!' : 'Better luck next time!'}
+        {isCorrect
+          ? (isSurvivalMode ? 'Keep going! Next round is harder!' : 'Great job!')
+          : (isSurvivalMode ? 'Survival mode ended. Try again!' : 'Better luck next time!')}
       </p>
     </div>
     <p className="text-xl text-gray-900 dark:text-gray-100">
@@ -60,7 +64,7 @@ const ResultDisplay: React.FC<{
       {totalScore}
     </p>
     <Button onClick={resetGame}>
-      Play Again
+      {isSurvivalMode && isCorrect ? 'Next Round' : 'Play Again'}
     </Button>
   </div>
 )
@@ -75,6 +79,7 @@ export const GameOverScreen: React.FC<{
   onHighscoreSubmit?: (result: GameResult) => void
   hintsUsed?: number
   onSurvivalResult?: (isCorrect: boolean) => void
+  isSurvivalMode?: boolean
 }> = ({
   totalScore,
   elapsedTime,
@@ -84,6 +89,7 @@ export const GameOverScreen: React.FC<{
   onHighscoreSubmit,
   hintsUsed = 0,
   onSurvivalResult,
+  isSurvivalMode = false,
 }) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
@@ -147,6 +153,7 @@ export const GameOverScreen: React.FC<{
           totalScore={totalScore}
           gameScore={gameScore}
           resetGame={resetGame}
+          isSurvivalMode={isSurvivalMode}
         />
       )}
     </div>
