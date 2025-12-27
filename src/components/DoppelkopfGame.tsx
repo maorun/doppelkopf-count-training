@@ -12,6 +12,7 @@ import { GameOverScreen } from './GameOverScreen'
 import { HighscoreList } from './HighscoreList'
 import { StatisticsView } from './StatisticsView'
 import { SurvivalInfo } from './SurvivalInfo'
+import { SurvivalStatsView } from './SurvivalStatsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { ThemeToggle } from './ThemeToggle'
 import { TutorialModal } from './TutorialModal'
@@ -173,15 +174,19 @@ const DoppelkopfGame: React.FC = () => {
       {showHighscores && (
         <div className="w-full max-w-6xl px-4">
           <Tabs defaultValue="statistics" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsList className="grid w-full grid-cols-3 mb-4">
               <TabsTrigger value="statistics">Statistics</TabsTrigger>
               <TabsTrigger value="highscores">Highscores</TabsTrigger>
+              <TabsTrigger value="survival">Survival</TabsTrigger>
             </TabsList>
             <TabsContent value="statistics">
               <StatisticsView statistics={statistics} recentTrend={recentTrend} />
             </TabsContent>
             <TabsContent value="highscores">
               <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+            </TabsContent>
+            <TabsContent value="survival">
+              <SurvivalStatsView />
             </TabsContent>
           </Tabs>
         </div>
