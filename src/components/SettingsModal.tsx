@@ -1,6 +1,7 @@
 // src/components/SettingsModal.tsx
-import React from 'react'
+import React, { useId } from 'react'
 import { GameSettings, GameMode } from '../hooks/useSettings'
+import { CardStyle, ColorScheme } from '../lib/card-design'
 import {
   Dialog,
   DialogContent,
@@ -105,16 +106,103 @@ const GameModeSelector: React.FC<{
   </div>
 )
 
+const CardStyleSelector: React.FC<{
+  value: CardStyle
+  onValueChange: (value: CardStyle) => void
+}> = ({ value, onValueChange }) => {
+  const classicId = useId()
+  const modernId = useId()
+  const minimalistId = useId()
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+      <div className="space-y-0.5">
+        <Label className="text-base font-medium">
+          Card Style
+        </Label>
+        <p className="text-sm text-slate-500">
+          Choose the visual style of the cards
+        </p>
+      </div>
+      <RadioGroup value={value} onValueChange={onValueChange}>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="classic" id={classicId} />
+          <Label htmlFor={classicId} className="cursor-pointer">
+            Classic - Traditional card design
+          </Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="modern" id={modernId} />
+          <Label htmlFor={modernId} className="cursor-pointer">
+            Modern - Stylish gradient cards
+          </Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="minimalist" id={minimalistId} />
+          <Label htmlFor={minimalistId} className="cursor-pointer">
+            Minimalist - Simple clean design
+          </Label>
+        </div>
+      </RadioGroup>
+    </div>
+  )
+}
+
+const ColorSchemeSelector: React.FC<{
+  value: ColorScheme
+  onValueChange: (value: ColorScheme) => void
+}> = ({ value, onValueChange }) => {
+  const traditionalId = useId()
+  const monochromeId = useId()
+  const vibrantId = useId()
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+      <div className="space-y-0.5">
+        <Label className="text-base font-medium">
+          Color Scheme
+        </Label>
+        <p className="text-sm text-slate-500">
+          Choose the color scheme for card suits
+        </p>
+      </div>
+      <RadioGroup value={value} onValueChange={onValueChange}>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="traditional" id={traditionalId} />
+          <Label htmlFor={traditionalId} className="cursor-pointer">
+            Traditional - Red and black suits
+          </Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="monochrome" id={monochromeId} />
+          <Label htmlFor={monochromeId} className="cursor-pointer">
+            Monochrome - All suits in same color
+          </Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="vibrant" id={vibrantId} />
+          <Label htmlFor={vibrantId} className="cursor-pointer">
+            Vibrant - Colorful suit colors
+          </Label>
+        </div>
+      </RadioGroup>
+    </div>
+  )
+}
+
 /* eslint-disable max-lines-per-function */
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   children,
   settings,
   setSettings,
 }) => {
+  const highContrastId = useId()
+  const largerTextId = useId()
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-3">
           <DialogTitle className="text-2xl font-bold">Settings</DialogTitle>
           <DialogDescription className="text-base">
@@ -152,6 +240,68 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 setSettings({ ...settings, cardCountRange: [value[0], value[1]] })}
             />
           )}
+
+          <div className="pt-2 border-t border-slate-200">
+            <h3 className="text-lg font-semibold mb-3 text-slate-900">Card Design</h3>
+
+            <div className="space-y-4">
+              <CardStyleSelector
+                value={settings.cardDesign.style}
+                onValueChange={style =>
+                  setSettings({
+                    ...settings,
+                    cardDesign: { ...settings.cardDesign, style },
+                  })}
+              />
+
+              <ColorSchemeSelector
+                value={settings.cardDesign.colorScheme}
+                onValueChange={colorScheme =>
+                  setSettings({
+                    ...settings,
+                    cardDesign: { ...settings.cardDesign, colorScheme },
+                  })}
+              />
+
+              <div className="space-y-3">
+                <h4 className="text-base font-medium text-slate-900">Accessibility</h4>
+                <SettingSwitch
+                  id={highContrastId}
+                  label="High Contrast"
+                  description="Increase contrast for better visibility"
+                  checked={settings.cardDesign.accessibility.highContrast}
+                  onCheckedChange={checked =>
+                    setSettings({
+                      ...settings,
+                      cardDesign: {
+                        ...settings.cardDesign,
+                        accessibility: {
+                          ...settings.cardDesign.accessibility,
+                          highContrast: checked,
+                        },
+                      },
+                    })}
+                />
+                <SettingSwitch
+                  id={largerTextId}
+                  label="Larger Text"
+                  description="Increase text size on cards for better readability"
+                  checked={settings.cardDesign.accessibility.largerText}
+                  onCheckedChange={checked =>
+                    setSettings({
+                      ...settings,
+                      cardDesign: {
+                        ...settings.cardDesign,
+                        accessibility: {
+                          ...settings.cardDesign.accessibility,
+                          largerText: checked,
+                        },
+                      },
+                    })}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

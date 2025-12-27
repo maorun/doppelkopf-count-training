@@ -6,6 +6,14 @@ import { useHighscores } from '../hooks/useHighscores'
 import { useStatistics } from '../hooks/useStatistics'
 import { useSurvivalMode } from '../hooks/useSurvivalMode'
 import { Card, Suit } from '../lib/doppelkopf'
+import { CardDesignOptions } from '../lib/card-design'
+import {
+  getCardContainerClasses,
+  getCardBackClasses,
+  getSuitColorClasses,
+  getTextSizeClasses,
+  getCardContentClasses,
+} from '../lib/card-design-utils'
 import { SettingsModal } from './SettingsModal'
 import { Button } from './ui/button'
 import { GameOverScreen } from './GameOverScreen'
@@ -31,31 +39,52 @@ const getSuitSymbol = (suit: Suit): string => {
   }
 }
 
-const isRedSuit = (suit: Suit): boolean => {
-  return suit === 'Herz' || suit === 'Karo'
-}
-
 const GameScreen: React.FC<{
   currentCard: Card | null
   handleCardClick: () => void
-}> = ({ currentCard, handleCardClick }) => (
+  cardDesign: CardDesignOptions
+}> = ({ currentCard, handleCardClick, cardDesign }) => (
   <div
-    className="w-64 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-colors"
+    className={getCardContainerClasses(cardDesign.style)}
     onClick={handleCardClick}
     role="button"
     data-testid="game-card"
   >
     {currentCard ? (
       <div
-        className="w-full h-full p-4 flex flex-col justify-between animate-fade-in-slow"
+        className={getCardContentClasses(cardDesign.style)}
         key={currentCard.suit + currentCard.rank}
       >
-        <span className={`text-2xl font-bold ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{currentCard.rank}</span>
-        <span className={`text-4xl self-center ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{getSuitSymbol(currentCard.suit)}</span>
-        <span className={`text-2xl font-bold self-end transform rotate-180 ${isRedSuit(currentCard.suit) ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}`}>{currentCard.rank}</span>
+        <span
+          className={`${getTextSizeClasses('small', cardDesign.accessibility)} font-bold ${getSuitColorClasses(
+            currentCard.suit,
+            cardDesign.colorScheme,
+            cardDesign.accessibility,
+          )}`}
+        >
+          {currentCard.rank}
+        </span>
+        <span
+          className={`${getTextSizeClasses('medium', cardDesign.accessibility)} self-center ${getSuitColorClasses(
+            currentCard.suit,
+            cardDesign.colorScheme,
+            cardDesign.accessibility,
+          )}`}
+        >
+          {getSuitSymbol(currentCard.suit)}
+        </span>
+        <span
+          className={`${getTextSizeClasses('small', cardDesign.accessibility)} font-bold self-end transform rotate-180 ${getSuitColorClasses(
+            currentCard.suit,
+            cardDesign.colorScheme,
+            cardDesign.accessibility,
+          )}`}
+        >
+          {currentCard.rank}
+        </span>
       </div>
     ) : (
-      <div data-testid="card-back" className="w-full h-full bg-blue-500 dark:bg-blue-700 rounded-lg border-4 border-white dark:border-gray-600 transition-colors"></div>
+      <div data-testid="card-back" className={getCardBackClasses(cardDesign.style)}></div>
     )}
   </div>
 )
@@ -126,7 +155,7 @@ const DoppelkopfGame: React.FC = () => {
           />
         ) : (
           <>
-            <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} />
+            <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} cardDesign={settings.cardDesign} />
             <p className="text-xl mt-4 text-center text-gray-900 dark:text-gray-100">
               Card
               {' '}

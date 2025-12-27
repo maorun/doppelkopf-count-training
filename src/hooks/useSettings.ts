@@ -1,5 +1,6 @@
 // src/hooks/useSettings.ts
 import { useState, useEffect } from 'react'
+import { CardDesignOptions, defaultCardDesign } from '../lib/card-design'
 
 export type GameMode = 'single' | 'survival'
 
@@ -8,6 +9,7 @@ export interface GameSettings {
   measureTime: boolean
   cardCountRange: [number, number]
   gameMode: GameMode
+  cardDesign: CardDesignOptions
 }
 
 const defaultSettings: GameSettings = {
@@ -15,13 +17,29 @@ const defaultSettings: GameSettings = {
   measureTime: true,
   cardCountRange: [20, 20],
   gameMode: 'single',
+  cardDesign: defaultCardDesign,
 }
 
 export const useSettings = () => {
   const [settings, setSettings] = useState<GameSettings>(() => {
     try {
       const storedSettings = window.localStorage.getItem('gameSettings')
-      return storedSettings ? JSON.parse(storedSettings) : defaultSettings
+      if (!storedSettings) {
+        return defaultSettings
+      }
+
+      const parsed = JSON.parse(storedSettings)
+
+      // Migrate old settings format to include cardDesign
+      if (!parsed.cardDesign) {
+        return {
+          ...defaultSettings,
+          ...parsed,
+          cardDesign: defaultCardDesign,
+        }
+      }
+
+      return parsed
     }
     catch (error) {
       console.error('Error reading from localStorage', error)
