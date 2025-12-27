@@ -8,14 +8,6 @@
 - Bonus points for faster completion
 - Progressive difficulty levels
 
-## Visual Enhancements
-
-### Card Design Options
-
-- Different card styles (classic, modern, minimalist)
-- Color scheme customization
-- Accessibility options (high contrast, larger text)
-
 ## Game Variations
 
 ### Different Counting Modes

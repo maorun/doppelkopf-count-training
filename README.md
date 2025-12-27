@@ -46,7 +46,7 @@ Training application to practice counting cards in the game Doppelkopf.
       gradients), or Minimalist (clean and simple) designs
     - **Color Schemes**: Select Traditional (red/black suits), Monochrome (uniform
       colors), or Vibrant (colorful suits) color schemes
-    - **Accessibility Features**: 
+    - **Accessibility Features**:
       - High Contrast mode for improved visibility
       - Larger Text option for better readability
 - **Hint System**: Get help during gameplay with optional hints
