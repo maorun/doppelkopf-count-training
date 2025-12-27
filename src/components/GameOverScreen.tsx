@@ -28,15 +28,39 @@ const InputForm: React.FC<{
   </div>
 )
 
-const getResultMessage = (isCorrect: boolean, isSurvivalMode: boolean): string => {
+const getResultMessage = (
+  isCorrect: boolean,
+  isSurvivalMode: boolean,
+  isTimedChallenge: boolean,
+  timeRanOut: boolean,
+): string => {
+  if (timeRanOut) {
+    return 'Time\'s up! Try again with more speed!'
+  }
   if (isCorrect) {
-    return isSurvivalMode ? 'Keep going! Next round is harder!' : 'Great job!'
+    if (isSurvivalMode) {
+      return 'Keep going! Next round is harder!'
+    }
+    if (isTimedChallenge) {
+      return 'Great job! You beat the clock!'
+    }
+    return 'Great job!'
   }
   return isSurvivalMode ? 'Survival mode ended. Try again!' : 'Better luck next time!'
 }
 
-const getButtonText = (isCorrect: boolean, isSurvivalMode: boolean): string => {
-  return isSurvivalMode && isCorrect ? 'Next Round' : 'Play Again'
+const getButtonText = (
+  isCorrect: boolean,
+  isSurvivalMode: boolean,
+  isTimedChallenge: boolean,
+): string => {
+  if (isSurvivalMode && isCorrect) {
+    return 'Next Round'
+  }
+  if (isTimedChallenge) {
+    return 'Try Again'
+  }
+  return 'Play Again'
 }
 
 const ResultDisplay: React.FC<{
@@ -46,7 +70,18 @@ const ResultDisplay: React.FC<{
   gameScore: number
   resetGame: () => void
   isSurvivalMode?: boolean
-}> = ({ isCorrect, userInput, totalScore, gameScore, resetGame, isSurvivalMode = false }) => (
+  isTimedChallenge?: boolean
+  timeRanOut?: boolean
+}> = ({
+  isCorrect,
+  userInput,
+  totalScore,
+  gameScore,
+  resetGame,
+  isSurvivalMode = false,
+  isTimedChallenge = false,
+  timeRanOut = false,
+}) => (
   <div className="space-y-4">
     <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
@@ -58,7 +93,7 @@ const ResultDisplay: React.FC<{
         {gameScore}
       </p>
       <p className="text-sm text-blue-700 dark:text-blue-300">
-        {getResultMessage(isCorrect, isSurvivalMode)}
+        {getResultMessage(isCorrect, isSurvivalMode, isTimedChallenge, timeRanOut)}
       </p>
     </div>
     <p className="text-xl text-gray-900 dark:text-gray-100">
@@ -72,7 +107,7 @@ const ResultDisplay: React.FC<{
       {totalScore}
     </p>
     <Button onClick={resetGame}>
-      {getButtonText(isCorrect, isSurvivalMode)}
+      {getButtonText(isCorrect, isSurvivalMode, isTimedChallenge)}
     </Button>
   </div>
 )
@@ -88,6 +123,8 @@ export const GameOverScreen: React.FC<{
   hintsUsed?: number
   onSurvivalResult?: (isCorrect: boolean) => void
   isSurvivalMode?: boolean
+  isTimedChallenge?: boolean
+  timeRanOut?: boolean
 }> = ({
   totalScore,
   elapsedTime,
@@ -98,6 +135,8 @@ export const GameOverScreen: React.FC<{
   hintsUsed = 0,
   onSurvivalResult,
   isSurvivalMode = false,
+  isTimedChallenge = false,
+  timeRanOut = false,
 }) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
@@ -162,6 +201,8 @@ export const GameOverScreen: React.FC<{
           gameScore={gameScore}
           resetGame={resetGame}
           isSurvivalMode={isSurvivalMode}
+          isTimedChallenge={isTimedChallenge}
+          timeRanOut={timeRanOut}
         />
       )}
     </div>

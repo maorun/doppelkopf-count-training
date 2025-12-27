@@ -1,10 +1,11 @@
 // src/components/DoppelkopfGame.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDoppelkopfGame } from '../hooks/useDoppelkopfGame'
 import { useSettings } from '../hooks/useSettings'
 import { useHighscores } from '../hooks/useHighscores'
 import { useStatistics } from '../hooks/useStatistics'
 import { useSurvivalMode } from '../hooks/useSurvivalMode'
+import { useTimedChallenge } from '../hooks/useTimedChallenge'
 import { Card, Suit } from '../lib/doppelkopf'
 import { CardDesignOptions } from '../lib/card-design'
 import {
@@ -24,6 +25,7 @@ import { SurvivalStatsView } from './SurvivalStatsView'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { ThemeToggle } from './ThemeToggle'
 import { TutorialModal } from './TutorialModal'
+import { TimedChallengeInfo } from './TimedChallengeInfo'
 import { HintDialog } from './HintDialog'
 
 const getSuitSymbol = (suit: Suit): string => {
@@ -96,6 +98,9 @@ const DoppelkopfGame: React.FC = () => {
   const [showHighscores, setShowHighscores] = useState(false)
   const { statistics, recentTrend } = useStatistics(highscores)
   const { survivalState, startSurvival } = useSurvivalMode()
+  const { timedChallengeState, startChallenge, endChallenge, resetChallenge } = useTimedChallenge(
+    settings.timedChallenge.timeLimitSeconds,
+  )
   const {
     currentCard,
     isFinished,
@@ -116,6 +121,24 @@ const DoppelkopfGame: React.FC = () => {
     startSurvival()
     resetGame()
   }
+
+  const handleStartTimedChallenge = () => {
+    startChallenge()
+    resetGame()
+  }
+
+  const handleTimedChallengeReset = () => {
+    resetChallenge()
+    resetGame()
+  }
+
+  // Auto-end game when time runs out in timed challenge mode
+  useEffect(() => {
+    if (settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp && !isFinished) {
+      // Time is up - force finish the game
+      endChallenge()
+    }
+  }, [settings.gameMode, timedChallengeState.isTimeUp, isFinished, endChallenge])
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-8 transition-colors">
@@ -140,6 +163,25 @@ const DoppelkopfGame: React.FC = () => {
         </div>
       )}
 
+      {settings.gameMode === 'timed-challenge' && timedChallengeState.isActive && !isFinished && (
+        <TimedChallengeInfo
+          timeRemaining={timedChallengeState.timeRemaining}
+          difficultyLevel={settings.timedChallenge.difficultyLevel}
+          cardsToReveal={cardsToReveal}
+        />
+      )}
+
+      {settings.gameMode === 'timed-challenge' && !timedChallengeState.isActive && !isFinished && (
+        <div className="mb-8 text-center">
+          <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
+            Ready for Timed Challenge?
+          </p>
+          <Button onClick={handleStartTimedChallenge} size="lg">
+            Start Timed Challenge
+          </Button>
+        </div>
+      )}
+
       <div className="mb-8">
         {isFinished ? (
           <GameOverScreen
@@ -147,11 +189,13 @@ const DoppelkopfGame: React.FC = () => {
             elapsedTime={elapsedTime}
             cardsCount={cardsToReveal}
             timeWasMeasured={settings.measureTime}
-            resetGame={resetGame}
+            resetGame={settings.gameMode === 'timed-challenge' ? handleTimedChallengeReset : resetGame}
             onHighscoreSubmit={addHighscore}
             hintsUsed={hintsUsed}
             onSurvivalResult={handleSurvivalResult}
             isSurvivalMode={settings.gameMode === 'survival'}
+            isTimedChallenge={settings.gameMode === 'timed-challenge'}
+            timeRanOut={settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp}
           />
         ) : (
           <>
