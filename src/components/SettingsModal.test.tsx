@@ -13,6 +13,10 @@ describe('SettingsModal', () => {
     cardCountRange: [20, 20],
     gameMode: 'single',
     cardDesign: defaultCardDesign,
+    timedChallenge: {
+      timeLimitSeconds: 60,
+      difficultyLevel: 'medium',
+    },
   }
 
   it('should render the modal with the correct settings', () => {
@@ -165,5 +169,72 @@ describe('SettingsModal', () => {
         },
       },
     })
+  })
+
+  it('should render timed challenge mode option', () => {
+    render(
+      <SettingsModal settings={initialSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+
+    expect(screen.getByText(/Timed Challenge - Race against the clock/)).toBeInTheDocument()
+  })
+
+  it('should show timed challenge settings when timed challenge mode is selected', () => {
+    const timedChallengeSettings: GameSettings = {
+      ...initialSettings,
+      gameMode: 'timed-challenge',
+    }
+
+    render(
+      <SettingsModal settings={timedChallengeSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+
+    expect(screen.getByText('Timed Challenge Settings')).toBeInTheDocument()
+    expect(screen.getByText(/Time Limit \(seconds\)/)).toBeInTheDocument()
+    expect(screen.getByText('Difficulty Level')).toBeInTheDocument()
+  })
+
+  it('should display time limit value', () => {
+    const timedChallengeSettings: GameSettings = {
+      ...initialSettings,
+      gameMode: 'timed-challenge',
+      timedChallenge: {
+        timeLimitSeconds: 90,
+        difficultyLevel: 'hard',
+      },
+    }
+
+    render(
+      <SettingsModal settings={timedChallengeSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+
+    expect(screen.getByText('90s')).toBeInTheDocument()
+  })
+
+  it('should display difficulty level options', () => {
+    const timedChallengeSettings: GameSettings = {
+      ...initialSettings,
+      gameMode: 'timed-challenge',
+    }
+
+    render(
+      <SettingsModal settings={timedChallengeSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+
+    expect(screen.getByText(/Easy - 15 cards/)).toBeInTheDocument()
+    expect(screen.getByText(/Medium - 25 cards/)).toBeInTheDocument()
+    expect(screen.getByText(/Hard - 35 cards/)).toBeInTheDocument()
   })
 })

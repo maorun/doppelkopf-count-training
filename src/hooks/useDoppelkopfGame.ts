@@ -27,12 +27,25 @@ const revealNextCard = (
 }
 
 const calculateCardsToReveal = (
-  gameMode: 'single' | 'survival',
+  gameMode: 'single' | 'survival' | 'timed-challenge',
   cardCountRange: [number, number],
   survivalDifficulty: number,
+  timedChallengeDifficulty?: 'easy' | 'medium' | 'hard',
 ): number => {
   if (gameMode === 'survival') {
     return survivalDifficulty
+  }
+  if (gameMode === 'timed-challenge') {
+    // Return card count based on difficulty level
+    switch (timedChallengeDifficulty) {
+      case 'easy':
+        return 15
+      case 'hard':
+        return 35
+      case 'medium':
+      default:
+        return 25
+    }
   }
   const [min, max] = cardCountRange
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -76,6 +89,7 @@ const resetGameState = (
     settings.gameMode,
     settings.cardCountRange,
     survivalDifficulty,
+    settings.timedChallenge?.difficultyLevel,
   )
 
   setCardsToReveal(newCardsToReveal)
