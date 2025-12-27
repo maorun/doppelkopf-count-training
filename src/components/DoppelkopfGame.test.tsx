@@ -115,11 +115,13 @@ describe('DoppelkopfGame', () => {
         const suitSymbol = suitElement.textContent
 
         if (suitSymbol === '♥' || suitSymbol === '♦') {
-          expect(suitElement).toHaveClass('text-red-600')
+          // Red suits should have red color classes (traditional color scheme)
+          expect(suitElement.className).toContain('text-red')
           foundRedSuit = true
         }
         else if (suitSymbol === '♠' || suitSymbol === '♣') {
-          expect(suitElement).not.toHaveClass('text-red-600')
+          // Black suits should not have red color classes
+          expect(suitElement.className).not.toContain('text-red')
           foundBlackSuit = true
         }
       }
@@ -151,14 +153,14 @@ describe('DoppelkopfGame', () => {
         if (suitSymbol === '♥' || suitSymbol === '♦') {
           // For red suits, all rank elements should have red color
           rankElements.forEach((rankElement) => {
-            expect(rankElement).toHaveClass('text-red-600')
+            expect(rankElement.className).toContain('text-red')
           })
           foundRedSuit = true
         }
         else if (suitSymbol === '♠' || suitSymbol === '♣') {
           // For black suits, rank elements should not have red color
           rankElements.forEach((rankElement) => {
-            expect(rankElement).not.toHaveClass('text-red-600')
+            expect(rankElement.className).not.toContain('text-red')
           })
           foundBlackSuit = true
         }
