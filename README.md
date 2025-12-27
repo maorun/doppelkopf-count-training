@@ -12,6 +12,13 @@ Training application to practice counting cards in the game Doppelkopf.
     - Maximum difficulty of 40 cards
     - Track your current streak and longest survival streak
     - Progress saved automatically
+  - **Timed Challenge Mode**: Race against the clock!
+    - Choose your difficulty level: Easy (15 cards), Medium (25 cards),
+      or Hard (35 cards)
+    - Set your time limit between 30 and 180 seconds
+    - Visual countdown timer with warning indicators when time is running low
+    - Automatic game end when time runs out
+    - Perfect for building speed and pressure handling
 - **Tutorial Mode**: Interactive step-by-step guide for beginners
   - Learn card values and their points in Doppelkopf
   - See practical counting examples with explanations
@@ -37,9 +44,10 @@ Training application to practice counting cards in the game Doppelkopf.
   - Local highscore leaderboard shows your top 10 performances
   - Clear all highscores option available
 - **Customizable Settings**:
-  - Choose between Single Game and Survival Mode
+  - Choose between Single Game, Survival Mode, and Timed Challenge Mode
   - Include or exclude 9s from the deck
   - Configure the number of cards to reveal (in Single Game mode)
+  - Set time limit and difficulty level for Timed Challenge Mode
   - Optional time tracking to measure your calculation speed
   - **Card Design Options**: Personalize the visual appearance of cards
     - **Card Styles**: Choose between Classic (traditional), Modern (stylish
@@ -63,28 +71,33 @@ Training application to practice counting cards in the game Doppelkopf.
 
 1. **First time here?** Click the "Tutorial" button to learn the basics through an
    interactive guide
-2. Click on the card to reveal it
-3. Mentally track the cumulative score based on card values:
+2. **Choose your game mode** in Settings:
+   - **Single Game**: Practice at your own pace with customizable card counts
+   - **Survival Mode**: Progressive difficulty challenge
+   - **Timed Challenge**: Race against the clock with fixed difficulty levels
+3. Click on the card to reveal it
+4. Mentally track the cumulative score based on card values:
    - Ass (Ace): 11 points
    - 10: 10 points
    - König (King): 4 points
    - Dame (Queen): 3 points
    - Bube (Jack): 2 points
    - 9: 0 points
-4. **Need help?** Click the "Hint" button to get assistance:
+5. **Need help?** Click the "Hint" button to get assistance:
    - View your current running total
    - See the last 5 cards revealed
    - Display card value reminders
    - Each hint costs 20 points from your final score
-5. After all cards are revealed, enter your calculated total in the input field
-6. Click "Check Result" to see if your answer is correct and view your score
-7. Click "Play Again" to start a new round
-8. Click "Tutorial" anytime to review card values and get helpful tips
-9. **Customize your experience**: Click "Settings" to personalize the game
-   - Adjust game mode and difficulty settings
-   - **Personalize card appearance**: Choose your preferred card style, color
-     scheme, and accessibility options to enhance your playing experience
-10. Click "Show Stats" to view your performance statistics and highscores
+6. After all cards are revealed, enter your calculated total in the input field
+7. Click "Check Result" to see if your answer is correct and view your score
+8. Click "Play Again" (or "Try Again" in Timed Challenge) to start a new round
+9. Click "Tutorial" anytime to review card values and get helpful tips
+10. **Customize your experience**: Click "Settings" to personalize the game
+    - Adjust game mode and difficulty settings
+    - For Timed Challenge: Set time limit (30-180 seconds) and difficulty level
+    - **Personalize card appearance**: Choose your preferred card style, color
+      scheme, and accessibility options to enhance your playing experience
+11. Click "Show Stats" to view your performance statistics and highscores
     - **Statistics Tab**: View comprehensive performance analytics including win
       rate, streaks, average times, performance by difficulty, and hint usage
     - **Highscores Tab**: View your top 10 performances
@@ -141,6 +154,41 @@ Track your survival performance in the Survival tab:
 - **Current Streak**: How many rounds you've survived in your current run
 - **Longest Streak**: Your best performance ever
 - **Current Difficulty**: The number of cards in your current round
+
+## Timed Challenge Mode
+
+Timed Challenge Mode adds the excitement of racing against the clock to test
+your speed and accuracy under pressure.
+
+### Setup
+
+1. **Select Timed Challenge Mode** in Settings
+2. **Configure your challenge**:
+   - **Time Limit**: Set between 30 and 180 seconds
+     (in 10-second increments)
+   - **Difficulty Level**: Choose Easy (15 cards), Medium (25 cards),
+     or Hard (35 cards)
+3. Click **Start Timed Challenge** to begin
+4. Countdown timer displays remaining time with visual warnings
+5. **Time's up means game over** - enter your answer before the timer runs out!
+6. Your performance is scored like other modes
+
+### Timed Challenge Features
+
+- **Live countdown display** showing remaining time
+- **Visual warnings** when time is running low
+  (red color and alert icon at ≤10 seconds)
+- **Fixed difficulty** - card count determined by difficulty level
+- **Automatic game end** when time expires
+- **Score tracking** with all standard bonuses and penalties
+
+### Tips for Timed Challenges
+
+- Start with Easy difficulty and higher time limits to build confidence
+- Practice mental math techniques to speed up calculations
+- Use the early seconds to establish a rhythm
+- Remember: Accuracy still matters! Don't sacrifice correctness for speed
+- Hints are available but cost 20 points each
 
 ## Development
 
