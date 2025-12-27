@@ -3,6 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { SettingsModal } from './SettingsModal'
 import { GameSettings } from '../hooks/useSettings'
+import { defaultCardDesign } from '../lib/card-design'
 
 describe('SettingsModal', () => {
   const mockSetSettings = vi.fn()
@@ -11,6 +12,7 @@ describe('SettingsModal', () => {
     measureTime: true,
     cardCountRange: [20, 20],
     gameMode: 'single',
+    cardDesign: defaultCardDesign,
   }
 
   it('should render the modal with the correct settings', () => {
