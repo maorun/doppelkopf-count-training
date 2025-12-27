@@ -2,7 +2,12 @@
 import { useState, useEffect } from 'react'
 import { CardDesignOptions, defaultCardDesign } from '../lib/card-design'
 
-export type GameMode = 'single' | 'survival'
+export type GameMode = 'single' | 'survival' | 'timed-challenge'
+
+export interface TimedChallengeSettings {
+  timeLimitSeconds: number
+  difficultyLevel: 'easy' | 'medium' | 'hard'
+}
 
 export interface GameSettings {
   includeNines: boolean
@@ -10,6 +15,12 @@ export interface GameSettings {
   cardCountRange: [number, number]
   gameMode: GameMode
   cardDesign: CardDesignOptions
+  timedChallenge: TimedChallengeSettings
+}
+
+const defaultTimedChallengeSettings: TimedChallengeSettings = {
+  timeLimitSeconds: 60,
+  difficultyLevel: 'medium',
 }
 
 const defaultSettings: GameSettings = {
@@ -18,6 +29,7 @@ const defaultSettings: GameSettings = {
   cardCountRange: [20, 20],
   gameMode: 'single',
   cardDesign: defaultCardDesign,
+  timedChallenge: defaultTimedChallengeSettings,
 }
 
 export const useSettings = () => {
@@ -30,13 +42,12 @@ export const useSettings = () => {
 
       const parsed = JSON.parse(storedSettings)
 
-      // Migrate old settings format to include cardDesign
+      // Migrate old settings format to include cardDesign and timedChallenge
       if (!parsed.cardDesign) {
-        return {
-          ...defaultSettings,
-          ...parsed,
-          cardDesign: defaultCardDesign,
-        }
+        parsed.cardDesign = defaultCardDesign
+      }
+      if (!parsed.timedChallenge) {
+        parsed.timedChallenge = defaultTimedChallengeSettings
       }
 
       return parsed
