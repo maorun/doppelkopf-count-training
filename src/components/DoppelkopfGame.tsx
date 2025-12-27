@@ -74,6 +74,7 @@ const DoppelkopfGame: React.FC = () => {
     cardsToReveal,
     hintsUsed,
     useHint,
+    handleSurvivalResult,
   } = useDoppelkopfGame(settings)
 
   const topHighscores = getTop(10)
@@ -92,6 +93,7 @@ const DoppelkopfGame: React.FC = () => {
             resetGame={resetGame}
             onHighscoreSubmit={addHighscore}
             hintsUsed={hintsUsed}
+            onSurvivalResult={handleSurvivalResult}
           />
         ) : (
           <>

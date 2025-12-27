@@ -74,7 +74,17 @@ export const GameOverScreen: React.FC<{
   resetGame: () => void
   onHighscoreSubmit?: (result: GameResult) => void
   hintsUsed?: number
-}> = ({ totalScore, elapsedTime, cardsCount, timeWasMeasured, resetGame, onHighscoreSubmit, hintsUsed = 0 }) => {
+  onSurvivalResult?: (isCorrect: boolean) => void
+}> = ({
+  totalScore,
+  elapsedTime,
+  cardsCount,
+  timeWasMeasured,
+  resetGame,
+  onHighscoreSubmit,
+  hintsUsed = 0,
+  onSurvivalResult,
+}) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
   const [gameScore, setGameScore] = useState(0)
@@ -94,9 +104,14 @@ export const GameOverScreen: React.FC<{
     const score = calculateScore(result)
     setGameScore(score)
 
-    // Notify parent component
+    // Notify parent component about highscore
     if (onHighscoreSubmit) {
       onHighscoreSubmit(result)
+    }
+
+    // Notify parent component about survival result
+    if (onSurvivalResult) {
+      onSurvivalResult(isCorrect)
     }
   }
 

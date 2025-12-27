@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Card, createDeck, shuffleDeck } from '../lib/doppelkopf'
 import { GameSettings } from './useSettings'
+import { useSurvivalMode } from './useSurvivalMode'
 
 const handleTimer = (
   measureTime: boolean,
@@ -25,6 +26,7 @@ const revealNextCard = (
   setTotalScore(totalScore + nextCard.value)
 }
 
+/* eslint-disable max-lines-per-function */
 export const useDoppelkopfGame = (settings: GameSettings) => {
   const [deck, setDeck] = useState<Card[]>([])
   const [revealedCards, setRevealedCards] = useState<Card[]>([])
@@ -35,9 +37,21 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
   const [cardsToReveal, setCardsToReveal] = useState(20)
   const [hintsUsed, setHintsUsed] = useState<number>(0)
 
+  const { survivalState, recordCorrectAnswer, recordIncorrectAnswer } = useSurvivalMode()
+
   const resetGame = useCallback(() => {
-    const [min, max] = settings.cardCountRange
-    const newCardsToReveal = Math.floor(Math.random() * (max - min + 1)) + min
+    let newCardsToReveal: number
+
+    if (settings.gameMode === 'survival') {
+      // In survival mode, use difficulty from survival state
+      newCardsToReveal = survivalState.currentDifficulty
+    }
+    else {
+      // In single mode, use random from range
+      const [min, max] = settings.cardCountRange
+      newCardsToReveal = Math.floor(Math.random() * (max - min + 1)) + min
+    }
+
     setCardsToReveal(newCardsToReveal)
     setDeck(shuffleDeck(createDeck(settings.includeNines)))
     setRevealedCards([])
@@ -46,7 +60,7 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     setStartTime(null)
     setElapsedTime(0)
     setHintsUsed(0)
-  }, [settings])
+  }, [settings, survivalState.currentDifficulty])
 
   useEffect(() => {
     resetGame()
@@ -69,6 +83,17 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
 
   const useHint = useCallback(() => setHintsUsed(prev => prev + 1), [])
 
+  const handleSurvivalResult = useCallback((isCorrect: boolean) => {
+    if (settings.gameMode === 'survival') {
+      if (isCorrect) {
+        recordCorrectAnswer()
+      }
+      else {
+        recordIncorrectAnswer()
+      }
+    }
+  }, [settings.gameMode, recordCorrectAnswer, recordIncorrectAnswer])
+
   return {
     currentCard: revealedCards.length > 0 ? revealedCards[revealedCards.length - 1] : null,
     isFinished,
@@ -80,5 +105,6 @@ export const useDoppelkopfGame = (settings: GameSettings) => {
     cardsToReveal,
     hintsUsed,
     useHint,
+    handleSurvivalResult,
   }
 }
