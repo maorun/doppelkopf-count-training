@@ -69,8 +69,8 @@ Training application to practice counting cards in the game Doppelkopf.
 
 ## How to Play
 
-1. **First time here?** Click the "Tutorial" button to learn the basics through an
-   interactive guide
+1. **First time here?** Click the "Tutorial" button to learn the basics
+   through an interactive guide
 2. **Choose your game mode** in Settings:
    - **Single Game**: Practice at your own pace with customizable card counts
    - **Survival Mode**: Progressive difficulty challenge
