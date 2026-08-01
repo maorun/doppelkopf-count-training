@@ -154,9 +154,9 @@ describe('card-design-utils', () => {
       const mediumSize = getTextSizeClasses('medium', { highContrast: false, largerText: false })
       const largeSize = getTextSizeClasses('large', { highContrast: false, largerText: false })
 
-      expect(smallSize).toBe('text-2xl')
-      expect(mediumSize).toBe('text-4xl')
-      expect(largeSize).toBe('text-5xl')
+      expect(smallSize).toBe('text-xl sm:text-2xl')
+      expect(mediumSize).toBe('text-3xl sm:text-4xl')
+      expect(largeSize).toBe('text-4xl sm:text-5xl')
     })
 
     it('should return larger sizes when largerText is true', () => {
@@ -164,14 +164,14 @@ describe('card-design-utils', () => {
       const mediumSize = getTextSizeClasses('medium', { highContrast: false, largerText: true })
       const largeSize = getTextSizeClasses('large', { highContrast: false, largerText: true })
 
-      expect(smallSize).toBe('text-3xl')
-      expect(mediumSize).toBe('text-5xl')
-      expect(largeSize).toBe('text-6xl')
+      expect(smallSize).toBe('text-2xl sm:text-3xl')
+      expect(mediumSize).toBe('text-4xl sm:text-5xl')
+      expect(largeSize).toBe('text-5xl sm:text-6xl')
     })
 
     it('should work with high contrast enabled', () => {
       const size = getTextSizeClasses('medium', { highContrast: true, largerText: false })
-      expect(size).toBe('text-4xl')
+      expect(size).toBe('text-3xl sm:text-4xl')
     })
   })
 

@@ -141,129 +141,145 @@ const DoppelkopfGame: React.FC = () => {
   }, [settings.gameMode, timedChallengeState.isTimeUp, isFinished, endChallenge])
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-8 transition-colors">
-      <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">Doppelkopf Game</h1>
-
-      {settings.gameMode === 'survival' && survivalState.isActive && (
-        <SurvivalInfo
-          currentStreak={survivalState.currentStreak}
-          longestStreak={survivalState.longestStreak}
-          currentDifficulty={survivalState.currentDifficulty}
-        />
-      )}
-
-      {settings.gameMode === 'survival' && !survivalState.isActive && !isFinished && (
-        <div className="mb-8 text-center">
-          <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
-            Ready for Survival Mode?
-          </p>
-          <Button onClick={handleStartSurvival} size="lg">
-            Start Survival Mode
-          </Button>
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
+      {/* Header */}
+      <header className="w-full bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+            🃏 Doppelkopf Training
+          </h1>
+          <ThemeToggle />
         </div>
-      )}
+      </header>
 
-      {settings.gameMode === 'timed-challenge' && timedChallengeState.isActive && !isFinished && (
-        <TimedChallengeInfo
-          timeRemaining={timedChallengeState.timeRemaining}
-          difficultyLevel={settings.timedChallenge.difficultyLevel}
-          cardsToReveal={cardsToReveal}
-        />
-      )}
-
-      {settings.gameMode === 'timed-challenge' && !timedChallengeState.isActive && !isFinished && (
-        <div className="mb-8 text-center">
-          <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
-            Ready for Timed Challenge?
-          </p>
-          <Button onClick={handleStartTimedChallenge} size="lg">
-            Start Timed Challenge
-          </Button>
-        </div>
-      )}
-
-      <div className="mb-8">
-        {isFinished ? (
-          <GameOverScreen
-            totalScore={totalScore}
-            elapsedTime={elapsedTime}
-            cardsCount={cardsToReveal}
-            timeWasMeasured={settings.measureTime}
-            resetGame={settings.gameMode === 'timed-challenge' ? handleTimedChallengeReset : resetGame}
-            onHighscoreSubmit={addHighscore}
-            hintsUsed={hintsUsed}
-            onSurvivalResult={handleSurvivalResult}
-            isSurvivalMode={settings.gameMode === 'survival'}
-            isTimedChallenge={settings.gameMode === 'timed-challenge'}
-            timeRanOut={settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp}
+      <main className="w-full max-w-4xl mx-auto px-4 py-6 flex flex-col items-center gap-4">
+        {settings.gameMode === 'survival' && survivalState.isActive && (
+          <SurvivalInfo
+            currentStreak={survivalState.currentStreak}
+            longestStreak={survivalState.longestStreak}
+            currentDifficulty={survivalState.currentDifficulty}
           />
-        ) : (
-          <>
-            <GameScreen currentCard={currentCard} handleCardClick={handleCardClick} cardDesign={settings.cardDesign} />
-            <p className="text-xl mt-4 text-center text-gray-900 dark:text-gray-100">
-              Card
-              {' '}
-              {revealedCards.length}
-              {' '}
-              of
-              {' '}
-              {cardsToReveal}
-            </p>
-            <div className="mt-4 flex gap-2 justify-center">
-              <TutorialModal>
-                <Button variant="outline">Tutorial</Button>
-              </TutorialModal>
-              <SettingsModal settings={settings} setSettings={setSettings}>
-                <Button>Settings</Button>
-              </SettingsModal>
-              <Button
-                variant="outline"
-                onClick={() => setShowHighscores(!showHighscores)}
-              >
-                {showHighscores ? 'Hide Stats' : 'Show Stats'}
-              </Button>
-              <HintDialog
-                revealedCards={revealedCards}
-                totalScore={totalScore}
-                onHintUsed={useHint}
-              >
-                <Button variant="secondary" disabled={revealedCards.length === 0}>
-                  Hint
-                  {hintsUsed > 0 && (
-                    <span className="ml-1 text-xs">
-                      (
-                      {hintsUsed}
-                      )
-                    </span>
-                  )}
-                </Button>
-              </HintDialog>
-              <ThemeToggle />
-            </div>
-          </>
         )}
-      </div>
 
-      {showHighscores && (
-        <div className="w-full max-w-6xl px-4">
-          <Tabs defaultValue="statistics" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-4">
-              <TabsTrigger value="statistics">Statistics</TabsTrigger>
-              <TabsTrigger value="highscores">Highscores</TabsTrigger>
-              <TabsTrigger value="survival">Survival</TabsTrigger>
-            </TabsList>
-            <TabsContent value="statistics">
-              <StatisticsView statistics={statistics} recentTrend={recentTrend} />
-            </TabsContent>
-            <TabsContent value="highscores">
-              <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
-            </TabsContent>
-            <TabsContent value="survival">
-              <SurvivalStatsView />
-            </TabsContent>
-          </Tabs>
+        {settings.gameMode === 'survival' && !survivalState.isActive && !isFinished && (
+          <div className="text-center space-y-3">
+            <p className="text-base text-gray-700 dark:text-gray-300">
+              Ready for Survival Mode?
+            </p>
+            <Button onClick={handleStartSurvival} size="lg">
+              Start Survival Mode
+            </Button>
+          </div>
+        )}
+
+        {settings.gameMode === 'timed-challenge' && timedChallengeState.isActive && !isFinished && (
+          <TimedChallengeInfo
+            timeRemaining={timedChallengeState.timeRemaining}
+            difficultyLevel={settings.timedChallenge.difficultyLevel}
+            cardsToReveal={cardsToReveal}
+          />
+        )}
+
+        {settings.gameMode === 'timed-challenge' && !timedChallengeState.isActive && !isFinished && (
+          <div className="text-center space-y-3">
+            <p className="text-base text-gray-700 dark:text-gray-300">
+              Ready for Timed Challenge?
+            </p>
+            <Button onClick={handleStartTimedChallenge} size="lg">
+              Start Timed Challenge
+            </Button>
+          </div>
+        )}
+
+        <div className="w-full flex flex-col items-center">
+          {isFinished ? (
+            <div className="w-full max-w-sm">
+              <GameOverScreen
+                totalScore={totalScore}
+                elapsedTime={elapsedTime}
+                cardsCount={cardsToReveal}
+                timeWasMeasured={settings.measureTime}
+                resetGame={settings.gameMode === 'timed-challenge' ? handleTimedChallengeReset : resetGame}
+                onHighscoreSubmit={addHighscore}
+                hintsUsed={hintsUsed}
+                onSurvivalResult={handleSurvivalResult}
+                isSurvivalMode={settings.gameMode === 'survival'}
+                isTimedChallenge={settings.gameMode === 'timed-challenge'}
+                timeRanOut={settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp}
+              />
+            </div>
+          ) : (
+            <>
+              <GameScreen
+                currentCard={currentCard}
+                handleCardClick={handleCardClick}
+                cardDesign={settings.cardDesign}
+              />
+              <p className="text-base sm:text-lg mt-3 text-center font-medium text-gray-600 dark:text-gray-400">
+                Card
+                {' '}
+                <span className="font-bold text-gray-900 dark:text-gray-100">{revealedCards.length}</span>
+                {' '}
+                of
+                {' '}
+                <span className="font-bold text-gray-900 dark:text-gray-100">{cardsToReveal}</span>
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2 justify-center">
+                <TutorialModal>
+                  <Button variant="outline" size="sm">Tutorial</Button>
+                </TutorialModal>
+                <SettingsModal settings={settings} setSettings={setSettings}>
+                  <Button size="sm">Settings</Button>
+                </SettingsModal>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowHighscores(!showHighscores)}
+                >
+                  {showHighscores ? 'Hide Stats' : 'Show Stats'}
+                </Button>
+                <HintDialog
+                  revealedCards={revealedCards}
+                  totalScore={totalScore}
+                  onHintUsed={useHint}
+                >
+                  <Button variant="secondary" size="sm" disabled={revealedCards.length === 0}>
+                    Hint
+                    {hintsUsed > 0 && (
+                      <span className="ml-1 text-xs">
+                        (
+                        {hintsUsed}
+                        )
+                      </span>
+                    )}
+                  </Button>
+                </HintDialog>
+              </div>
+            </>
+          )}
         </div>
-      )}
+
+        {showHighscores && (
+          <div className="w-full">
+            <Tabs defaultValue="statistics" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-4">
+                <TabsTrigger value="statistics">Statistics</TabsTrigger>
+                <TabsTrigger value="highscores">Highscores</TabsTrigger>
+                <TabsTrigger value="survival">Survival</TabsTrigger>
+              </TabsList>
+              <TabsContent value="statistics">
+                <StatisticsView statistics={statistics} recentTrend={recentTrend} />
+              </TabsContent>
+              <TabsContent value="highscores">
+                <HighscoreList highscores={topHighscores} onClear={clearHighscores} />
+              </TabsContent>
+              <TabsContent value="survival">
+                <SurvivalStatsView />
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+      </main>
     </div>
   )
 }

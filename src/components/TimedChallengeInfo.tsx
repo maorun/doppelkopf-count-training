@@ -36,7 +36,7 @@ export const TimedChallengeInfo: React.FC<TimedChallengeInfoProps> = ({
     : 'text-gray-900 dark:text-gray-100'
 
   return (
-    <div className="w-full max-w-md mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors">
+    <div className="w-full mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Clock className={`w-5 h-5 ${timeColor}`} />

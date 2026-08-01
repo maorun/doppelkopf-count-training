@@ -6,15 +6,15 @@ import { Suit } from './doppelkopf'
  * Get CSS classes for card container based on style
  */
 export const getCardContainerClasses = (style: CardStyle): string => {
-  const baseClasses = 'w-64 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-colors'
+  const baseClasses = 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-colors'
 
   switch (style) {
     case 'classic':
       return baseClasses
     case 'modern':
-      return 'w-64 h-96 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer transition-all hover:scale-105'
+      return 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer transition-all hover:scale-105'
     case 'minimalist':
-      return 'w-64 h-96 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 flex items-center justify-center cursor-pointer transition-colors'
+      return 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 flex items-center justify-center cursor-pointer transition-colors'
   }
 }
 
@@ -108,9 +108,9 @@ export const getTextSizeClasses = (
   accessibility: AccessibilityOptions,
 ): string => {
   const sizes = {
-    small: accessibility.largerText ? 'text-3xl' : 'text-2xl',
-    medium: accessibility.largerText ? 'text-5xl' : 'text-4xl',
-    large: accessibility.largerText ? 'text-6xl' : 'text-5xl',
+    small: accessibility.largerText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl',
+    medium: accessibility.largerText ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl',
+    large: accessibility.largerText ? 'text-5xl sm:text-6xl' : 'text-4xl sm:text-5xl',
   }
 
   return sizes[baseSize]
