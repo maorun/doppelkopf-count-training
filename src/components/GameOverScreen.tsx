@@ -19,10 +19,11 @@ const InputForm: React.FC<{
         value={userInput}
         onChange={e => setUserInput(e.target.value)}
         placeholder="Enter your result"
-        className="max-w-xs mx-auto"
+        className="w-full max-w-xs mx-auto block"
+        onKeyDown={e => e.key === 'Enter' && userInput && handleSubmit()}
       />
     </div>
-    <Button onClick={handleSubmit}>
+    <Button onClick={handleSubmit} className="w-full max-w-xs">
       Check Result
     </Button>
   </div>
@@ -178,13 +179,15 @@ export const GameOverScreen: React.FC<{
   const isCorrect = showResult && parseInt(userInput) === totalScore
 
   return (
-    <div className="text-center space-y-4">
+    <div className="text-center space-y-4 w-full">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Game Over</h2>
-      <p className="text-lg text-gray-900 dark:text-gray-100">
+      <p className="text-base text-gray-600 dark:text-gray-400">
         Time:
         {' '}
-        {(elapsedTime / 1000).toFixed(2)}
-        s
+        <span className="font-semibold text-gray-900 dark:text-gray-100">
+          {(elapsedTime / 1000).toFixed(2)}
+          s
+        </span>
       </p>
 
       {!showResult ? (

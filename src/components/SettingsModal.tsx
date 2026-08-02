@@ -28,13 +28,13 @@ const SettingSwitch: React.FC<{
   checked: boolean
   onCheckedChange: (checked: boolean) => void
 }> = ({ id, label, description, checked, onCheckedChange }) => (
-  <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 transition-colors hover:bg-slate-100">
+  <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700">
     <div className="flex-1 space-y-0.5">
       <Label htmlFor={id} className="text-base font-medium leading-none">
         {label}
       </Label>
       {description && (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {description}
         </p>
       )}
@@ -49,13 +49,13 @@ const SettingSlider: React.FC<{
   value: [number, number]
   onValueChange: (value: [number, number]) => void
 }> = ({ label, description, value, onValueChange }) => (
-  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
     <div className="space-y-0.5">
       <Label className="text-base font-medium">
         {label}
       </Label>
       {description && (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {description}
         </p>
       )}
@@ -68,9 +68,9 @@ const SettingSlider: React.FC<{
         value={value}
         onValueChange={onValueChange}
       />
-      <div className="flex justify-between mt-3 text-sm font-medium text-slate-700">
-        <span className="px-2 py-1 rounded bg-slate-200" aria-label="Minimum value">{value[0]}</span>
-        <span className="px-2 py-1 rounded bg-slate-200" aria-label="Maximum value">{value[1]}</span>
+      <div className="flex justify-between mt-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+        <span className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700" aria-label="Minimum value">{value[0]}</span>
+        <span className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700" aria-label="Maximum value">{value[1]}</span>
       </div>
     </div>
   </div>
@@ -85,12 +85,12 @@ const GameModeSelector: React.FC<{
   const timedChallengeId = useId()
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
       <div className="space-y-0.5">
         <Label className="text-base font-medium">
           Game Mode
         </Label>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Choose between single game, survival mode, or timed challenge
         </p>
       </div>
@@ -127,12 +127,12 @@ const CardStyleSelector: React.FC<{
   const minimalistId = useId()
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
       <div className="space-y-0.5">
         <Label className="text-base font-medium">
           Card Style
         </Label>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Choose the visual style of the cards
         </p>
       </div>
@@ -169,12 +169,12 @@ const ColorSchemeSelector: React.FC<{
   const vibrantId = useId()
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
       <div className="space-y-0.5">
         <Label className="text-base font-medium">
           Color Scheme
         </Label>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Choose the color scheme for card suits
         </p>
       </div>
@@ -245,12 +245,12 @@ const TimedChallengeSettingsSelector: React.FC<{
   onSettingsChange: (settings: TimedChallengeSettings) => void
 }> = ({ settings, onSettingsChange }) => {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-3">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
       <div className="space-y-0.5">
         <Label className="text-base font-medium">
           Timed Challenge Settings
         </Label>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Configure time limit and difficulty level
         </p>
       </div>
@@ -267,7 +267,7 @@ const TimedChallengeSettingsSelector: React.FC<{
               onSettingsChange({ ...settings, timeLimitSeconds: value })}
           />
           <div className="flex justify-center mt-2">
-            <span className="px-2 py-1 rounded bg-slate-200 text-sm font-medium" aria-label="Time limit in seconds">
+            <span className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-sm font-medium" aria-label="Time limit in seconds">
               {settings.timeLimitSeconds}
               s
             </span>
@@ -293,7 +293,7 @@ const AccessibilitySettings: React.FC<{
 
   return (
     <div className="space-y-3">
-      <h4 className="text-base font-medium text-slate-900">Accessibility</h4>
+      <h4 className="text-base font-medium text-slate-900 dark:text-slate-100">Accessibility</h4>
       <SettingSwitch
         id={highContrastId}
         label="High Contrast"
@@ -337,8 +337,8 @@ const CardDesignSettings: React.FC<{
   setSettings: (settings: GameSettings) => void
 }> = ({ settings, setSettings }) => {
   return (
-    <div className="pt-2 border-t border-slate-200">
-      <h3 className="text-lg font-semibold mb-3 text-slate-900">Card Design</h3>
+    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+      <h3 className="text-lg font-semibold mb-3 text-slate-900 dark:text-slate-100">Card Design</h3>
 
       <div className="space-y-4">
         <CardStyleSelector
