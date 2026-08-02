@@ -2,6 +2,20 @@
 
 Training application to practice counting cards in the game Doppelkopf.
 
+## PWA – Progressive Web App
+
+This application is a fully installable Progressive Web App (PWA).
+You can install it on any device (Android, iOS, desktop) directly from
+the browser:
+
+- **Android**: Open in Chrome → tap the "Add to Home Screen" prompt or
+  use the browser menu → "Install App"
+- **iOS**: Open in Safari → tap the Share button → "Add to Home Screen"
+- **Desktop (Chrome/Edge)**: Click the install icon in the address bar
+
+Once installed, the app works **offline** thanks to a service worker
+that caches all static assets automatically.
+
 ## Features
 
 - **Game Modes**:
