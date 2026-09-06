@@ -85,11 +85,11 @@ const GameScreen: React.FC<{
         >
           {currentCard.rank}
         </span>
-      </button>
+      </div>
     ) : (
       <div data-testid="card-back" className={getCardBackClasses(cardDesign.style)}></div>
     )}
-  </div>
+  </button>
 )
 
 /* eslint-disable max-lines-per-function, complexity */
