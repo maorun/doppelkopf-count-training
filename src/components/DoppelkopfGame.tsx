@@ -46,10 +46,11 @@ const GameScreen: React.FC<{
   handleCardClick: () => void
   cardDesign: CardDesignOptions
 }> = ({ currentCard, handleCardClick, cardDesign }) => (
-  <div
+  <button
+    type="button"
     className={getCardContainerClasses(cardDesign.style)}
     onClick={handleCardClick}
-    role="button"
+    aria-label={currentCard ? 'Aufgedeckte Karte anzeigen' : 'Nächste Karte aufdecken'}
     data-testid="game-card"
   >
     {currentCard ? (
@@ -84,7 +85,7 @@ const GameScreen: React.FC<{
         >
           {currentCard.rank}
         </span>
-      </div>
+      </button>
     ) : (
       <div data-testid="card-back" className={getCardBackClasses(cardDesign.style)}></div>
     )}
@@ -144,15 +145,15 @@ const DoppelkopfGame: React.FC = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
       {/* Header */}
       <header className="w-full bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-3">
+          <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
             🃏 Doppelkopf Training
           </h1>
           <ThemeToggle />
         </div>
       </header>
 
-      <main className="w-full max-w-4xl mx-auto px-4 py-6 flex flex-col items-center gap-4">
+      <main className="w-full max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex flex-col items-center gap-4">
         {settings.gameMode === 'survival' && survivalState.isActive && (
           <SurvivalInfo
             currentStreak={survivalState.currentStreak}
@@ -224,16 +225,17 @@ const DoppelkopfGame: React.FC = () => {
                 {' '}
                 <span className="font-bold text-gray-900 dark:text-gray-100">{cardsToReveal}</span>
               </p>
-              <div className="mt-3 flex flex-wrap gap-2 justify-center">
+              <div className="mt-3 grid grid-cols-2 sm:flex sm:flex-wrap gap-2 justify-center w-full">
                 <TutorialModal>
-                  <Button variant="outline" size="sm">Tutorial</Button>
+                  <Button variant="outline" size="sm" className="w-full sm:w-auto">Tutorial</Button>
                 </TutorialModal>
                 <SettingsModal settings={settings} setSettings={setSettings}>
-                  <Button size="sm">Settings</Button>
+                  <Button size="sm" className="w-full sm:w-auto">Settings</Button>
                 </SettingsModal>
                 <Button
                   variant="outline"
                   size="sm"
+                  className="w-full sm:w-auto"
                   onClick={() => setShowHighscores(!showHighscores)}
                 >
                   {showHighscores ? 'Hide Stats' : 'Show Stats'}
@@ -243,7 +245,7 @@ const DoppelkopfGame: React.FC = () => {
                   totalScore={totalScore}
                   onHintUsed={useHint}
                 >
-                  <Button variant="secondary" size="sm" disabled={revealedCards.length === 0}>
+                  <Button variant="secondary" size="sm" className="w-full sm:w-auto" disabled={revealedCards.length === 0}>
                     Hint
                     {hintsUsed > 0 && (
                       <span className="ml-1 text-xs">
