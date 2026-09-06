@@ -161,13 +161,14 @@ describe('HighscoreList', () => {
     expect(cardCounts.length).toBeGreaterThan(0)
   })
 
-  it('applies reduced opacity to incorrect entries', () => {
+  it('visually distinguishes incorrect entries without reducing text contrast', () => {
     render(<HighscoreList highscores={sampleHighscores} />)
 
     const rows = screen.getAllByRole('row')
     // Last row is incorrect entry
     const incorrectRow = rows[rows.length - 1]
 
-    expect(incorrectRow.className).toContain('opacity-60')
+    expect(incorrectRow.className).toContain('bg-red-50/60')
+    expect(incorrectRow.className).not.toContain('opacity-60')
   })
 })
