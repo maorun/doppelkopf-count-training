@@ -61,8 +61,10 @@ export const HighscoreList: React.FC<HighscoreListProps> = ({ highscores, onClea
             {highscores.map((entry, index) => (
               <tr
                 key={entry.timestamp}
-                className={`border-b border-gray-100 dark:border-gray-700 ${
-                  entry.isCorrect ? '' : 'opacity-60'
+                className={`border-b ${
+                  entry.isCorrect
+                    ? 'border-gray-100 dark:border-gray-700'
+                    : 'border-red-100 bg-red-50/60 dark:border-red-900/40 dark:bg-red-950/20'
                 }`}
               >
                 <td className="py-2 px-2 font-semibold text-gray-600 dark:text-gray-400">

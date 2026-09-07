@@ -80,6 +80,8 @@ that caches all static assets automatically.
 - **Interactive Feedback**: Get clear visual feedback (✓ Correct or ✗
   Incorrect) when checking your answer
 - **Play Again**: Quickly start a new round with a fresh shuffled deck
+- **Mobile-first interaction**: Responsive controls, comfortable touch targets,
+  keyboard-accessible card interaction, and readable dialogs on small screens
 
 ## How to Play
 

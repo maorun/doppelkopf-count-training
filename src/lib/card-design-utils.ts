@@ -46,8 +46,8 @@ const isRedSuit = (suit: Suit): boolean => {
  */
 const getHighContrastColors = (suit: Suit): string => {
   return isRedSuit(suit)
-    ? 'text-red-700 dark:text-red-300'
-    : 'text-black dark:text-white'
+    ? 'text-red-700 dark:text-red-300 dark:!text-red-300'
+    : 'text-black dark:text-white dark:!text-white'
 }
 
 /**
@@ -55,8 +55,8 @@ const getHighContrastColors = (suit: Suit): string => {
  */
 const getTraditionalColors = (suit: Suit): string => {
   return isRedSuit(suit)
-    ? 'text-red-600 dark:text-red-400'
-    : 'text-gray-900 dark:text-gray-100'
+    ? 'text-red-600 dark:text-red-400 dark:!text-red-400'
+    : 'text-gray-900 dark:text-gray-100 dark:!text-gray-100'
 }
 
 /**
@@ -65,13 +65,13 @@ const getTraditionalColors = (suit: Suit): string => {
 const getVibrantColors = (suit: Suit): string => {
   if (isRedSuit(suit)) {
     return suit === 'Herz'
-      ? 'text-pink-600 dark:text-pink-400'
-      : 'text-orange-600 dark:text-orange-400'
+      ? 'text-pink-600 dark:text-pink-400 dark:!text-pink-400'
+      : 'text-orange-600 dark:text-orange-400 dark:!text-orange-400'
   }
   else {
     return suit === 'Pik'
-      ? 'text-indigo-900 dark:text-indigo-300'
-      : 'text-emerald-900 dark:text-emerald-300'
+      ? 'text-indigo-900 dark:text-indigo-300 dark:!text-indigo-300'
+      : 'text-emerald-900 dark:text-emerald-300 dark:!text-emerald-300'
   }
 }
 
@@ -93,7 +93,7 @@ export const getSuitColorClasses = (
       return getTraditionalColors(suit)
 
     case 'monochrome':
-      return 'text-gray-900 dark:text-gray-100'
+      return 'text-gray-900 dark:text-gray-100 dark:!text-gray-100'
 
     case 'vibrant':
       return getVibrantColors(suit)

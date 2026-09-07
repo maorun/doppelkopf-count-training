@@ -7,6 +7,12 @@
 }
 
 @layer base {
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -53,5 +59,3 @@
     --ring: 224.3 76.3% 48%;
   }
 }
-
-/* Add your styles here */

@@ -86,7 +86,7 @@ export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, rece
       {/* Overview Statistics */}
       <div>
         <h3 className="text-lg font-semibold mb-3">Overview</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
           <StatCard
             title="Total Games"
             value={statistics.totalGames}
@@ -112,7 +112,7 @@ export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, rece
       {/* Performance Metrics */}
       <div>
         <h3 className="text-lg font-semibold mb-3">Performance</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
           <StatCard
             title="Total Cards"
             value={statistics.totalCardsPlayed}

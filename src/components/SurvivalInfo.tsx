@@ -15,7 +15,7 @@ export const SurvivalInfo: React.FC<SurvivalInfoProps> = ({
   currentDifficulty,
 }) => {
   return (
-    <Card className="w-full max-w-md mx-auto mb-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+    <Card className="w-full max-w-md mx-auto mb-4 border-purple-200/70 bg-gradient-to-r from-purple-50 to-blue-50 dark:border-purple-800/60 dark:from-purple-900/30 dark:to-blue-900/30">
       <CardContent className="p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">

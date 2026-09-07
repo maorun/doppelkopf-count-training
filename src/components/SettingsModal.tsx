@@ -371,6 +371,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   settings,
   setSettings,
 }) => {
+  const includeNinesId = useId()
+  const measureTimeId = useId()
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -388,7 +391,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               setSettings({ ...settings, gameMode: mode })}
           />
           <SettingSwitch
-            id="include-nines"
+            id={includeNinesId}
             label="Include 9s"
             description="Add 9s to the card deck"
             checked={settings.includeNines}
@@ -396,7 +399,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               setSettings({ ...settings, includeNines: checked })}
           />
           <SettingSwitch
-            id="measure-time"
+            id={measureTimeId}
             label="Measure time"
             description="Track how long it takes to complete the game"
             checked={settings.measureTime}
