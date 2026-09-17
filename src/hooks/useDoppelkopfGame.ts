@@ -1,99 +1,69 @@
-// src/hooks/useDoppelkopfGame.ts
-import { useState, useEffect, useCallback } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { Card, createDeck, shuffleDeck } from '../lib/doppelkopf'
 import { GameSettings } from './useSettings'
-import { useSurvivalMode } from './useSurvivalMode'
 
-const handleTimer = (
-  measureTime: boolean,
-  startTime: number | null,
-  setStartTime: (time: number) => void,
-) => {
-  if (measureTime && startTime === null) {
-    setStartTime(Date.now())
-  }
-}
+const TIMED_CHALLENGE_CARD_COUNTS = { easy: 15, medium: 25, hard: 35 } as const
 
-const revealNextCard = (
-  deck: Card[],
-  revealedCards: Card[],
-  setRevealedCards: (cards: Card[]) => void,
-  totalScore: number,
-  setTotalScore: (score: number) => void,
-) => {
-  const nextCard = deck[revealedCards.length]
-  setRevealedCards([...revealedCards, nextCard])
-  setTotalScore(totalScore + nextCard.value)
+const normalizeCardCount = (count: number, maxCards: number): number => {
+  if (!Number.isFinite(count)) return maxCards
+  return Math.min(Math.max(Math.floor(count), 1), maxCards)
 }
 
 const calculateCardsToReveal = (
-  gameMode: 'single' | 'survival' | 'timed-challenge',
+  gameMode: GameSettings['gameMode'],
   cardCountRange: [number, number],
   survivalDifficulty: number,
-  timedChallengeDifficulty?: 'easy' | 'medium' | 'hard',
+  timedChallengeDifficulty: GameSettings['timedChallenge']['difficultyLevel'],
+  maxCards: number,
 ): number => {
-  if (gameMode === 'survival') {
-    return survivalDifficulty
-  }
+  if (gameMode === 'survival') return normalizeCardCount(survivalDifficulty, maxCards)
+
   if (gameMode === 'timed-challenge') {
-    // Return card count based on difficulty level
-    switch (timedChallengeDifficulty) {
-      case 'easy':
-        return 15
-      case 'hard':
-        return 35
-      case 'medium':
-      default:
-        return 25
-    }
+    return TIMED_CHALLENGE_CARD_COUNTS[timedChallengeDifficulty] ?? TIMED_CHALLENGE_CARD_COUNTS.medium
   }
-  const [min, max] = cardCountRange
+
+  const min = normalizeCardCount(cardCountRange[0], maxCards)
+  const max = Math.max(min, normalizeCardCount(cardCountRange[1], maxCards))
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const shouldFinishGame = (
-  revealedCount: number,
-  cardsToReveal: number,
+const getCompletedElapsedTime = (
   measureTime: boolean,
   startTime: number | null,
-  setIsFinished: (finished: boolean) => void,
-  setElapsedTime: (time: number) => void,
-): boolean => {
-  if (revealedCount >= cardsToReveal - 1) {
-    setIsFinished(true)
-    if (measureTime && startTime) {
-      setElapsedTime(Date.now() - startTime)
-    }
-    return true
-  }
-  return false
-}
+  completedAt: number,
+): number | null => (measureTime && startTime !== null ? completedAt - startTime : null)
 
-const getCurrentCard = (revealedCards: Card[]): Card | null => {
-  return revealedCards.length > 0 ? revealedCards[revealedCards.length - 1] : null
-}
+const getCurrentCard = (revealedCards: Card[]): Card | null => revealedCards.at(-1) ?? null
+
+const isLastCard = (revealedCardsCount: number, cardsToReveal: number): boolean => (
+  revealedCardsCount + 1 >= cardsToReveal
+)
+
+type StateSetter<T> = Dispatch<SetStateAction<T>>
 
 const resetGameState = (
   settings: GameSettings,
   survivalDifficulty: number,
-  setCardsToReveal: (cards: number) => void,
-  setDeck: (deck: Card[]) => void,
-  setRevealedCards: (cards: Card[]) => void,
-  setTotalScore: (score: number) => void,
-  setIsFinished: (finished: boolean) => void,
-  setStartTime: (time: number | null) => void,
-  setElapsedTime: (time: number) => void,
-  setHintsUsed: (hints: number) => void,
-) => {
+  setCardsToReveal: StateSetter<number>,
+  setDeck: StateSetter<Card[]>,
+  setRevealedCards: StateSetter<Card[]>,
+  setTotalScore: StateSetter<number>,
+  setIsFinished: StateSetter<boolean>,
+  setStartTime: StateSetter<number | null>,
+  setElapsedTime: StateSetter<number>,
+  setHintsUsed: StateSetter<number>,
+): void => {
+  const newDeck = shuffleDeck(createDeck(settings.includeNines))
   const newCardsToReveal = calculateCardsToReveal(
     settings.gameMode,
     settings.cardCountRange,
     survivalDifficulty,
-    settings.timedChallenge?.difficultyLevel,
+    settings.timedChallenge.difficultyLevel,
+    newDeck.length,
   )
 
   setCardsToReveal(newCardsToReveal)
-  setDeck(shuffleDeck(createDeck(settings.includeNines)))
+  setDeck(newDeck)
   setRevealedCards([])
   setTotalScore(0)
   setIsFinished(false)
@@ -102,74 +72,65 @@ const resetGameState = (
   setHintsUsed(0)
 }
 
-const processCardClick = (
-  isFinished: boolean,
-  settings: GameSettings,
-  startTime: number | null,
-  setStartTime: (time: number) => void,
-  revealedCards: Card[],
-  cardsToReveal: number,
-  setIsFinished: (finished: boolean) => void,
-  setElapsedTime: (time: number) => void,
-  deck: Card[],
-  setRevealedCards: (cards: Card[]) => void,
-  totalScore: number,
-  setTotalScore: (score: number) => void,
-) => {
-  if (isFinished) return
-
-  handleTimer(settings.measureTime, startTime, setStartTime)
-
-  const finished = shouldFinishGame(
-    revealedCards.length,
-    cardsToReveal,
-    settings.measureTime,
-    startTime,
-    setIsFinished,
-    setElapsedTime,
-  )
-
-  if (!finished && revealedCards.length < cardsToReveal) {
-    revealNextCard(deck, revealedCards, setRevealedCards, totalScore, setTotalScore)
-  }
-}
-
-export const useDoppelkopfGame = (settings: GameSettings) => {
+export const useDoppelkopfGame = (settings: GameSettings, survivalDifficulty = 15) => {
   const [deck, setDeck] = useState<Card[]>([])
   const [revealedCards, setRevealedCards] = useState<Card[]>([])
-  const [totalScore, setTotalScore] = useState<number>(0)
+  const [totalScore, setTotalScore] = useState(0)
   const [isFinished, setIsFinished] = useState(false)
   const [startTime, setStartTime] = useState<number | null>(null)
-  const [elapsedTime, setElapsedTime] = useState<number>(0)
+  const [elapsedTime, setElapsedTime] = useState(0)
   const [cardsToReveal, setCardsToReveal] = useState(20)
-  const [hintsUsed, setHintsUsed] = useState<number>(0)
-  const { survivalState, recordCorrectAnswer, recordIncorrectAnswer } = useSurvivalMode()
+  const [hintsUsed, setHintsUsed] = useState(0)
+
+  const finishGame = useCallback(() => {
+    setIsFinished(true)
+    if (settings.measureTime && startTime !== null) {
+      setElapsedTime(Date.now() - startTime)
+    }
+  }, [settings.measureTime, startTime])
 
   const resetGame = useCallback(() => {
     resetGameState(
-      settings, survivalState.currentDifficulty, setCardsToReveal, setDeck,
-      setRevealedCards, setTotalScore, setIsFinished, setStartTime, setElapsedTime, setHintsUsed,
+      settings, survivalDifficulty, setCardsToReveal, setDeck, setRevealedCards,
+      setTotalScore, setIsFinished, setStartTime, setElapsedTime, setHintsUsed,
     )
-  }, [settings, survivalState.currentDifficulty])
+  }, [settings, survivalDifficulty])
 
   useEffect(() => {
     resetGame()
   }, [resetGame])
 
-  const handleCardClick = useCallback(() => {
-    processCardClick(
-      isFinished, settings, startTime, setStartTime, revealedCards, cardsToReveal,
-      setIsFinished, setElapsedTime, deck, setRevealedCards, totalScore, setTotalScore,
-    )
-  }, [isFinished, settings, startTime, revealedCards, cardsToReveal, deck, totalScore])
+  const completeGameAt = useCallback((completedAt: number, gameStartTime: number) => {
+    setIsFinished(true)
+    const completedElapsedTime = getCompletedElapsedTime(settings.measureTime, gameStartTime, completedAt)
+    if (completedElapsedTime !== null) setElapsedTime(completedElapsedTime)
+  }, [settings.measureTime])
 
-  const useHint = useCallback(() => setHintsUsed(prev => prev + 1), [])
-  const handleSurvivalResult = useCallback((isCorrect: boolean) => {
-    if (settings.gameMode === 'survival') isCorrect ? recordCorrectAnswer() : recordIncorrectAnswer()
-  }, [settings.gameMode, recordCorrectAnswer, recordIncorrectAnswer])
+  const handleCardClick = useCallback(() => {
+    if (isFinished) return
+    if (revealedCards.length >= cardsToReveal) return
+
+    const nextCard = deck[revealedCards.length]
+    if (!nextCard) return
+
+    const revealedAt = Date.now()
+    const gameStartTime = startTime ?? revealedAt
+    if (settings.measureTime && startTime === null) setStartTime(gameStartTime)
+
+    setRevealedCards(previousCards => [...previousCards, nextCard])
+    setTotalScore(previousScore => previousScore + nextCard.value)
+
+    if (isLastCard(revealedCards.length, cardsToReveal)) {
+      completeGameAt(revealedAt, gameStartTime)
+    }
+  }, [cardsToReveal, completeGameAt, deck, isFinished, revealedCards.length, settings.measureTime, startTime])
+
+  const useHint = useCallback(() => setHintsUsed(previousHints => previousHints + 1), [])
 
   return {
-    currentCard: getCurrentCard(revealedCards), isFinished, totalScore, elapsedTime,
-    handleCardClick, resetGame, revealedCards, cardsToReveal, hintsUsed, useHint, handleSurvivalResult,
+    currentCard: getCurrentCard(revealedCards),
+    isFinished, totalScore, elapsedTime,
+    handleCardClick, finishGame, resetGame,
+    revealedCards, cardsToReveal, hintsUsed, useHint,
   }
 }

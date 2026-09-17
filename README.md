@@ -89,8 +89,10 @@ that caches all static assets automatically.
    through an interactive guide
 2. **Choose your game mode** in Settings:
    - **Single Game**: Practice at your own pace with customizable card counts
-   - **Survival Mode**: Progressive difficulty challenge
-   - **Timed Challenge**: Race against the clock with fixed difficulty levels
+   - **Survival Mode**: Progressive difficulty challenge; click
+     **Start Survival Mode** first
+   - **Timed Challenge**: Race against the clock with fixed difficulty levels;
+     click **Start Timed Challenge** first
 3. Click on the card to reveal it
 4. Mentally track the cumulative score based on card values:
    - Ass (Ace): 11 points
@@ -207,6 +209,8 @@ your speed and accuracy under pressure.
 - Hints are available but cost 20 points each
 
 ## Development
+
+**Prerequisite:** Node.js 18 or newer (Node.js 20 is used in CI).
 
 ```bash
 # Install dependencies
