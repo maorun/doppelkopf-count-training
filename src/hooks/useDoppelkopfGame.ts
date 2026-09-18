@@ -107,9 +107,7 @@ export const useDoppelkopfGame = (settings: GameSettings, survivalDifficulty = 1
   }, [settings.measureTime])
 
   const handleCardClick = useCallback(() => {
-    if (isFinished) return
-    if (revealedCards.length >= cardsToReveal) return
-
+    if (isFinished || revealedCards.length >= cardsToReveal) return
     const nextCard = deck[revealedCards.length]
     if (!nextCard) return
 
