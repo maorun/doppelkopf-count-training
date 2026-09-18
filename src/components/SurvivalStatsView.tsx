@@ -15,7 +15,7 @@ const StatCard: React.FC<{
   <div className={`flex flex-col items-center p-4 ${colorClass} rounded-lg`}>
     {icon}
     <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{label}</p>
-    <p className={`text-3xl font-bold ${colorClass.includes('purple') ? 'text-purple-600 dark:text-purple-400' : colorClass.includes('yellow') ? 'text-yellow-600 dark:text-yellow-400' : 'text-blue-600 dark:text-blue-400'}`}>
+    <p className={`text-3xl font-bold ${colorClass.includes('purple') ? 'text-purple-600 dark:text-purple-400' : colorClass.includes('yellow') ? 'text-yellow-800 dark:text-yellow-300' : 'text-blue-600 dark:text-blue-400'}`}>
       {value}
     </p>
     {suffix && <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{suffix}</p>}
@@ -55,7 +55,7 @@ export const SurvivalStatsView: React.FC = () => {
               colorClass="bg-purple-50 dark:bg-purple-900/20"
             />
             <StatCard
-              icon={<Trophy className="h-8 w-8 text-yellow-600 dark:text-yellow-400 mb-2" />}
+              icon={<Trophy className="h-8 w-8 text-yellow-800 dark:text-yellow-300 mb-2" />}
               label="Longest Streak"
               value={survivalState.longestStreak}
               colorClass="bg-yellow-50 dark:bg-yellow-900/20"

@@ -28,10 +28,10 @@ export const SurvivalInfo: React.FC<SurvivalInfoProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+            <Trophy className="h-5 w-5 text-yellow-800 dark:text-yellow-300" />
             <div>
               <p className="text-xs text-slate-600 dark:text-slate-400">Best Streak</p>
-              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              <p className="text-2xl font-bold text-yellow-800 dark:text-yellow-300">
                 {longestStreak}
               </p>
             </div>
