@@ -1,5 +1,5 @@
 // src/hooks/useTimedChallenge.ts
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface TimedChallengeState {
   isActive: boolean
@@ -15,38 +15,12 @@ const getDefaultState = (timeLimitSeconds: number): TimedChallengeState => ({
   isTimeUp: false,
 })
 
-const useCountdownTimer = (
-  isActive: boolean,
-  timeRemaining: number,
-  setTimedChallengeState: (value: TimedChallengeState | ((prev: TimedChallengeState) => TimedChallengeState)) => void,
-) => {
-  useEffect(() => {
-    if (!isActive || timeRemaining <= 0) {
-      return
-    }
-
-    const interval = setInterval(() => {
-      setTimedChallengeState((prev) => {
-        const newTimeRemaining = prev.timeRemaining - 1
-
-        if (newTimeRemaining <= 0) {
-          return {
-            ...prev,
-            timeRemaining: 0,
-            isTimeUp: true,
-            isActive: false,
-          }
-        }
-
-        return {
-          ...prev,
-          timeRemaining: newTimeRemaining,
-        }
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isActive, timeRemaining, setTimedChallengeState])
+const advanceCountdown = (state: TimedChallengeState): TimedChallengeState => {
+  const timeRemaining = state.timeRemaining - 1
+  if (timeRemaining <= 0) {
+    return { ...state, timeRemaining: 0, isTimeUp: true, isActive: false }
+  }
+  return { ...state, timeRemaining }
 }
 
 export const useTimedChallenge = (timeLimitSeconds: number) => {
@@ -54,7 +28,11 @@ export const useTimedChallenge = (timeLimitSeconds: number) => {
     () => getDefaultState(timeLimitSeconds),
   )
 
-  // Update state when time limit changes
+  // Keep the latest updater reference so the interval callback never closes over a stale one.
+  const setTimedChallengeStateRef = useRef(setTimedChallengeState)
+  setTimedChallengeStateRef.current = setTimedChallengeState
+
+  // Sync the stored time limit when the prop changes (e.g. settings re-render).
   useEffect(() => {
     setTimedChallengeState(prev => ({
       ...prev,
@@ -63,11 +41,17 @@ export const useTimedChallenge = (timeLimitSeconds: number) => {
     }))
   }, [timeLimitSeconds])
 
-  useCountdownTimer(
-    timedChallengeState.isActive,
-    timedChallengeState.timeRemaining,
-    setTimedChallengeState,
-  )
+  // Single interval that runs only while the challenge is active; it reads/writes
+  // timeRemaining through refs/state updater, so it does not depend on the value itself.
+  useEffect(() => {
+    if (!timedChallengeState.isActive) return
+
+    const interval = setInterval(() => {
+      setTimedChallengeStateRef.current(advanceCountdown)
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timedChallengeState.isActive])
 
   const startChallenge = useCallback(() => {
     setTimedChallengeState(prev => ({
@@ -79,10 +63,7 @@ export const useTimedChallenge = (timeLimitSeconds: number) => {
   }, [])
 
   const endChallenge = useCallback(() => {
-    setTimedChallengeState(prev => ({
-      ...prev,
-      isActive: false,
-    }))
+    setTimedChallengeState(prev => ({ ...prev, isActive: false }))
   }, [])
 
   const resetChallenge = useCallback(() => {

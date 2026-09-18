@@ -40,6 +40,28 @@ describe('DoppelkopfGame', () => {
     expect(screen.getAllByText('1')[0]).toBeInTheDocument()
   })
 
+  it('does not allow cards to be revealed before a survival game starts', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'survival',
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    const cardElement = screen.getByTestId('game-card')
+    expect(cardElement).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: 'Start Survival Mode' }))
+    expect(cardElement).toBeEnabled()
+    window.localStorage.clear()
+  })
+
   it('shows input field when game is over', () => {
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')

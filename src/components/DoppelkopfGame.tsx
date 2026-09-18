@@ -45,11 +45,13 @@ const GameScreen: React.FC<{
   currentCard: Card | null
   handleCardClick: () => void
   cardDesign: CardDesignOptions
-}> = ({ currentCard, handleCardClick, cardDesign }) => (
+  isDisabled: boolean
+}> = ({ currentCard, handleCardClick, cardDesign, isDisabled }) => (
   <button
     type="button"
     className={getCardContainerClasses(cardDesign.style)}
     onClick={handleCardClick}
+    disabled={isDisabled}
     aria-label={currentCard ? 'Aufgedeckte Karte anzeigen' : 'Nächste Karte aufdecken'}
     data-testid="game-card"
   >
@@ -98,7 +100,7 @@ const DoppelkopfGame: React.FC = () => {
   const { addHighscore, getTop, clearHighscores, highscores } = useHighscores()
   const [showHighscores, setShowHighscores] = useState(false)
   const { statistics, recentTrend } = useStatistics(highscores)
-  const { survivalState, startSurvival } = useSurvivalMode()
+  const { survivalState, startSurvival, recordCorrectAnswer, recordIncorrectAnswer } = useSurvivalMode()
   const { timedChallengeState, startChallenge, endChallenge, resetChallenge } = useTimedChallenge(
     settings.timedChallenge.timeLimitSeconds,
   )
@@ -108,15 +110,16 @@ const DoppelkopfGame: React.FC = () => {
     totalScore,
     elapsedTime,
     handleCardClick,
+    finishGame,
     resetGame,
     revealedCards,
     cardsToReveal,
     hintsUsed,
     useHint,
-    handleSurvivalResult,
-  } = useDoppelkopfGame(settings)
+  } = useDoppelkopfGame(settings, survivalState.currentDifficulty)
 
   const topHighscores = getTop(10)
+  const isGameActive = settings.gameMode === 'single' || survivalState.isActive || timedChallengeState.isActive
 
   const handleStartSurvival = () => {
     startSurvival()
@@ -133,13 +136,18 @@ const DoppelkopfGame: React.FC = () => {
     resetGame()
   }
 
-  // Auto-end game when time runs out in timed challenge mode
+  const handleSurvivalResult = (isCorrect: boolean) => {
+    if (isCorrect) recordCorrectAnswer()
+    else recordIncorrectAnswer()
+  }
+
+  // Finish the round when the countdown reaches zero so the player sees the result screen.
   useEffect(() => {
     if (settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp && !isFinished) {
-      // Time is up - force finish the game
       endChallenge()
+      finishGame()
     }
-  }, [settings.gameMode, timedChallengeState.isTimeUp, isFinished, endChallenge])
+  }, [endChallenge, finishGame, isFinished, settings.gameMode, timedChallengeState.isTimeUp])
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
@@ -215,6 +223,7 @@ const DoppelkopfGame: React.FC = () => {
                 currentCard={currentCard}
                 handleCardClick={handleCardClick}
                 cardDesign={settings.cardDesign}
+                isDisabled={!isGameActive}
               />
               <p className="text-base sm:text-lg mt-3 text-center font-medium text-gray-600 dark:text-gray-400">
                 Card
