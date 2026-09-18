@@ -1,8 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import DoppelkopfGame from './DoppelkopfGame'
 
 describe('DoppelkopfGame', () => {
+  beforeEach(() => {
+    window.localStorage.clear()
+  })
+
+  afterEach(() => {
+    window.localStorage.clear()
+  })
+
   it('renders the game title', () => {
     render(<DoppelkopfGame />)
     expect(screen.getByText(/Doppelkopf Training/)).toBeInTheDocument()
