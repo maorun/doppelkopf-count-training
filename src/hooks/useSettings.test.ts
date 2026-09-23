@@ -14,6 +14,7 @@ describe('useSettings', () => {
     expect(result.current.settings).toEqual({
       includeNines: false,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
       measureTime: true,
       cardCountRange: [20, 20],
       gameMode: 'single',
@@ -29,6 +30,7 @@ describe('useSettings', () => {
     const storedSettings: GameSettings = {
       includeNines: true,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
       measureTime: false,
       cardCountRange: [15, 25],
       gameMode: 'single',
@@ -55,6 +57,7 @@ describe('useSettings', () => {
     const newSettings: GameSettings = {
       includeNines: true,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
       measureTime: false,
       cardCountRange: [18, 22],
       gameMode: 'survival',
@@ -90,6 +93,7 @@ describe('useSettings', () => {
     expect(result.current.settings).toEqual({
       ...oldSettings,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
       cardDesign: defaultCardDesign,
       timedChallenge: {
         timeLimitSeconds: 60,

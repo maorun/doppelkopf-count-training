@@ -10,6 +10,7 @@ describe('SettingsModal', () => {
   const initialSettings: GameSettings = {
     includeNines: false,
     countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+    countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
     measureTime: true,
     cardCountRange: [20, 20],
     gameMode: 'single',
@@ -44,6 +45,21 @@ describe('SettingsModal', () => {
     expect(mockSetSettings).toHaveBeenLastCalledWith({
       ...initialSettings,
       countedRanks: ['Ass', 'König', 'Dame', 'Bube', '9'],
+    })
+  })
+
+  it('should update the counted suits when a suit is toggled', () => {
+    render(
+      <SettingsModal settings={initialSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+    fireEvent.click(screen.getByLabelText('Herz'))
+
+    expect(mockSetSettings).toHaveBeenLastCalledWith({
+      ...initialSettings,
+      countedSuits: ['Kreuz', 'Pik', 'Karo'],
     })
   })
 

@@ -6,6 +6,7 @@ import { useDoppelkopfGame } from './useDoppelkopfGame'
 const settings: GameSettings = {
   includeNines: false,
   countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+  countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
   measureTime: true,
   cardCountRange: [1, 1],
   gameMode: 'single',
@@ -40,6 +41,18 @@ describe('useDoppelkopfGame', () => {
     act(() => result.current.handleCardClick())
 
     expect(result.current.currentCard?.rank).toBe('10')
+    expect(result.current.totalScore).toBe(0)
+    vi.restoreAllMocks()
+  })
+
+  it('only adds values for the selected card suits', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const selectedSuitSettings: GameSettings = { ...settings, countedSuits: ['Herz'] }
+    const { result } = renderHook(() => useDoppelkopfGame(selectedSuitSettings))
+
+    act(() => result.current.handleCardClick())
+
+    expect(result.current.currentCard?.suit).toBe('Kreuz')
     expect(result.current.totalScore).toBe(0)
     vi.restoreAllMocks()
   })

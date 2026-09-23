@@ -1,8 +1,10 @@
 // src/components/SettingsModal.tsx
 import React, { useId } from 'react'
-import { countableRanks, GameSettings, GameMode, TimedChallengeSettings } from '../hooks/useSettings'
+import {
+  countableRanks, countableSuits, GameSettings, GameMode, TimedChallengeSettings,
+} from '../hooks/useSettings'
 import { CardStyle, ColorScheme } from '../lib/card-design'
-import { Rank } from '../lib/doppelkopf'
+import { Rank, Suit } from '../lib/doppelkopf'
 import {
   Dialog,
   DialogContent,
@@ -370,6 +372,43 @@ const CountedRanksSelector: React.FC<{
   )
 }
 
+const CountedSuitsSelector: React.FC<{
+  countedSuits: Suit[]
+  onCountedSuitsChange: (countedSuits: Suit[]) => void
+}> = ({ countedSuits, onCountedSuitsChange }) => {
+  const idPrefix = useId()
+
+  const toggleSuit = (suit: Suit) => {
+    onCountedSuitsChange(
+      countedSuits.includes(suit)
+        ? countedSuits.filter(selectedSuit => selectedSuit !== suit)
+        : [...countedSuits, suit],
+    )
+  }
+
+  return (
+    <fieldset className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
+      <legend className="text-base font-medium">Counted card suits</legend>
+      <p className="text-sm text-slate-500 dark:text-slate-400">
+        Only selected suits add their card values to the running count.
+      </p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {countableSuits.map((suit, index) => (
+          <div key={suit} className="flex items-center gap-2">
+            <input
+              id={`${idPrefix}-${index}`}
+              type="checkbox"
+              checked={countedSuits.includes(suit)}
+              onChange={() => toggleSuit(suit)}
+            />
+            <Label htmlFor={`${idPrefix}-${index}`} className="cursor-pointer">{suit}</Label>
+          </div>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
 const CardDesignSettings: React.FC<{
   settings: GameSettings
   setSettings: (settings: GameSettings) => void
@@ -464,6 +503,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             countedRanks={settings.countedRanks}
             onCountedRanksChange={countedRanks =>
               setSettings({ ...settings, countedRanks })}
+          />
+          <CountedSuitsSelector
+            countedSuits={settings.countedSuits}
+            onCountedSuitsChange={countedSuits =>
+              setSettings({ ...settings, countedSuits })}
           />
 
           <CardDesignSettings settings={settings} setSettings={setSettings} />

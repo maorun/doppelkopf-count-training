@@ -1,7 +1,7 @@
 // src/hooks/useSettings.ts
 import { useState, useEffect } from 'react'
 import { CardDesignOptions, defaultCardDesign } from '../lib/card-design'
-import { Rank } from '../lib/doppelkopf'
+import { Rank, Suit } from '../lib/doppelkopf'
 
 export type GameMode = 'single' | 'survival' | 'timed-challenge'
 
@@ -11,10 +11,12 @@ export interface TimedChallengeSettings {
 }
 
 export const countableRanks: Rank[] = ['Ass', '10', 'König', 'Dame', 'Bube', '9']
+export const countableSuits: Suit[] = ['Kreuz', 'Pik', 'Herz', 'Karo']
 
 export interface GameSettings {
   includeNines: boolean
   countedRanks: Rank[]
+  countedSuits: Suit[]
   measureTime: boolean
   cardCountRange: [number, number]
   gameMode: GameMode
@@ -30,6 +32,7 @@ const defaultTimedChallengeSettings: TimedChallengeSettings = {
 const defaultSettings: GameSettings = {
   includeNines: false,
   countedRanks: countableRanks,
+  countedSuits: countableSuits,
   measureTime: true,
   cardCountRange: [20, 20],
   gameMode: 'single',
@@ -56,6 +59,9 @@ export const useSettings = () => {
       }
       if (!parsed.countedRanks) {
         parsed.countedRanks = countableRanks
+      }
+      if (!parsed.countedSuits) {
+        parsed.countedSuits = countableSuits
       }
 
       return parsed
