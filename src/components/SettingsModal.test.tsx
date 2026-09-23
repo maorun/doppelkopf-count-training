@@ -9,6 +9,7 @@ describe('SettingsModal', () => {
   const mockSetSettings = vi.fn()
   const initialSettings: GameSettings = {
     includeNines: false,
+    countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
     measureTime: true,
     cardCountRange: [20, 20],
     gameMode: 'single',
@@ -29,6 +30,21 @@ describe('SettingsModal', () => {
     expect(getByLabelText('Include 9s')).not.toBeChecked()
     expect(getByLabelText('Measure time')).toBeChecked()
     expect(getAllByText('20').length).toBe(2)
+  })
+
+  it('should update the counted ranks when a rank is toggled', () => {
+    render(
+      <SettingsModal settings={initialSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+    fireEvent.click(screen.getByLabelText('10'))
+
+    expect(mockSetSettings).toHaveBeenLastCalledWith({
+      ...initialSettings,
+      countedRanks: ['Ass', 'König', 'Dame', 'Bube', '9'],
+    })
   })
 
   it('should render card design options', () => {

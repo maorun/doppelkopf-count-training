@@ -13,6 +13,7 @@ describe('useSettings', () => {
     const { result } = renderHook(() => useSettings())
     expect(result.current.settings).toEqual({
       includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       measureTime: true,
       cardCountRange: [20, 20],
       gameMode: 'single',
@@ -27,6 +28,7 @@ describe('useSettings', () => {
   it('should return settings from localStorage when available', () => {
     const storedSettings: GameSettings = {
       includeNines: true,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       measureTime: false,
       cardCountRange: [15, 25],
       gameMode: 'single',
@@ -52,6 +54,7 @@ describe('useSettings', () => {
     const { result } = renderHook(() => useSettings())
     const newSettings: GameSettings = {
       includeNines: true,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       measureTime: false,
       cardCountRange: [18, 22],
       gameMode: 'survival',
@@ -86,6 +89,7 @@ describe('useSettings', () => {
     const { result } = renderHook(() => useSettings())
     expect(result.current.settings).toEqual({
       ...oldSettings,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       cardDesign: defaultCardDesign,
       timedChallenge: {
         timeLimitSeconds: 60,
@@ -189,5 +193,6 @@ describe('useSettings', () => {
       timeLimitSeconds: 60,
       difficultyLevel: 'medium',
     })
+    expect(result.current.settings.countedRanks).toEqual(['Ass', '10', 'König', 'Dame', 'Bube', '9'])
   })
 })

@@ -18,6 +18,8 @@ that caches all static assets automatically.
 
 ## Features
 
+- **Counted card ranks**: Choose which ranks contribute to your running count;
+  all ranks are counted by default.
 - **Game Modes**:
   - **Single Game Mode**: Play one round at a time with customizable card counts
   - **Survival Mode**: Test your endurance! Keep playing until your first mistake

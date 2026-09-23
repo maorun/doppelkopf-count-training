@@ -51,6 +51,7 @@ describe('DoppelkopfGame', () => {
   it('does not allow cards to be revealed before a survival game starts', () => {
     window.localStorage.setItem('gameSettings', JSON.stringify({
       includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       measureTime: true,
       cardCountRange: [20, 20],
       gameMode: 'survival',

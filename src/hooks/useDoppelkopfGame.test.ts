@@ -1,10 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { GameSettings } from './useSettings'
 import { useDoppelkopfGame } from './useDoppelkopfGame'
 
 const settings: GameSettings = {
   includeNines: false,
+  countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
   measureTime: true,
   cardCountRange: [1, 1],
   gameMode: 'single',
@@ -29,6 +30,18 @@ describe('useDoppelkopfGame', () => {
     expect(result.current.revealedCards).toHaveLength(1)
     expect(result.current.totalScore).toBe(result.current.revealedCards[0].value)
     expect(result.current.isFinished).toBe(true)
+  })
+
+  it('only adds values for the selected card ranks', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const selectedRankSettings: GameSettings = { ...settings, countedRanks: ['Ass'] }
+    const { result } = renderHook(() => useDoppelkopfGame(selectedRankSettings))
+
+    act(() => result.current.handleCardClick())
+
+    expect(result.current.currentCard?.rank).toBe('10')
+    expect(result.current.totalScore).toBe(0)
+    vi.restoreAllMocks()
   })
 
   it('does not reveal further cards after the game has completed', () => {
