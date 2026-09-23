@@ -20,6 +20,8 @@ that caches all static assets automatically.
 
 - **Counted card ranks**: Choose which ranks contribute to your running count;
   all ranks are counted by default.
+- **Counted card suits**: Focus your running count on one suit or any selected
+  combination of suits; all suits are counted by default.
 - **Game Modes**:
   - **Single Game Mode**: Play one round at a time with customizable card counts
   - **Survival Mode**: Test your endurance! Keep playing until your first mistake

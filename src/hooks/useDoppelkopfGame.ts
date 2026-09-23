@@ -40,8 +40,12 @@ const getRevealTiming = (startTime: number | null): [number, number] => {
   return [revealedAt, startTime ?? revealedAt]
 }
 
-const getCardScore = (card: Card, countedRanks: GameSettings['countedRanks']): number => (
-  countedRanks.includes(card.rank) ? card.value : 0
+const getCardScore = (
+  card: Card,
+  countedRanks: GameSettings['countedRanks'],
+  countedSuits: GameSettings['countedSuits'],
+): number => (
+  countedRanks.includes(card.rank) && countedSuits.includes(card.suit) ? card.value : 0
 )
 
 const isLastCard = (revealedCardsCount: number, cardsToReveal: number): boolean => (
@@ -124,7 +128,7 @@ export const useDoppelkopfGame = (settings: GameSettings, survivalDifficulty = 1
     if (settings.measureTime && startTime === null) setStartTime(gameStartTime)
 
     setRevealedCards(previousCards => [...previousCards, nextCard])
-    setTotalScore(previousScore => previousScore + getCardScore(nextCard, settings.countedRanks))
+    setTotalScore(previousScore => previousScore + getCardScore(nextCard, settings.countedRanks, settings.countedSuits))
 
     if (isLastCard(revealedCards.length, cardsToReveal)) {
       completeGameAt(revealedAt, gameStartTime)
