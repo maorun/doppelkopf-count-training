@@ -1,7 +1,8 @@
 // src/components/SettingsModal.tsx
 import React, { useId } from 'react'
-import { GameSettings, GameMode, TimedChallengeSettings } from '../hooks/useSettings'
+import { countableRanks, GameSettings, GameMode, TimedChallengeSettings } from '../hooks/useSettings'
 import { CardStyle, ColorScheme } from '../lib/card-design'
+import { Rank } from '../lib/doppelkopf'
 import {
   Dialog,
   DialogContent,
@@ -332,6 +333,43 @@ const AccessibilitySettings: React.FC<{
   )
 }
 
+const CountedRanksSelector: React.FC<{
+  countedRanks: Rank[]
+  onCountedRanksChange: (countedRanks: Rank[]) => void
+}> = ({ countedRanks, onCountedRanksChange }) => {
+  const idPrefix = useId()
+
+  const toggleRank = (rank: Rank) => {
+    onCountedRanksChange(
+      countedRanks.includes(rank)
+        ? countedRanks.filter(selectedRank => selectedRank !== rank)
+        : [...countedRanks, rank],
+    )
+  }
+
+  return (
+    <fieldset className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
+      <legend className="text-base font-medium">Counted card ranks</legend>
+      <p className="text-sm text-slate-500 dark:text-slate-400">
+        Only selected ranks add their card values to the running count.
+      </p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {countableRanks.map((rank, index) => (
+          <div key={rank} className="flex items-center gap-2">
+            <input
+              id={`${idPrefix}-${index}`}
+              type="checkbox"
+              checked={countedRanks.includes(rank)}
+              onChange={() => toggleRank(rank)}
+            />
+            <Label htmlFor={`${idPrefix}-${index}`} className="cursor-pointer">{rank}</Label>
+          </div>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
 const CardDesignSettings: React.FC<{
   settings: GameSettings
   setSettings: (settings: GameSettings) => void
@@ -422,6 +460,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 setSettings({ ...settings, timedChallenge })}
             />
           )}
+          <CountedRanksSelector
+            countedRanks={settings.countedRanks}
+            onCountedRanksChange={countedRanks =>
+              setSettings({ ...settings, countedRanks })}
+          />
 
           <CardDesignSettings settings={settings} setSettings={setSettings} />
         </div>
