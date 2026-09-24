@@ -15,6 +15,7 @@ describe('SettingsModal', () => {
     cardCountRange: [20, 20],
     gameMode: 'single',
     countingMode: 'count-up',
+    autoShowRunningTotal: false,
     cardDesign: defaultCardDesign,
     timedChallenge: {
       timeLimitSeconds: 60,
@@ -201,6 +202,21 @@ describe('SettingsModal', () => {
           largerText: true,
         },
       },
+    })
+  })
+
+  it('should enable automatic running totals when the setting is toggled', () => {
+    render(
+      <SettingsModal settings={initialSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+    fireEvent.click(screen.getByLabelText('Show running total after each card'))
+
+    expect(mockSetSettings).toHaveBeenLastCalledWith({
+      ...initialSettings,
+      autoShowRunningTotal: true,
     })
   })
 

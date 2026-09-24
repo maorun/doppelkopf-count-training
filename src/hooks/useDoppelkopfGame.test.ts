@@ -11,6 +11,7 @@ const settings: GameSettings = {
   cardCountRange: [1, 1],
   gameMode: 'single',
   countingMode: 'count-up',
+  autoShowRunningTotal: false,
   cardDesign: {
     style: 'classic',
     colorScheme: 'traditional',

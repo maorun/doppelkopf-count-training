@@ -43,6 +43,14 @@ const getSuitSymbol = (suit: Suit): string => {
   }
 }
 
+const RunningTotal: React.FC<{ totalScore: number }> = ({ totalScore }) => (
+  <p className="text-base sm:text-lg text-center font-medium text-blue-800 dark:text-blue-200" role="status" aria-live="polite">
+    Running total:
+    {' '}
+    <span className="font-bold">{totalScore}</span>
+  </p>
+)
+
 const GameScreen: React.FC<{
   currentCard: Card | null
   handleCardClick: () => void
@@ -126,6 +134,9 @@ const DoppelkopfGame: React.FC = () => {
     || settings.gameMode === 'team-play'
     || survivalState.isActive
     || timedChallengeState.isActive
+  const shouldShowRunningTotal = settings.autoShowRunningTotal
+    && (settings.gameMode === 'single' || settings.gameMode === 'team-play')
+    && revealedCards.length > 0
 
   const handleStartSurvival = () => {
     startSurvival()
@@ -234,6 +245,7 @@ const DoppelkopfGame: React.FC = () => {
                 cardDesign={settings.cardDesign}
                 isDisabled={!isGameActive}
               />
+              {shouldShowRunningTotal && <RunningTotal totalScore={totalScore} />}
               <p className="text-base sm:text-lg mt-3 text-center font-medium text-gray-600 dark:text-gray-400">
                 Card
                 {' '}

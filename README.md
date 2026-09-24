@@ -81,6 +81,9 @@ that caches all static assets automatically.
       - Larger Text option for better readability
 - **Hint System**: Get help during gameplay with optional hints
   - Show current running total at any time
+  - Optionally show the running total automatically after each card in Single Game
+    and Team Play; this free learning aid does not apply to Survival or Timed
+    Challenge modes
   - View the last 5 cards revealed with their values
   - Display card value reminders
   - Each hint costs 20 points from your final score

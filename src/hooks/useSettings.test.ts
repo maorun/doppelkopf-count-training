@@ -19,6 +19,7 @@ describe('useSettings', () => {
       cardCountRange: [20, 20],
       gameMode: 'single',
       countingMode: 'count-up',
+      autoShowRunningTotal: false,
       cardDesign: defaultCardDesign,
       timedChallenge: {
         timeLimitSeconds: 60,
@@ -37,6 +38,7 @@ describe('useSettings', () => {
       cardCountRange: [15, 25],
       gameMode: 'single',
       countingMode: 'count-down',
+      autoShowRunningTotal: true,
       cardDesign: {
         style: 'modern',
         colorScheme: 'vibrant',
@@ -66,6 +68,7 @@ describe('useSettings', () => {
       cardCountRange: [18, 22],
       gameMode: 'survival',
       countingMode: 'count-down',
+      autoShowRunningTotal: true,
       cardDesign: {
         style: 'minimalist',
         colorScheme: 'monochrome',
@@ -98,6 +101,7 @@ describe('useSettings', () => {
     expect(result.current.settings).toEqual({
       ...oldSettings,
       countingMode: 'count-up',
+      autoShowRunningTotal: false,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
       countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
       cardDesign: defaultCardDesign,

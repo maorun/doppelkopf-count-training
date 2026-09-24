@@ -491,6 +491,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const includeNinesId = useId()
   const measureTimeId = useId()
   const reverseCountingId = useId()
+  const autoShowRunningTotalId = useId()
 
   return (
     <Dialog>
@@ -531,6 +532,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             checked={settings.countingMode === 'count-down'}
             onCheckedChange={checked =>
               setSettings({ ...settings, countingMode: checked ? 'count-down' : 'count-up' })}
+          />
+          <SettingSwitch
+            id={autoShowRunningTotalId}
+            label="Show running total after each card"
+            description="Available in Single Game and Team Play; does not use hints"
+            checked={settings.autoShowRunningTotal}
+            onCheckedChange={autoShowRunningTotal =>
+              setSettings({ ...settings, autoShowRunningTotal })}
           />
           {settings.gameMode === 'single' && (
             <SettingSlider
