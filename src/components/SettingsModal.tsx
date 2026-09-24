@@ -450,6 +450,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const includeNinesId = useId()
   const measureTimeId = useId()
+  const reverseCountingId = useId()
 
   return (
     <Dialog>
@@ -482,6 +483,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             checked={settings.measureTime}
             onCheckedChange={checked =>
               setSettings({ ...settings, measureTime: checked })}
+          />
+          <SettingSwitch
+            id={reverseCountingId}
+            label="Reverse counting"
+            description="Start from the round total and subtract each card value"
+            checked={settings.countingMode === 'count-down'}
+            onCheckedChange={checked =>
+              setSettings({ ...settings, countingMode: checked ? 'count-down' : 'count-up' })}
           />
           {settings.gameMode === 'single' && (
             <SettingSlider

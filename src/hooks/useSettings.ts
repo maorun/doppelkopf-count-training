@@ -4,6 +4,7 @@ import { CardDesignOptions, defaultCardDesign } from '../lib/card-design'
 import { Rank, Suit } from '../lib/doppelkopf'
 
 export type GameMode = 'single' | 'survival' | 'timed-challenge'
+export type CountingMode = 'count-up' | 'count-down'
 
 export interface TimedChallengeSettings {
   timeLimitSeconds: number
@@ -20,6 +21,7 @@ export interface GameSettings {
   measureTime: boolean
   cardCountRange: [number, number]
   gameMode: GameMode
+  countingMode: CountingMode
   cardDesign: CardDesignOptions
   timedChallenge: TimedChallengeSettings
 }
@@ -36,6 +38,7 @@ const defaultSettings: GameSettings = {
   measureTime: true,
   cardCountRange: [20, 20],
   gameMode: 'single',
+  countingMode: 'count-up',
   cardDesign: defaultCardDesign,
   timedChallenge: defaultTimedChallengeSettings,
 }
@@ -62,6 +65,9 @@ export const useSettings = () => {
       }
       if (!parsed.countedSuits) {
         parsed.countedSuits = countableSuits
+      }
+      if (parsed.countingMode !== 'count-down') {
+        parsed.countingMode = 'count-up'
       }
 
       return parsed
