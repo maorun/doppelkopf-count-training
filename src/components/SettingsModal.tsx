@@ -1,7 +1,7 @@
 // src/components/SettingsModal.tsx
 import React, { useId } from 'react'
 import {
-  countableRanks, countableSuits, GameSettings, GameMode, TimedChallengeSettings,
+  countableRanks, countableSuits, defaultTeamPlaySettings, GameSettings, GameMode, TimedChallengeSettings,
 } from '../hooks/useSettings'
 import { CardStyle, ColorScheme } from '../lib/card-design'
 import { Rank, Suit } from '../lib/doppelkopf'
@@ -86,6 +86,7 @@ const GameModeSelector: React.FC<{
   const singleId = useId()
   const survivalId = useId()
   const timedChallengeId = useId()
+  const teamPlayId = useId()
 
   return (
     <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
@@ -116,6 +117,45 @@ const GameModeSelector: React.FC<{
             Timed Challenge - Race against the clock
           </Label>
         </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="team-play" id={teamPlayId} />
+          <Label htmlFor={teamPlayId} className="cursor-pointer">
+            Team Play - Take turns with 2 to 4 players
+          </Label>
+        </div>
+      </RadioGroup>
+    </div>
+  )
+}
+
+const TeamPlayerCountSelector: React.FC<{
+  playerCount: number
+  onPlayerCountChange: (playerCount: number) => void
+}> = ({ playerCount, onPlayerCountChange }) => {
+  const twoPlayersId = useId()
+  const threePlayersId = useId()
+  const fourPlayersId = useId()
+
+  return (
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-3">
+      <div className="space-y-0.5">
+        <Label className="text-base font-medium">Team Play</Label>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Players alternate turns and are assigned to Team A or Team B.</p>
+      </div>
+      <RadioGroup value={String(playerCount)} onValueChange={value => onPlayerCountChange(Number(value))}>
+        {[
+          { count: 2, id: twoPlayersId },
+          { count: 3, id: threePlayersId },
+          { count: 4, id: fourPlayersId },
+        ].map(({ count, id }) => (
+          <div key={count} className="flex items-center space-x-2">
+            <RadioGroupItem value={String(count)} id={id} />
+            <Label htmlFor={id} className="cursor-pointer">
+              {count}
+              {' players'}
+            </Label>
+          </div>
+        ))}
       </RadioGroup>
     </div>
   )
@@ -499,6 +539,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               value={settings.cardCountRange}
               onValueChange={value =>
                 setSettings({ ...settings, cardCountRange: [value[0], value[1]] })}
+            />
+          )}
+          {settings.gameMode === 'team-play' && (
+            <TeamPlayerCountSelector
+              playerCount={settings.teamPlay?.playerCount ?? defaultTeamPlaySettings.playerCount}
+              onPlayerCountChange={playerCount =>
+                setSettings({ ...settings, teamPlay: { playerCount } })}
             />
           )}
           {settings.gameMode === 'timed-challenge' && (

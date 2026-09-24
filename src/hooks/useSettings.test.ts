@@ -24,6 +24,7 @@ describe('useSettings', () => {
         timeLimitSeconds: 60,
         difficultyLevel: 'medium',
       },
+      teamPlay: { playerCount: 4 },
     })
   })
 
@@ -48,6 +49,7 @@ describe('useSettings', () => {
         timeLimitSeconds: 90,
         difficultyLevel: 'hard',
       },
+      teamPlay: { playerCount: 3 },
     }
     window.localStorage.setItem('gameSettings', JSON.stringify(storedSettings))
     const { result } = renderHook(() => useSettings())
@@ -103,6 +105,7 @@ describe('useSettings', () => {
         timeLimitSeconds: 60,
         difficultyLevel: 'medium',
       },
+      teamPlay: { playerCount: 4 },
     })
   })
 
@@ -202,5 +205,19 @@ describe('useSettings', () => {
       difficultyLevel: 'medium',
     })
     expect(result.current.settings.countedRanks).toEqual(['Ass', '10', 'König', 'Dame', 'Bube', '9'])
+  })
+
+  it('migrates old settings with the default team-player count', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: true,
+      measureTime: false,
+      cardCountRange: [15, 25],
+      gameMode: 'single',
+      cardDesign: defaultCardDesign,
+    }))
+
+    const { result } = renderHook(() => useSettings())
+
+    expect(result.current.settings.teamPlay).toEqual({ playerCount: 4 })
   })
 })
