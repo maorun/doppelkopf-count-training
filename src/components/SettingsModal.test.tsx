@@ -14,6 +14,7 @@ describe('SettingsModal', () => {
     measureTime: true,
     cardCountRange: [20, 20],
     gameMode: 'single',
+    countingMode: 'count-up',
     cardDesign: defaultCardDesign,
     timedChallenge: {
       timeLimitSeconds: 60,
@@ -200,6 +201,21 @@ describe('SettingsModal', () => {
           largerText: true,
         },
       },
+    })
+  })
+
+  it('should enable reverse counting when the setting is toggled', () => {
+    render(
+      <SettingsModal settings={initialSettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+    fireEvent.click(screen.getByLabelText('Reverse counting'))
+
+    expect(mockSetSettings).toHaveBeenLastCalledWith({
+      ...initialSettings,
+      countingMode: 'count-down',
     })
   })
 

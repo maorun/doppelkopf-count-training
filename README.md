@@ -45,6 +45,8 @@ that caches all static assets automatically.
   - Navigate at your own pace through 5 tutorial steps
 - **Card Counting Practice**: Reveal cards one by one and mentally track the
   total score
+- **Reverse Counting**: Start from the total value of the cards in the round and
+  subtract each counted card value until reaching zero.
 - **Result Validation**: After completing a round, enter your calculated total
   and receive immediate feedback on whether you were correct
 - **Dark Mode / Light Mode**: Switch between dark and light themes for comfortable
@@ -98,7 +100,9 @@ that caches all static assets automatically.
    - **Timed Challenge**: Race against the clock with fixed difficulty levels;
      click **Start Timed Challenge** first
 3. Click on the card to reveal it
-4. Mentally track the cumulative score based on card values:
+4. Mentally track the cumulative score based on card values. Enable **Reverse
+  counting** in Settings to start from the round total and subtract each card
+  instead:
    - Ass (Ace): 11 points
    - 10: 10 points
    - König (King): 4 points

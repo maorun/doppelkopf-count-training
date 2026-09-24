@@ -10,6 +10,7 @@ const settings: GameSettings = {
   measureTime: true,
   cardCountRange: [1, 1],
   gameMode: 'single',
+  countingMode: 'count-up',
   cardDesign: {
     style: 'classic',
     colorScheme: 'traditional',
@@ -53,6 +54,19 @@ describe('useDoppelkopfGame', () => {
     act(() => result.current.handleCardClick())
 
     expect(result.current.currentCard?.suit).toBe('Kreuz')
+    expect(result.current.totalScore).toBe(0)
+    vi.restoreAllMocks()
+  })
+
+  it('starts reverse counting at the round total and reaches zero after all cards', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const reverseCountingSettings: GameSettings = { ...settings, countingMode: 'count-down' }
+    const { result } = renderHook(() => useDoppelkopfGame(reverseCountingSettings))
+
+    expect(result.current.totalScore).toBe(10)
+
+    act(() => result.current.handleCardClick())
+
     expect(result.current.totalScore).toBe(0)
     vi.restoreAllMocks()
   })
