@@ -192,6 +192,22 @@ describe('DoppelkopfGame', () => {
   })
 
   it('shows correct message when user enters correct result', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'single',
+      countingMode: 'count-up',
+      autoShowRunningTotal: false,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
 
