@@ -3,8 +3,12 @@ import { useState, useEffect } from 'react'
 import { CardDesignOptions, defaultCardDesign } from '../lib/card-design'
 import { Rank, Suit } from '../lib/doppelkopf'
 
-export type GameMode = 'single' | 'survival' | 'timed-challenge'
+export type GameMode = 'single' | 'survival' | 'timed-challenge' | 'team-play'
 export type CountingMode = 'count-up' | 'count-down'
+
+export interface TeamPlaySettings {
+  playerCount: number
+}
 
 export interface TimedChallengeSettings {
   timeLimitSeconds: number
@@ -24,11 +28,16 @@ export interface GameSettings {
   countingMode: CountingMode
   cardDesign: CardDesignOptions
   timedChallenge: TimedChallengeSettings
+  teamPlay?: TeamPlaySettings
 }
 
 const defaultTimedChallengeSettings: TimedChallengeSettings = {
   timeLimitSeconds: 60,
   difficultyLevel: 'medium',
+}
+
+export const defaultTeamPlaySettings: TeamPlaySettings = {
+  playerCount: 4,
 }
 
 const defaultSettings: GameSettings = {
@@ -41,42 +50,32 @@ const defaultSettings: GameSettings = {
   countingMode: 'count-up',
   cardDesign: defaultCardDesign,
   timedChallenge: defaultTimedChallengeSettings,
+  teamPlay: defaultTeamPlaySettings,
+}
+
+const migrateSettings = (parsed: Partial<GameSettings>): GameSettings => ({
+  ...parsed,
+  cardDesign: parsed.cardDesign ?? defaultCardDesign,
+  timedChallenge: parsed.timedChallenge ?? defaultTimedChallengeSettings,
+  teamPlay: parsed.teamPlay ?? defaultTeamPlaySettings,
+  countedRanks: parsed.countedRanks ?? countableRanks,
+  countedSuits: parsed.countedSuits ?? countableSuits,
+  countingMode: parsed.countingMode === 'count-down' ? 'count-down' : 'count-up',
+}) as GameSettings
+
+const loadSettings = (): GameSettings => {
+  try {
+    const storedSettings = window.localStorage.getItem('gameSettings')
+    return storedSettings ? migrateSettings(JSON.parse(storedSettings)) : defaultSettings
+  }
+  catch (error) {
+    console.error('Error reading from localStorage', error)
+    return defaultSettings
+  }
 }
 
 export const useSettings = () => {
-  const [settings, setSettings] = useState<GameSettings>(() => {
-    try {
-      const storedSettings = window.localStorage.getItem('gameSettings')
-      if (!storedSettings) {
-        return defaultSettings
-      }
-
-      const parsed = JSON.parse(storedSettings)
-
-      // Migrate old settings format to include cardDesign and timedChallenge
-      if (!parsed.cardDesign) {
-        parsed.cardDesign = defaultCardDesign
-      }
-      if (!parsed.timedChallenge) {
-        parsed.timedChallenge = defaultTimedChallengeSettings
-      }
-      if (!parsed.countedRanks) {
-        parsed.countedRanks = countableRanks
-      }
-      if (!parsed.countedSuits) {
-        parsed.countedSuits = countableSuits
-      }
-      if (parsed.countingMode !== 'count-down') {
-        parsed.countingMode = 'count-up'
-      }
-
-      return parsed
-    }
-    catch (error) {
-      console.error('Error reading from localStorage', error)
-      return defaultSettings
-    }
-  })
+  const [settings, setSettings] = useState<GameSettings>(loadSettings)
 
   useEffect(() => {
     try {

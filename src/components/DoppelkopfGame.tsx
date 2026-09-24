@@ -6,6 +6,7 @@ import { useHighscores } from '../hooks/useHighscores'
 import { useStatistics } from '../hooks/useStatistics'
 import { useSurvivalMode } from '../hooks/useSurvivalMode'
 import { useTimedChallenge } from '../hooks/useTimedChallenge'
+import { useTeamPlay } from '../hooks/useTeamPlay'
 import { Card, Suit } from '../lib/doppelkopf'
 import { CardDesignOptions } from '../lib/card-design'
 import {
@@ -27,6 +28,7 @@ import { ThemeToggle } from './ThemeToggle'
 import { TutorialModal } from './TutorialModal'
 import { TimedChallengeInfo } from './TimedChallengeInfo'
 import { HintDialog } from './HintDialog'
+import { TeamPlayInfo } from './TeamPlayInfo'
 
 const getSuitSymbol = (suit: Suit): string => {
   switch (suit) {
@@ -118,8 +120,12 @@ const DoppelkopfGame: React.FC = () => {
     useHint,
   } = useDoppelkopfGame(settings, survivalState.currentDifficulty)
 
+  const { players, activePlayer } = useTeamPlay(settings.teamPlay?.playerCount, revealedCards.length)
   const topHighscores = getTop(10)
-  const isGameActive = settings.gameMode === 'single' || survivalState.isActive || timedChallengeState.isActive
+  const isGameActive = settings.gameMode === 'single'
+    || settings.gameMode === 'team-play'
+    || survivalState.isActive
+    || timedChallengeState.isActive
 
   const handleStartSurvival = () => {
     startSurvival()
@@ -219,6 +225,9 @@ const DoppelkopfGame: React.FC = () => {
             </div>
           ) : (
             <>
+              {settings.gameMode === 'team-play' && (
+                <TeamPlayInfo activePlayer={activePlayer} players={players} />
+              )}
               <GameScreen
                 currentCard={currentCard}
                 handleCardClick={handleCardClick}

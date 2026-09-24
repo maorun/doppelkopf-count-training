@@ -230,6 +230,27 @@ describe('SettingsModal', () => {
     expect(screen.getByText(/Timed Challenge - Race against the clock/)).toBeInTheDocument()
   })
 
+  it('should show team-player controls when team play is selected', () => {
+    const teamPlaySettings: GameSettings = {
+      ...initialSettings,
+      gameMode: 'team-play',
+      teamPlay: { playerCount: 4 },
+    }
+
+    render(
+      <SettingsModal settings={teamPlaySettings} setSettings={mockSetSettings}>
+        <button>Open</button>
+      </SettingsModal>,
+    )
+    fireEvent.click(screen.getByText('Open'))
+    fireEvent.click(screen.getByLabelText('3 players'))
+
+    expect(mockSetSettings).toHaveBeenLastCalledWith({
+      ...teamPlaySettings,
+      teamPlay: { playerCount: 3 },
+    })
+  })
+
   it('should show timed challenge settings when timed challenge mode is selected', () => {
     const timedChallengeSettings: GameSettings = {
       ...initialSettings,
