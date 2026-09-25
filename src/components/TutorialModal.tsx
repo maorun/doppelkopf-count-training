@@ -119,6 +119,31 @@ const TipsSection: React.FC<{
   )
 }
 
+const NinesSettingStep: React.FC = () => (
+  <div className="space-y-4">
+    <p className="text-base text-gray-700 dark:text-gray-300">
+      Im Doppelkopf werden 9er je nach Spielvariante mit oder ohne gespielt. Mit der Einstellung
+      <strong>„Include 9s“</strong>
+      {' '}
+      legst du fest, ob sie im Kartendeck enthalten sind.
+    </p>
+    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+      <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-2">Wann sollte ich umstellen?</h4>
+      <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+        <li>• Aktiviere die Einstellung, um das Zählen mit 9ern zu üben.</li>
+        <li>• Deaktiviere sie, wenn deine Spielrunde ohne 9er spielt oder du mit weniger Karten starten möchtest.</li>
+      </ul>
+    </div>
+    <p className="text-sm text-gray-600 dark:text-gray-400">
+      Du findest den Schalter „Include 9s“ im Dialog
+      {' '}
+      <strong>Settings</strong>
+      {' '}
+      direkt unter der Spielmodus-Auswahl.
+    </p>
+  </div>
+)
+
 const TipsAndTricksStep: React.FC = () => (
   <div className="space-y-4">
     <TipsSection title="🎯 Strategie-Tipps" color="blue">
@@ -244,6 +269,11 @@ const getTutorialSteps = (): TutorialStep[] => [
     title: 'Spielablauf',
     description: 'Schritt für Schritt zum Erfolg',
     content: <GameplayStep />,
+  },
+  {
+    title: '9er im Kartendeck',
+    description: 'Passe das Kartendeck an deine Spielvariante an',
+    content: <NinesSettingStep />,
   },
   {
     title: 'Tipps & Tricks',
