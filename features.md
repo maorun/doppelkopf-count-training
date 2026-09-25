@@ -4,7 +4,4 @@
 
 ### Different Counting Modes
 
-- Count only specific suits
-- Count only specific card types (e.g., only Aces and 10s)
-- Reverse counting (countdown from total)
-- Team play mode (multiple players)
+All counting-mode variations previously listed here are implemented.
