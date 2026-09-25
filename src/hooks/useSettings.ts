@@ -26,6 +26,7 @@ export interface GameSettings {
   cardCountRange: [number, number]
   gameMode: GameMode
   countingMode: CountingMode
+  autoShowRunningTotal: boolean
   cardDesign: CardDesignOptions
   timedChallenge: TimedChallengeSettings
   teamPlay?: TeamPlaySettings
@@ -48,6 +49,7 @@ const defaultSettings: GameSettings = {
   cardCountRange: [20, 20],
   gameMode: 'single',
   countingMode: 'count-up',
+  autoShowRunningTotal: false,
   cardDesign: defaultCardDesign,
   timedChallenge: defaultTimedChallengeSettings,
   teamPlay: defaultTeamPlaySettings,
@@ -61,6 +63,7 @@ const migrateSettings = (parsed: Partial<GameSettings>): GameSettings => ({
   countedRanks: parsed.countedRanks ?? countableRanks,
   countedSuits: parsed.countedSuits ?? countableSuits,
   countingMode: parsed.countingMode === 'count-down' ? 'count-down' : 'count-up',
+  autoShowRunningTotal: parsed.autoShowRunningTotal ?? false,
 }) as GameSettings
 
 const loadSettings = (): GameSettings => {

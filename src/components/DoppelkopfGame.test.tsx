@@ -29,6 +29,106 @@ describe('DoppelkopfGame', () => {
     fireEvent.click(cardElement)
     // After the first click, the card back should not be visible
     expect(screen.queryByTestId('card-back')).not.toBeInTheDocument()
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('shows the running total after each card when enabled in Single Game', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'single',
+      countingMode: 'count-up',
+      autoShowRunningTotal: true,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    fireEvent.click(screen.getByTestId('game-card'))
+
+    expect(screen.getByRole('status')).toHaveTextContent(/Running total:/)
+    expect(screen.getByRole('button', { name: 'Hint' })).not.toHaveAccessibleName(/Hint \(1\)/)
+  })
+
+  it('shows the running total after each card in Team Play when enabled', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'team-play',
+      countingMode: 'count-up',
+      autoShowRunningTotal: true,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    fireEvent.click(screen.getByTestId('game-card'))
+
+    expect(screen.getByRole('status')).toHaveTextContent(/Running total:/)
+  })
+
+  it('does not show the running total in Survival Mode when enabled', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'survival',
+      countingMode: 'count-up',
+      autoShowRunningTotal: true,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start Survival Mode' }))
+    fireEvent.click(screen.getByTestId('game-card'))
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('does not show the running total in Timed Challenge Mode when enabled', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'timed-challenge',
+      countingMode: 'count-up',
+      autoShowRunningTotal: true,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start Timed Challenge' }))
+    fireEvent.click(screen.getByTestId('game-card'))
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 
   it('opens the settings modal when the "Settings" button is clicked', () => {
@@ -92,6 +192,22 @@ describe('DoppelkopfGame', () => {
   })
 
   it('shows correct message when user enters correct result', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'single',
+      countingMode: 'count-up',
+      autoShowRunningTotal: false,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
 
