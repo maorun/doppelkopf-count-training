@@ -41,7 +41,7 @@ describe('TutorialModal', () => {
     expect(screen.getByText(/Kartenwerte im Doppelkopf kennenlernen/)).toBeInTheDocument()
   })
 
-  it('shows step 1 of 5 initially', async () => {
+  it('shows step 1 of 6 initially', async () => {
     render(
       <TutorialModal>
         <button>Open Tutorial</button>
@@ -50,7 +50,7 @@ describe('TutorialModal', () => {
 
     fireEvent.click(screen.getByText('Open Tutorial'))
 
-    expect(await screen.findByText('Schritt 1 von 5')).toBeInTheDocument()
+    expect(await screen.findByText('Schritt 1 von 6')).toBeInTheDocument()
   })
 
   it('navigates to the next step when clicking Weiter', async () => {
@@ -71,7 +71,7 @@ describe('TutorialModal', () => {
     // Should show card values step
     expect(await screen.findByText('Kartenwerte')).toBeInTheDocument()
     expect(screen.getByText('Diese Punkte haben die verschiedenen Karten')).toBeInTheDocument()
-    expect(screen.getByText('Schritt 2 von 5')).toBeInTheDocument()
+    expect(screen.getByText('Schritt 2 von 6')).toBeInTheDocument()
   })
 
   it('disables the Zurück button on the first step', async () => {
@@ -127,7 +127,7 @@ describe('TutorialModal', () => {
     fireEvent.click(screen.getByText('Zurück'))
 
     expect(await screen.findByText('Willkommen zum Tutorial')).toBeInTheDocument()
-    expect(screen.getByText('Schritt 1 von 5')).toBeInTheDocument()
+    expect(screen.getByText('Schritt 1 von 6')).toBeInTheDocument()
   })
 
   it('displays card values in the Kartenwerte step', async () => {
@@ -204,6 +204,28 @@ describe('TutorialModal', () => {
     expect(screen.getByText('Ergebnis eingeben')).toBeInTheDocument()
   })
 
+  it('explains how to include or exclude 9s from the deck', async () => {
+    render(
+      <TutorialModal>
+        <button>Open Tutorial</button>
+      </TutorialModal>,
+    )
+
+    fireEvent.click(screen.getByText('Open Tutorial'))
+    await screen.findByText('Willkommen zum Tutorial')
+
+    for (let i = 0; i < 4; i++) {
+      fireEvent.click(screen.getByText('Weiter'))
+    }
+
+    expect(await screen.findByText('9er im Kartendeck')).toBeInTheDocument()
+    expect(screen.getByText('„Include 9s“')).toBeInTheDocument()
+    expect(screen.getByText(/Zählen mit 9ern zu üben/)).toBeInTheDocument()
+    expect(screen.getByText(/ohne 9er spielt/)).toBeInTheDocument()
+    expect(screen.getByText(/direkt unter der Spielmodus-Auswahl/)).toBeInTheDocument()
+    expect(screen.getByText('Schritt 5 von 6')).toBeInTheDocument()
+  })
+
   it('displays tips and tricks in the last step', async () => {
     render(
       <TutorialModal>
@@ -215,7 +237,8 @@ describe('TutorialModal', () => {
 
     await screen.findByText('Willkommen zum Tutorial')
 
-    // Navigate to tips step (step 5)
+    // Navigate to tips step (step 6)
+    fireEvent.click(screen.getByText('Weiter'))
     fireEvent.click(screen.getByText('Weiter'))
     fireEvent.click(screen.getByText('Weiter'))
     fireEvent.click(screen.getByText('Weiter'))
@@ -245,6 +268,7 @@ describe('TutorialModal', () => {
     fireEvent.click(screen.getByText('Weiter'))
     fireEvent.click(screen.getByText('Weiter'))
     fireEvent.click(screen.getByText('Weiter'))
+    fireEvent.click(screen.getByText('Weiter'))
 
     await screen.findByText('Tipps & Tricks')
 
@@ -253,7 +277,7 @@ describe('TutorialModal', () => {
     expect(finishButton).toBeDisabled()
   })
 
-  it('shows correct step count text (Schritt X von 5)', async () => {
+  it('shows correct step count text (Schritt X von 6)', async () => {
     render(
       <TutorialModal>
         <button>Open Tutorial</button>
@@ -263,13 +287,13 @@ describe('TutorialModal', () => {
     fireEvent.click(screen.getByText('Open Tutorial'))
 
     await screen.findByText('Willkommen zum Tutorial')
-    expect(screen.getByText('Schritt 1 von 5')).toBeInTheDocument()
+    expect(screen.getByText('Schritt 1 von 6')).toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Weiter'))
-    expect(await screen.findByText('Schritt 2 von 5')).toBeInTheDocument()
+    expect(await screen.findByText('Schritt 2 von 6')).toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Weiter'))
-    expect(await screen.findByText('Schritt 3 von 5')).toBeInTheDocument()
+    expect(await screen.findByText('Schritt 3 von 6')).toBeInTheDocument()
   })
 
   it('displays progress indicator with correct number of dots', async () => {
@@ -284,8 +308,8 @@ describe('TutorialModal', () => {
     await screen.findByText('Willkommen zum Tutorial')
 
     // Find the progress indicator container
-    const progressIndicators = screen.getByText('Schritt 1 von 5').parentElement?.parentElement?.querySelector('.flex.gap-2.justify-center.py-2')
-    expect(progressIndicators?.children.length).toBe(5)
+    const progressIndicators = screen.getByText('Schritt 1 von 6').parentElement?.parentElement?.querySelector('.flex.gap-2.justify-center.py-2')
+    expect(progressIndicators?.children.length).toBe(6)
   })
 
   it('resets to first step when modal is closed and reopened', async () => {
@@ -315,15 +339,16 @@ describe('TutorialModal', () => {
 
     // Should be back at first step
     expect(await screen.findByText('Willkommen zum Tutorial')).toBeInTheDocument()
-    expect(screen.getByText('Schritt 1 von 5')).toBeInTheDocument()
+    expect(screen.getByText('Schritt 1 von 6')).toBeInTheDocument()
   })
 
-  it('displays all 5 tutorial steps with correct titles', async () => {
+  it('displays all 6 tutorial steps with correct titles', async () => {
     const expectedTitles = [
       'Willkommen zum Tutorial',
       'Kartenwerte',
       'Zähl-Beispiel',
       'Spielablauf',
+      '9er im Kartendeck',
       'Tipps & Tricks',
     ]
 
