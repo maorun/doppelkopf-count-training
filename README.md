@@ -73,6 +73,8 @@ that caches all static assets automatically.
   - Configure the number of cards to reveal (in Single Game mode)
   - Set time limit and difficulty level for Timed Challenge Mode
   - Optional time tracking to measure your calculation speed
+  - Game settings are saved automatically in your browser for future visits on
+    the same device
   - **Card Design Options**: Personalize the visual appearance of cards
     - **Card Styles**: Choose between Classic (traditional), Modern (stylish
       gradients), or Minimalist (clean and simple) designs
