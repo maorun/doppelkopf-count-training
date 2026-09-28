@@ -13,6 +13,7 @@ All counting-mode variations previously listed here are implemented:
 - **Timed Challenge**: Complete a fixed-difficulty round before a configurable
   time limit expires.
 - **Tutorial**: Follow an interactive, step-by-step introduction to card values,
-  counting examples, and game flow.
+  counting examples, game flow, and changing the **Include 9s** switch in
+  **Settings** directly below the game-mode selector.
 - **Reverse Counting**: Start from the round's total card value and subtract each
   counted card until reaching zero.
