@@ -12,16 +12,19 @@ describe('useTeamPlay', () => {
     ])
   })
 
-  it('cycles the active player after every revealed card', () => {
-    const { result, rerender } = renderHook(({ completedTurns }) => useTeamPlay(3, completedTurns), {
+  it.each([
+    [2, ['Player 1', 'Player 2', 'Player 1', 'Player 2']],
+    [3, ['Player 1', 'Player 2', 'Player 3', 'Player 1', 'Player 2', 'Player 3']],
+    [4, ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 1', 'Player 2', 'Player 3', 'Player 4']],
+  ])('assigns every player their turn before starting the next rotation (%i players)', (playerCount, expectedTurns) => {
+    const { result, rerender } = renderHook(({ completedTurns }) => useTeamPlay(playerCount, completedTurns), {
       initialProps: { completedTurns: 0 },
     })
 
-    expect(result.current.activePlayer.name).toBe('Player 1')
-    rerender({ completedTurns: 2 })
-    expect(result.current.activePlayer.name).toBe('Player 3')
-    rerender({ completedTurns: 3 })
-    expect(result.current.activePlayer.name).toBe('Player 1')
+    expectedTurns.forEach((expectedPlayerName, completedTurns) => {
+      rerender({ completedTurns })
+      expect(result.current.activePlayer.name).toBe(expectedPlayerName)
+    })
   })
 
   it('keeps malformed player counts within the supported range', () => {
