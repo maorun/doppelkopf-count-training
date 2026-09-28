@@ -222,6 +222,8 @@ describe('TutorialModal', () => {
     expect(screen.getByText('„Include 9s“')).toBeInTheDocument()
     expect(screen.getByText(/Zählen mit 9ern zu üben/)).toBeInTheDocument()
     expect(screen.getByText(/ohne 9er spielt/)).toBeInTheDocument()
+    expect(screen.getByText('So änderst du die Einstellung:')).toBeInTheDocument()
+    expect(screen.getByText(/Öffne den Dialog/)).toBeInTheDocument()
     expect(screen.getByText(/direkt unter der Spielmodus-Auswahl/)).toBeInTheDocument()
     expect(screen.getByText('Schritt 5 von 6')).toBeInTheDocument()
   })

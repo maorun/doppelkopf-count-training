@@ -134,13 +134,24 @@ const NinesSettingStep: React.FC = () => (
         <li>• Deaktiviere sie, wenn deine Spielrunde ohne 9er spielt oder du mit weniger Karten starten möchtest.</li>
       </ul>
     </div>
-    <p className="text-sm text-gray-600 dark:text-gray-400">
-      Du findest den Schalter „Include 9s“ im Dialog
-      {' '}
-      <strong>Settings</strong>
-      {' '}
-      direkt unter der Spielmodus-Auswahl.
-    </p>
+    <div className="text-sm text-gray-600 dark:text-gray-400">
+      <p className="font-medium text-gray-700 dark:text-gray-300">So änderst du die Einstellung:</p>
+      <ol className="mt-2 list-decimal space-y-1 pl-5">
+        <li>
+          Öffne den Dialog
+          {' '}
+          <strong>Settings</strong>
+          .
+        </li>
+        <li>
+          Nutze den Schalter
+          {' '}
+          <strong>Include 9s</strong>
+          {' '}
+          direkt unter der Spielmodus-Auswahl.
+        </li>
+      </ol>
+    </div>
   </div>
 )
 

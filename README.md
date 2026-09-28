@@ -129,6 +129,8 @@ that caches all static assets automatically.
 9. Click "Tutorial" anytime to review card values and get helpful tips
 10. **Customize your experience**: Click "Settings" to personalize the game
     - Adjust game mode and difficulty settings
+    - Toggle **Include 9s** directly below the game-mode selector to match the
+      deck used by your game round
     - For Timed Challenge: Set time limit (30-180 seconds) and difficulty level
     - **Personalize card appearance**: Choose your preferred card style, color
       scheme, and accessibility options to enhance your playing experience
