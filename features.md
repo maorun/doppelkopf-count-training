@@ -16,8 +16,9 @@ step-by-step gameplay instructions.
   180-second limit expires. Easy, medium, and hard use 15, 25, and 35 cards,
   respectively. The timer warns when ten seconds or fewer remain and ends the
   round when it expires.
-- **Team Play**: Play with two to four players. Players alternate between Team A
-  and Team B, and the active player rotates after every revealed card.
+- **Team Play**: Play with two to four players. In player order, Players 1 and
+  3 are assigned to Team A, while Players 2 and 4 are assigned to Team B. The
+  active player rotates after every revealed card.
 
 ## Counting Practice
 
