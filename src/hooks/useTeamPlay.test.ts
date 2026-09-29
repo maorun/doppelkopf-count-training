@@ -27,9 +27,15 @@ describe('useTeamPlay', () => {
     })
   })
 
-  it('keeps malformed player counts within the supported range', () => {
-    expect(normalizeTeamPlayerCount(undefined)).toBe(4)
-    expect(normalizeTeamPlayerCount(1)).toBe(2)
-    expect(normalizeTeamPlayerCount(9)).toBe(4)
+  it.each([
+    [undefined, 4],
+    [Number.NaN, 4],
+    [Number.POSITIVE_INFINITY, 4],
+    [1, 2],
+    [2.9, 2],
+    [9, 4],
+  ])('normalizes invalid player count %s to %i players before assigning turns', (playerCount, expectedCount) => {
+    expect(normalizeTeamPlayerCount(playerCount)).toBe(expectedCount)
+    expect(createTeamPlayers(playerCount)).toHaveLength(expectedCount)
   })
 })

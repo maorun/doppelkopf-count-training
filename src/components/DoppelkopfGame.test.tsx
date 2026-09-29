@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import DoppelkopfGame from './DoppelkopfGame'
 
@@ -191,7 +191,7 @@ describe('DoppelkopfGame', () => {
     expect(screen.getByText(/Time:/)).toBeInTheDocument()
   })
 
-  it('shows correct message when user enters correct result', () => {
+  it('shows correct message when user enters correct result', async () => {
     window.localStorage.setItem('gameSettings', JSON.stringify({
       includeNines: false,
       countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
@@ -211,8 +211,12 @@ describe('DoppelkopfGame', () => {
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
 
-    // Click through all cards
-    for (let i = 0; i < 20; i++) {
+    // Wait for the effect that initializes the shuffled deck before counting cards.
+    await waitFor(() => {
+      fireEvent.click(cardElement)
+      expect(screen.queryByTestId('card-back')).not.toBeInTheDocument()
+    })
+    for (let i = 1; i < 20; i++) {
       fireEvent.click(cardElement)
     }
 
