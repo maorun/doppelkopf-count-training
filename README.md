@@ -65,9 +65,9 @@ that caches all static assets automatically.
   - Time bonus for fast calculations (when time tracking is enabled)
   - Local highscore leaderboard shows your top 10 performances
   - Clear all highscores option available
-- **Team Play**: Take turns with 2 to 4 players. In player order, Players 1 and
-  3 join Team A, while Players 2 and 4 join Team B; the active player is shown
-  before every card.
+- **Team Play**: Take turns with 2 to 4 players. Players alternate between
+  Team A and Team B in player order: Players 1 and 3 join Team A, while Players
+  2 and 4 join Team B. The active player is shown before every card.
 - **Customizable Settings**:
   - Choose between Single Game, Team Play, Survival Mode, and Timed Challenge Mode
   - Include or exclude 9s from the deck
