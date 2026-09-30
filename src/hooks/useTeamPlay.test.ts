@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { createTeamPlayers, normalizeTeamPlayerCount, useTeamPlay } from './useTeamPlay'
+import { createTeamPlayers, MIN_TEAM_PLAYERS, normalizeTeamPlayerCount, useTeamPlay } from './useTeamPlay'
 
 describe('useTeamPlay', () => {
   it('creates alternating teams for the configured players', () => {
@@ -10,6 +10,13 @@ describe('useTeamPlay', () => {
       { name: 'Player 3', team: 'Team A' },
       { name: 'Player 4', team: 'Team B' },
     ])
+  })
+
+  it('uses the minimum player count for undersized teams', () => {
+    const undersizedPlayerCount = MIN_TEAM_PLAYERS - 1
+
+    expect(normalizeTeamPlayerCount(undersizedPlayerCount)).toBe(MIN_TEAM_PLAYERS)
+    expect(createTeamPlayers(undersizedPlayerCount)).toHaveLength(MIN_TEAM_PLAYERS)
   })
 
   it.each([
