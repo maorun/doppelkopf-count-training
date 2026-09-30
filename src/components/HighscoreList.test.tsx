@@ -39,6 +39,12 @@ describe('HighscoreList', () => {
     expect(screen.getByText(/No highscores yet/)).toBeInTheDocument()
   })
 
+  it('does not offer clearing when the highscore list is empty', () => {
+    render(<HighscoreList highscores={[]} onClear={vi.fn()} />)
+
+    expect(screen.queryByRole('button', { name: 'Clear All' })).not.toBeInTheDocument()
+  })
+
   it('renders highscore table when entries exist', () => {
     render(<HighscoreList highscores={sampleHighscores} />)
 
