@@ -122,6 +122,12 @@ const TipsSection: React.FC<{
 const NinesSettingStep: React.FC = () => (
   <div className="space-y-4">
     <p className="text-base text-gray-700 dark:text-gray-300">
+      9er zählen nicht mit:
+      {' '}
+      <span lang="en">9s are worth 0 points</span>
+      . Wenn du sie ausschließt, erscheinen Karten ohne Punktewert nicht in deiner Übung.
+    </p>
+    <p className="text-base text-gray-700 dark:text-gray-300">
       Im Doppelkopf werden 9er je nach Spielvariante mit oder ohne gespielt. Mit der Einstellung
       <strong>„Include 9s“</strong>
       {' '}
