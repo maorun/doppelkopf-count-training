@@ -43,7 +43,8 @@ that caches all static assets automatically.
   - See practical counting examples with explanations
   - Understand the game flow with clear instructions
   - Get helpful tips and strategies for faster counting
-  - Learn when to include or exclude 9s from the deck and where to change the setting
+  - Learn why 9s are worth 0 points and when to exclude these irrelevant cards
+    from scoring practice, plus where to change the setting
   - Navigate at your own pace through 6 tutorial steps
 - **Card Counting Practice**: Reveal cards one by one and mentally track the
   total score

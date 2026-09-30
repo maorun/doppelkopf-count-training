@@ -219,7 +219,12 @@ describe('TutorialModal', () => {
     }
 
     expect(await screen.findByText('9er im Kartendeck')).toBeInTheDocument()
-    expect(screen.getByText('„Include 9s“')).toBeInTheDocument()
+    const zeroPointExplanation = screen.getByText('9s are worth 0 points')
+    const includeNinesToggle = screen.getByText('„Include 9s“')
+
+    expect(zeroPointExplanation).toBeInTheDocument()
+    expect(zeroPointExplanation.compareDocumentPosition(includeNinesToggle))
+      .toBe(Node.DOCUMENT_POSITION_FOLLOWING)
     expect(screen.getByText(/Zählen mit 9ern zu üben/)).toBeInTheDocument()
     expect(screen.getByText(/ohne 9er spielt/)).toBeInTheDocument()
     expect(screen.getByText('So änderst du die Einstellung:')).toBeInTheDocument()
