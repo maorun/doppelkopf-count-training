@@ -33,15 +33,10 @@ describe('HighscoreList', () => {
   ]
 
   it('renders empty state when no highscores', () => {
-    render(<HighscoreList highscores={[]} />)
+    render(<HighscoreList highscores={[]} onClear={vi.fn()} />)
 
     expect(screen.getByText('Highscores')).toBeInTheDocument()
     expect(screen.getByText(/No highscores yet/)).toBeInTheDocument()
-  })
-
-  it('does not offer clearing when the highscore list is empty', () => {
-    render(<HighscoreList highscores={[]} onClear={vi.fn()} />)
-
     expect(screen.queryByRole('button', { name: 'Clear All' })).not.toBeInTheDocument()
   })
 
