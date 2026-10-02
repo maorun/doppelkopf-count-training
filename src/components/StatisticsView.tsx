@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 interface StatisticsViewProps {
   statistics: Statistics
   recentTrend: number
+  countingMode?: 'count-up' | 'count-down'
 }
 
 const StatCard: React.FC<{
@@ -70,7 +71,7 @@ const DifficultyCard: React.FC<{
 }
 
 /* eslint-disable max-lines-per-function */
-export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, recentTrend }) => {
+export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, recentTrend, countingMode = 'count-up' }) => {
   if (statistics.totalGames === 0) {
     return (
       <div className="text-center py-8">
@@ -106,6 +107,13 @@ export const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics, rece
             value={`${recentTrend.toFixed(0)}%`}
             subtitle="Last 10 games"
           />
+          {countingMode === 'count-down' && (
+            <StatCard
+              title="Training Mode"
+              value="Countdown"
+              subtitle="Track the remaining total"
+            />
+          )}
         </div>
       </div>
 

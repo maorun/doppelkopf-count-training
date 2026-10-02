@@ -201,4 +201,16 @@ describe('GameOverScreen', () => {
     // Should not crash
     expect(screen.getByText('✓ Correct!')).toBeInTheDocument()
   })
+
+  it('uses remaining-total labels in countdown mode', () => {
+    render(<GameOverScreen {...defaultProps} totalScore={0} isCountdownMode />)
+
+    const input = screen.getByLabelText('Enter your remaining total:')
+    fireEvent.change(input, { target: { value: '0' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Check Result' }))
+
+    expect(screen.getByText(/Your remaining total:/)).toBeInTheDocument()
+    expect(screen.getByText(/Remaining total:/)).toBeInTheDocument()
+    expect(screen.getByText('✓ Correct!')).toBeInTheDocument()
+  })
 })

@@ -48,8 +48,9 @@ that caches all static assets automatically.
   - Navigate at your own pace through 6 tutorial steps
 - **Card Counting Practice**: Reveal cards one by one and mentally track the
   total score
-- **Reverse Counting**: Start from the total value of the cards in the round and
-  subtract each counted card value until reaching zero.
+- **Reverse Counting**: Enable the **Reverse counting** setting to start from the
+  total value of the cards in the round. The visible remaining total decreases
+  with each counted card until it reaches zero.
 - **Result Validation**: After completing a round, enter your calculated total
   and receive immediate feedback on whether you were correct
 - **Dark Mode / Light Mode**: Switch between dark and light themes for comfortable
@@ -115,7 +116,7 @@ that caches all static assets automatically.
 3. Click on the card to reveal it
 4. Mentally track the cumulative score based on card values. Enable **Reverse
   counting** in Settings to start from the round total and subtract each card
-  instead:
+  instead; the **Remaining total** is displayed after every revealed card:
    - Ass (Ace): 11 points
    - 10: 10 points
    - König (King): 4 points

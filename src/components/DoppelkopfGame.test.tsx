@@ -57,6 +57,30 @@ describe('DoppelkopfGame', () => {
     expect(screen.getByRole('button', { name: 'Hint' })).not.toHaveAccessibleName(/Hint \(1\)/)
   })
 
+  it('shows the remaining total after each card in countdown mode', () => {
+    window.localStorage.setItem('gameSettings', JSON.stringify({
+      includeNines: false,
+      countedRanks: ['Ass', '10', 'König', 'Dame', 'Bube', '9'],
+      countedSuits: ['Kreuz', 'Pik', 'Herz', 'Karo'],
+      measureTime: true,
+      cardCountRange: [20, 20],
+      gameMode: 'single',
+      countingMode: 'count-down',
+      autoShowRunningTotal: false,
+      cardDesign: {
+        style: 'classic',
+        colorScheme: 'traditional',
+        accessibility: { highContrast: false, largerText: false },
+      },
+      timedChallenge: { timeLimitSeconds: 60, difficultyLevel: 'medium' },
+    }))
+    render(<DoppelkopfGame />)
+
+    fireEvent.click(screen.getByTestId('game-card'))
+
+    expect(screen.getByRole('status')).toHaveTextContent(/Remaining total:/)
+  })
+
   it('shows the running total after each card in Team Play when enabled', () => {
     window.localStorage.setItem('gameSettings', JSON.stringify({
       includeNines: false,
