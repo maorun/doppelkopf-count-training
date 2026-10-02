@@ -9,10 +9,13 @@ const InputForm: React.FC<{
   userInput: string
   setUserInput: (value: string) => void
   handleSubmit: () => void
-}> = ({ userInput, setUserInput, handleSubmit }) => (
+  isCountdownMode: boolean
+}> = ({ userInput, setUserInput, handleSubmit, isCountdownMode }) => (
   <div className="space-y-4 mt-4">
     <div className="space-y-2">
-      <Label htmlFor="score-input">Enter your calculated result:</Label>
+      <Label htmlFor="score-input">
+        {isCountdownMode ? 'Enter your remaining total:' : 'Enter your calculated result:'}
+      </Label>
       <Input
         id="score-input"
         type="number"
@@ -64,6 +67,12 @@ const getButtonText = (
   return 'Play Again'
 }
 
+const getCountdownLabel = (
+  isCountdownMode: boolean,
+  defaultLabel: string,
+  countdownLabel: string,
+): string => (isCountdownMode ? countdownLabel : defaultLabel)
+
 const ResultDisplay: React.FC<{
   isCorrect: boolean
   userInput: string
@@ -73,6 +82,7 @@ const ResultDisplay: React.FC<{
   isSurvivalMode?: boolean
   isTimedChallenge?: boolean
   timeRanOut?: boolean
+  isCountdownMode?: boolean
 }> = ({
   isCorrect,
   userInput,
@@ -82,6 +92,7 @@ const ResultDisplay: React.FC<{
   isSurvivalMode = false,
   isTimedChallenge = false,
   timeRanOut = false,
+  isCountdownMode = false,
 }) => (
   <div className="space-y-4">
     <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -98,12 +109,12 @@ const ResultDisplay: React.FC<{
       </p>
     </div>
     <p className="text-xl text-gray-900 dark:text-gray-100">
-      Your answer:
+      {getCountdownLabel(isCountdownMode, 'Your answer:', 'Your remaining total:')}
       {' '}
       {userInput}
     </p>
     <p className="text-xl text-gray-900 dark:text-gray-100">
-      Actual total:
+      {getCountdownLabel(isCountdownMode, 'Actual total:', 'Remaining total:')}
       {' '}
       {totalScore}
     </p>
@@ -126,6 +137,7 @@ export const GameOverScreen: React.FC<{
   isSurvivalMode?: boolean
   isTimedChallenge?: boolean
   timeRanOut?: boolean
+  isCountdownMode?: boolean
 }> = ({
   totalScore,
   elapsedTime,
@@ -138,6 +150,7 @@ export const GameOverScreen: React.FC<{
   isSurvivalMode = false,
   isTimedChallenge = false,
   timeRanOut = false,
+  isCountdownMode = false,
 }) => {
   const [userInput, setUserInput] = useState('')
   const [showResult, setShowResult] = useState(false)
@@ -195,6 +208,7 @@ export const GameOverScreen: React.FC<{
           userInput={userInput}
           setUserInput={setUserInput}
           handleSubmit={handleSubmit}
+          isCountdownMode={isCountdownMode}
         />
       ) : (
         <ResultDisplay
@@ -206,6 +220,7 @@ export const GameOverScreen: React.FC<{
           isSurvivalMode={isSurvivalMode}
           isTimedChallenge={isTimedChallenge}
           timeRanOut={timeRanOut}
+          isCountdownMode={isCountdownMode}
         />
       )}
     </div>

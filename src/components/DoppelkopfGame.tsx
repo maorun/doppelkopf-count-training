@@ -43,9 +43,12 @@ const getSuitSymbol = (suit: Suit): string => {
   }
 }
 
-const RunningTotal: React.FC<{ totalScore: number }> = ({ totalScore }) => (
+const RunningTotal: React.FC<{
+  totalScore: number
+  isCountdown: boolean
+}> = ({ totalScore, isCountdown }) => (
   <p className="text-base sm:text-lg text-center font-medium text-blue-800 dark:text-blue-200" role="status" aria-live="polite">
-    Running total:
+    {isCountdown ? 'Remaining total:' : 'Running total:'}
     {' '}
     <span className="font-bold">{totalScore}</span>
   </p>
@@ -134,7 +137,8 @@ const DoppelkopfGame: React.FC = () => {
     || settings.gameMode === 'team-play'
     || survivalState.isActive
     || timedChallengeState.isActive
-  const shouldShowRunningTotal = settings.autoShowRunningTotal
+  const isCountdownMode = settings.countingMode === 'count-down'
+  const shouldShowRunningTotal = (settings.autoShowRunningTotal || isCountdownMode)
     && (settings.gameMode === 'single' || settings.gameMode === 'team-play')
     && revealedCards.length > 0
 
@@ -222,6 +226,7 @@ const DoppelkopfGame: React.FC = () => {
             <div className="w-full max-w-sm">
               <GameOverScreen
                 totalScore={totalScore}
+                isCountdownMode={isCountdownMode}
                 elapsedTime={elapsedTime}
                 cardsCount={cardsToReveal}
                 timeWasMeasured={settings.measureTime}
@@ -245,7 +250,7 @@ const DoppelkopfGame: React.FC = () => {
                 cardDesign={settings.cardDesign}
                 isDisabled={!isGameActive}
               />
-              {shouldShowRunningTotal && <RunningTotal totalScore={totalScore} />}
+              {shouldShowRunningTotal && <RunningTotal totalScore={totalScore} isCountdown={isCountdownMode} />}
               <p className="text-base sm:text-lg mt-3 text-center font-medium text-gray-600 dark:text-gray-400">
                 Card
                 {' '}
@@ -300,7 +305,11 @@ const DoppelkopfGame: React.FC = () => {
                 <TabsTrigger value="survival">Survival</TabsTrigger>
               </TabsList>
               <TabsContent value="statistics">
-                <StatisticsView statistics={statistics} recentTrend={recentTrend} />
+                <StatisticsView
+                  statistics={statistics}
+                  recentTrend={recentTrend}
+                  countingMode={settings.countingMode}
+                />
               </TabsContent>
               <TabsContent value="highscores">
                 <HighscoreList highscores={topHighscores} onClear={clearHighscores} />

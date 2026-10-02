@@ -200,4 +200,14 @@ describe('StatisticsView', () => {
 
     expect(screen.queryByText('Hint Usage')).not.toBeInTheDocument()
   })
+
+  it('should show countdown training status when reverse counting is active', () => {
+    const stats = createStats({ totalGames: 1, correctAnswers: 1, winRate: 100 })
+
+    render(<StatisticsView statistics={stats} recentTrend={100} countingMode="count-down" />)
+
+    expect(screen.getByText('Training Mode')).toBeInTheDocument()
+    expect(screen.getByText('Countdown')).toBeInTheDocument()
+    expect(screen.getByText('Track the remaining total')).toBeInTheDocument()
+  })
 })
