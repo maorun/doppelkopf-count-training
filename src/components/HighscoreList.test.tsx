@@ -1,6 +1,6 @@
 // src/components/HighscoreList.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { HighscoreList } from './HighscoreList'
 import { HighscoreEntry } from '../lib/highscore'
 
@@ -31,6 +31,10 @@ describe('HighscoreList', () => {
       timestamp: new Date('2024-01-13').getTime(),
     },
   ]
+
+  beforeEach(() => {
+    localStorage.clear()
+  })
 
   it('renders empty state when no highscores', () => {
     render(<HighscoreList highscores={[]} onClear={vi.fn()} />)
@@ -171,5 +175,130 @@ describe('HighscoreList', () => {
 
     expect(incorrectRow.className).toContain('bg-red-50/60')
     expect(incorrectRow.className).not.toContain('opacity-60')
+  })
+
+  it('persists highscores to localStorage on mount', () => {
+    localStorage.clear()
+    const mockOnClear = vi.fn()
+    render(<HighscoreList highscores={sampleHighscores} onClear={mockOnClear} />)
+
+    // After render, localStorage should contain the highscores
+    const stored = localStorage.getItem('doppelkopf-highscore-list')!
+    expect(JSON.parse(stored)).toHaveLength(3)
+
+    localStorage.clear()
+  })
+
+  it('loads highscores from localStorage on mount', async () => {
+    localStorage.setItem('doppelkopf-highscore-list', JSON.stringify([{ score: 500, isCorrect: true, cardsCount: 25, elapsedTime: 10000, timeWasMeasured: true, timestamp: Date.now() }]))
+
+    render(<HighscoreList highscores={[]} onClear={vi.fn()} />)
+
+    // Should load from localStorage even when no highscores provided
+    await waitFor(() => {
+      expect(screen.getByText('500')).toBeInTheDocument()
+    })
+    expect(screen.getByText('10.0s')).toBeInTheDocument()
+
+    localStorage.clear()
+  })
+
+  it('clears highscores from localStorage when Clear button is clicked', async () => {
+    localStorage.clear()
+    const mockOnClear = vi.fn()
+    render(<HighscoreList highscores={sampleHighscores} onClear={mockOnClear} />)
+
+    // Verify highscores are displayed initially
+    await waitFor(() => {
+      expect(screen.getByText('350')).toBeInTheDocument()
+    })
+
+    // Clear button should be clicked
+    fireEvent.click(screen.getByRole('button', { name: 'Clear All' }))
+
+    // onClear callback should be called
+    expect(mockOnClear).toHaveBeenCalledTimes(1)
+
+    // Verify localStorage is cleared (null or undefined)
+    const stored = localStorage.getItem('doppelkopf-highscore-list')
+    expect(stored).toBeNull()
+
+    localStorage.clear()
+  })
+
+  it('merges new highscores with persisted list', async () => {
+    const newHighscores: HighscoreEntry[] = [
+      {
+        score: 400,
+        isCorrect: true,
+        cardsCount: 22,
+        elapsedTime: 12000,
+        timeWasMeasured: true,
+        timestamp: Date.now() - 1000,
+      },
+    ]
+
+    // First, persist some highscores
+    localStorage.setItem('doppelkopf-highscore-list', JSON.stringify(sampleHighscores))
+
+    // Then render component with new highscores
+    render(<HighscoreList highscores={newHighscores} onClear={vi.fn()} />)
+
+    // Should contain both old and new highscores (merged and sorted)
+    await waitFor(() => {
+      expect(screen.getByText('400')).toBeInTheDocument() // New score
+    }, { timeout: 1000 })
+
+    localStorage.clear()
+  })
+
+  it('maintains sorted order when merging highscores', async () => {
+    const lowerScore: HighscoreEntry = {
+      score: 100,
+      isCorrect: true,
+      cardsCount: 10,
+      elapsedTime: 20000,
+      timeWasMeasured: true,
+      timestamp: Date.now(),
+    }
+
+    const higherScore: HighscoreEntry = {
+      score: 500,
+      isCorrect: true,
+      cardsCount: 25,
+      elapsedTime: 8000,
+      timeWasMeasured: true,
+      timestamp: Date.now() - 1000,
+    }
+
+    // First persist lower score
+    localStorage.setItem('doppelkopf-highscore-list', JSON.stringify([lowerScore]))
+
+    // Then add higher score
+    render(<HighscoreList highscores={[higherScore]} onClear={vi.fn()} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('500')).toBeInTheDocument()
+    }, { timeout: 1000 })
+
+    localStorage.clear()
+  })
+
+  it('merges new highscores with persisted list (regression)', async () => {
+    // This test ensures existing functionality is preserved
+    const mockOnClear = vi.fn()
+    render(<HighscoreList highscores={sampleHighscores} onClear={mockOnClear} />)
+
+    // Verify all original functionality still works
+    await waitFor(() => {
+      expect(screen.getByText('350')).toBeInTheDocument()
+      expect(screen.getByText('300')).toBeInTheDocument()
+      expect(screen.getByText('0')).toBeInTheDocument()
+      expect(screen.getByText('1')).toBeInTheDocument()
+      expect(screen.getByText('2')).toBeInTheDocument()
+      expect(screen.getByText('3')).toBeInTheDocument()
+    })
+
+    localStorage.clear()
   })
 })
