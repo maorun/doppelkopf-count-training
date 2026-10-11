@@ -117,7 +117,7 @@ export const HighscoreList: React.FC<HighscoreListProps> = ({ highscores: extern
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Highscores</h2>
         {onClear && (
           <Button variant="outline" size="sm" onClick={handleClear}>
-            Clear All
+            Clear Highscore
           </Button>
         )}
       </div>
