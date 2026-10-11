@@ -92,24 +92,24 @@ describe('HighscoreList', () => {
     expect(screen.getByText('3')).toBeInTheDocument()
   })
 
-  it('renders Clear All button when onClear is provided', () => {
+  it('renders Clear Highscore button when onClear is provided', () => {
     const mockOnClear = vi.fn()
     render(<HighscoreList highscores={sampleHighscores} onClear={mockOnClear} />)
 
-    expect(screen.getByRole('button', { name: 'Clear All' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Clear Highscore' })).toBeInTheDocument()
   })
 
-  it('does not render Clear All button when onClear is not provided', () => {
+  it('does not render Clear Highscore button when onClear is not provided', () => {
     render(<HighscoreList highscores={sampleHighscores} />)
 
-    expect(screen.queryByRole('button', { name: 'Clear All' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear Highscore' })).not.toBeInTheDocument()
   })
 
-  it('calls onClear when Clear All button is clicked', () => {
+  it('calls onClear when Clear Highscore button is clicked', () => {
     const mockOnClear = vi.fn()
     render(<HighscoreList highscores={sampleHighscores} onClear={mockOnClear} />)
 
-    const clearButton = screen.getByRole('button', { name: 'Clear All' })
+    const clearButton = screen.getByRole('button', { name: 'Clear Highscore' })
     fireEvent.click(clearButton)
 
     expect(mockOnClear).toHaveBeenCalledTimes(1)
@@ -214,7 +214,7 @@ describe('HighscoreList', () => {
     })
 
     // Clear button should be clicked
-    fireEvent.click(screen.getByRole('button', { name: 'Clear All' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Clear Highscore' }))
 
     // onClear callback should be called
     expect(mockOnClear).toHaveBeenCalledTimes(1)
