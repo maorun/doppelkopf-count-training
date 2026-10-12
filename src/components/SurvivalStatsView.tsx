@@ -1,9 +1,11 @@
 // src/components/SurvivalStatsView.tsx
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { useSurvivalMode } from '../hooks/useSurvivalMode'
+import { useSurvivalMode, type SurvivalState } from '../hooks/useSurvivalMode'
 import { Button } from './ui/button'
-import { Trophy, Target, TrendingUp } from 'lucide-react'
+import { Trophy, Target, TrendingUp, List } from 'lucide-react'
+import { useHighscores } from '../hooks/useHighscores'
+import { HighscoreList } from './HighscoreList'
 
 const StatCard: React.FC<{
   icon: React.ReactNode
@@ -37,8 +39,51 @@ const HowItWorksSection: React.FC = () => (
   </div>
 )
 
+const SurvivalStatsCardContent: React.FC<{
+  survivalState: SurvivalState
+  resetLongestStreak: () => void
+}> = ({ survivalState, resetLongestStreak }) => (
+  <div className="space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <StatCard
+        icon={<Target className="h-8 w-8 text-purple-600 dark:text-purple-400 mb-2" />}
+        label="Current Streak"
+        value={survivalState.currentStreak}
+        colorClass="bg-purple-50 dark:bg-purple-900/20"
+      />
+      <StatCard
+        icon={<Trophy className="h-8 w-8 text-yellow-800 dark:text-yellow-300 mb-2" />}
+        label="Longest Streak"
+        value={survivalState.longestStreak}
+        colorClass="bg-yellow-50 dark:bg-yellow-900/20"
+      />
+      <StatCard
+        icon={<TrendingUp className="h-8 w-8 text-blue-600 dark:text-blue-400 mb-2" />}
+        label="Current Difficulty"
+        value={survivalState.currentDifficulty}
+        suffix="cards"
+        colorClass="bg-blue-50 dark:bg-blue-900/20"
+      />
+    </div>
+    <HowItWorksSection />
+    {survivalState.longestStreak > 0 && (
+      <div className="flex justify-center">
+        <Button
+          variant="outline"
+          onClick={resetLongestStreak}
+          className="text-sm"
+        >
+          Reset Longest Streak
+        </Button>
+      </div>
+    )}
+  </div>
+)
+
 export const SurvivalStatsView: React.FC = () => {
   const { survivalState, resetLongestStreak } = useSurvivalMode()
+  const { highscores } = useHighscores()
+  const survivalHighscores = highscores.filter(entry => entry.gameMode === 'survival')
 
   return (
     <div className="space-y-6">
@@ -47,41 +92,24 @@ export const SurvivalStatsView: React.FC = () => {
           <CardTitle className="text-xl">Survival Mode Statistics</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <StatCard
-              icon={<Target className="h-8 w-8 text-purple-600 dark:text-purple-400 mb-2" />}
-              label="Current Streak"
-              value={survivalState.currentStreak}
-              colorClass="bg-purple-50 dark:bg-purple-900/20"
-            />
-            <StatCard
-              icon={<Trophy className="h-8 w-8 text-yellow-800 dark:text-yellow-300 mb-2" />}
-              label="Longest Streak"
-              value={survivalState.longestStreak}
-              colorClass="bg-yellow-50 dark:bg-yellow-900/20"
-            />
-            <StatCard
-              icon={<TrendingUp className="h-8 w-8 text-blue-600 dark:text-blue-400 mb-2" />}
-              label="Current Difficulty"
-              value={survivalState.currentDifficulty}
-              suffix="cards"
-              colorClass="bg-blue-50 dark:bg-blue-900/20"
-            />
-          </div>
+          <SurvivalStatsCardContent
+            survivalState={survivalState}
+            resetLongestStreak={resetLongestStreak}
+          />
+        </CardContent>
+      </Card>
 
-          <HowItWorksSection />
-
-          {survivalState.longestStreak > 0 && (
-            <div className="mt-4 flex justify-center">
-              <Button
-                variant="outline"
-                onClick={resetLongestStreak}
-                className="text-sm"
-              >
-                Reset Longest Streak
-              </Button>
-            </div>
-          )}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <List className="h-5 w-5" />
+            Survival Highscores
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <HighscoreList
+            highscores={survivalHighscores}
+          />
         </CardContent>
       </Card>
     </div>
