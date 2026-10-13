@@ -6,6 +6,7 @@ export interface GameResult {
   elapsedTime: number // in milliseconds
   timeWasMeasured: boolean
   hintsUsed?: number
+  gameMode?: string
 }
 
 export interface HighscoreEntry {
@@ -16,6 +17,7 @@ export interface HighscoreEntry {
   timeWasMeasured: boolean
   timestamp: number
   hintsUsed?: number
+  gameMode?: string
 }
 
 /**
@@ -74,6 +76,7 @@ export const createHighscoreEntry = (result: GameResult): HighscoreEntry => {
     timeWasMeasured: result.timeWasMeasured,
     timestamp: Date.now(),
     hintsUsed: result.hintsUsed,
+    gameMode: result.gameMode,
   }
 }
 
