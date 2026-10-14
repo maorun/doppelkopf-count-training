@@ -42,7 +42,8 @@ const HowItWorksSection: React.FC = () => (
 const SurvivalStatsCardContent: React.FC<{
   survivalState: SurvivalState
   resetLongestStreak: () => void
-}> = ({ survivalState, resetLongestStreak }) => (
+  resetAllStats: () => void
+}> = ({ survivalState, resetLongestStreak, resetAllStats }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <StatCard
@@ -67,21 +68,32 @@ const SurvivalStatsCardContent: React.FC<{
     </div>
     <HowItWorksSection />
     {survivalState.longestStreak > 0 && (
-      <div className="flex justify-center">
-        <Button
-          variant="outline"
-          onClick={resetLongestStreak}
-          className="text-sm"
-        >
-          Reset Longest Streak
-        </Button>
-      </div>
+      <>
+        <div className="flex justify-center">
+          <Button
+            variant="outline"
+            onClick={resetLongestStreak}
+            className="text-sm"
+          >
+            Reset Longest Streak
+          </Button>
+        </div>
+        <div className="flex justify-center gap-2">
+          <Button
+            variant="outline"
+            onClick={resetAllStats}
+            className="text-sm"
+          >
+            Clear All Stats
+          </Button>
+        </div>
+      </>
     )}
   </div>
 )
 
 export const SurvivalStatsView: React.FC = () => {
-  const { survivalState, resetLongestStreak } = useSurvivalMode()
+  const { survivalState, resetLongestStreak, resetAllStats } = useSurvivalMode()
   const { highscores } = useHighscores()
   const survivalHighscores = highscores.filter(entry => entry.gameMode === 'survival')
 
@@ -95,6 +107,7 @@ export const SurvivalStatsView: React.FC = () => {
           <SurvivalStatsCardContent
             survivalState={survivalState}
             resetLongestStreak={resetLongestStreak}
+            resetAllStats={resetAllStats}
           />
         </CardContent>
       </Card>

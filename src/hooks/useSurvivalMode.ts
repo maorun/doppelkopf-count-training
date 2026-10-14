@@ -95,6 +95,10 @@ export const useSurvivalMode = () => {
     }))
   }, [])
 
+  const resetAllStats = useCallback(() => {
+    setSurvivalState(getDefaultState())
+  }, [])
+
   return {
     survivalState,
     startSurvival,
@@ -102,5 +106,6 @@ export const useSurvivalMode = () => {
     recordCorrectAnswer,
     recordIncorrectAnswer,
     resetLongestStreak,
+    resetAllStats,
   }
 }
