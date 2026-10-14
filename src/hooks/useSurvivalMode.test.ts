@@ -188,6 +188,30 @@ describe('useSurvivalMode', () => {
     expect(result.current.survivalState.longestStreak).toBe(0)
   })
 
+  it('should reset all stats to default state', () => {
+    const { result } = renderHook(() => useSurvivalMode())
+
+    act(() => {
+      result.current.startSurvival()
+      result.current.recordCorrectAnswer()
+      result.current.recordCorrectAnswer()
+      result.current.recordCorrectAnswer()
+    })
+
+    expect(result.current.survivalState.longestStreak).toBe(3)
+    expect(result.current.survivalState.currentStreak).toBe(3)
+    expect(result.current.survivalState.currentDifficulty).toBe(21)
+
+    act(() => {
+      result.current.resetAllStats()
+    })
+
+    expect(result.current.survivalState.longestStreak).toBe(0)
+    expect(result.current.survivalState.currentStreak).toBe(0)
+    expect(result.current.survivalState.currentDifficulty).toBe(15)
+    expect(result.current.survivalState.isActive).toBe(false)
+  })
+
   it('should persist state to localStorage', () => {
     const { result } = renderHook(() => useSurvivalMode())
 
