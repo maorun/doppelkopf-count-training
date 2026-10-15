@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import DoppelkopfGame from './DoppelkopfGame'
 
@@ -445,5 +445,42 @@ describe('DoppelkopfGame', () => {
     // Hint count should be reset (no count displayed)
     expect(screen.getByRole('button', { name: 'Hint' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /Hint \(1\)/ })).not.toBeInTheDocument()
+  })
+
+  it('toggles stats and allows returning to the game on desktop and mobile', () => {
+    render(<DoppelkopfGame />)
+    expect(screen.getByTestId('game-card')).toBeInTheDocument()
+
+    // Open stats
+    const showStatsButton = screen.getByRole('button', { name: 'Show Stats' })
+    fireEvent.click(showStatsButton)
+
+    // Stats section should be visible and game card unmounted
+    expect(screen.getByText('Statistik & Highscores')).toBeInTheDocument()
+    expect(screen.queryByTestId('game-card')).not.toBeInTheDocument()
+
+    // Close stats via Hide Stats button
+    const hideStatsButton = screen.getByRole('button', { name: 'Hide Stats' })
+    fireEvent.click(hideStatsButton)
+
+    // Game card should be back
+    expect(screen.getByTestId('game-card')).toBeInTheDocument()
+  })
+
+  it('switches between tabs in the stats section via bottom nav', () => {
+    render(<DoppelkopfGame />)
+    const bottomNav = screen.getByTestId('mobile-bottom-nav')
+
+    // Click Statistik in bottom nav
+    fireEvent.click(within(bottomNav).getByRole('button', { name: 'Statistik' }))
+    expect(screen.getByText('Statistik & Highscores')).toBeInTheDocument()
+
+    // Click Highscores in bottom nav
+    fireEvent.click(within(bottomNav).getByRole('button', { name: 'Highscores' }))
+    expect(screen.getByText('No highscores yet. Play a game to get started!')).toBeInTheDocument()
+
+    // Click Spiel in bottom nav to return
+    fireEvent.click(within(bottomNav).getByRole('button', { name: 'Spiel' }))
+    expect(screen.getByTestId('game-card')).toBeInTheDocument()
   })
 })
