@@ -63,8 +63,12 @@ describe('SurvivalStatsView', () => {
     expect(screen.queryByRole('button', { name: /Reset Longest Streak/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /Clear All Stats/i })).not.toBeInTheDocument()
 
-    // Highscores section
+    // Highscores section and empty state announcement
     expect(screen.getByText('Survival Highscores')).toBeInTheDocument()
+    const emptyStateAnnouncement = screen.getByRole('status', { name: /No survival highscores recorded yet/i })
+    expect(emptyStateAnnouncement).toBeInTheDocument()
+    expect(emptyStateAnnouncement).toHaveAttribute('aria-live', 'polite')
+    expect(screen.getByText(/No survival highscores recorded yet\. Play survival mode to set your first highscore!/i)).toBeInTheDocument()
   })
 
   it('renders streak and difficulty values when active or recorded', () => {
@@ -170,5 +174,15 @@ describe('SurvivalStatsView', () => {
     // Check that stat cards have region roles and live regions
     const currentStreakCard = screen.getByRole('region', { name: /Current Streak: 2/i })
     expect(currentStreakCard).toBeInTheDocument()
+  })
+
+  it('handles robust rendering when survivalState properties are undefined/missing', () => {
+    // @ts-expect-error testing incomplete state object
+    mockSurvivalState = {}
+
+    render(<SurvivalStatsView />)
+
+    expect(screen.getByRole('region', { name: /Survival Mode Statistics View/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Reset Longest Streak/i })).not.toBeInTheDocument()
   })
 })
