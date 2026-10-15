@@ -19,10 +19,37 @@ const getDefaultState = (): SurvivalState => ({
   currentDifficulty: STARTING_DIFFICULTY,
 })
 
+const validateStreak = (val: unknown): number =>
+  typeof val === 'number' && Number.isFinite(val) && val >= 0 ? Math.floor(val) : 0
+
+const validateDifficulty = (val: unknown): number =>
+  typeof val === 'number' && Number.isFinite(val)
+    ? Math.min(Math.max(Math.floor(val), STARTING_DIFFICULTY), MAX_DIFFICULTY)
+    : STARTING_DIFFICULTY
+
+const validateSurvivalState = (parsed: unknown): SurvivalState => {
+  if (!parsed || typeof parsed !== 'object') {
+    return getDefaultState()
+  }
+
+  const p = parsed as Record<string, unknown>
+  const currentStreak = validateStreak(p.currentStreak)
+  const longestStreak = Math.max(validateStreak(p.longestStreak), currentStreak)
+  const isActive = typeof p.isActive === 'boolean' ? p.isActive : false
+  const currentDifficulty = validateDifficulty(p.currentDifficulty)
+
+  return {
+    currentStreak,
+    longestStreak,
+    isActive,
+    currentDifficulty,
+  }
+}
+
 const loadSurvivalState = (): SurvivalState => {
   try {
     const stored = window.localStorage.getItem('survivalState')
-    return stored ? JSON.parse(stored) : getDefaultState()
+    return stored ? validateSurvivalState(JSON.parse(stored)) : getDefaultState()
   }
   catch (error) {
     console.error('Error reading survival state from localStorage', error)
@@ -51,7 +78,7 @@ export const useSurvivalMode = () => {
   const startSurvival = useCallback(() => {
     setSurvivalState(prev => ({
       currentStreak: 0,
-      longestStreak: prev.longestStreak,
+      longestStreak: Math.max(0, prev.longestStreak),
       isActive: true,
       currentDifficulty: STARTING_DIFFICULTY,
     }))
@@ -59,21 +86,22 @@ export const useSurvivalMode = () => {
 
   const endSurvival = useCallback(() => {
     setSurvivalState(prev => ({
-      ...prev,
+      ...validateSurvivalState(prev),
       isActive: false,
     }))
   }, [])
 
   const recordCorrectAnswer = useCallback(() => {
     setSurvivalState((prev) => {
-      const newStreak = prev.currentStreak + 1
+      const validatedPrev = validateSurvivalState(prev)
+      const newStreak = validatedPrev.currentStreak + 1
       const newDifficulty = Math.min(
-        prev.currentDifficulty + DIFFICULTY_INCREMENT,
+        validatedPrev.currentDifficulty + DIFFICULTY_INCREMENT,
         MAX_DIFFICULTY,
       )
       return {
         currentStreak: newStreak,
-        longestStreak: Math.max(newStreak, prev.longestStreak),
+        longestStreak: Math.max(newStreak, validatedPrev.longestStreak),
         isActive: true,
         currentDifficulty: newDifficulty,
       }
@@ -82,7 +110,7 @@ export const useSurvivalMode = () => {
 
   const recordIncorrectAnswer = useCallback(() => {
     setSurvivalState(prev => ({
-      ...prev,
+      ...validateSurvivalState(prev),
       currentStreak: 0,
       isActive: false,
     }))
@@ -90,7 +118,7 @@ export const useSurvivalMode = () => {
 
   const resetLongestStreak = useCallback(() => {
     setSurvivalState(prev => ({
-      ...prev,
+      ...validateSurvivalState(prev),
       longestStreak: 0,
     }))
   }, [])

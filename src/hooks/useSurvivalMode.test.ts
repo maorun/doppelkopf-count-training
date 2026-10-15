@@ -282,4 +282,24 @@ describe('useSurvivalMode', () => {
     expect(result.current.survivalState.longestStreak).toBe(3)
     expect(result.current.survivalState.currentStreak).toBe(0)
   })
+
+  it('should validate and normalize malformed or out-of-bounds state from localStorage', () => {
+    const malformedState = {
+      currentStreak: -5,
+      longestStreak: 'abc',
+      isActive: 'yes',
+      currentDifficulty: 999,
+    }
+
+    localStorage.setItem('survivalState', JSON.stringify(malformedState))
+
+    const { result } = renderHook(() => useSurvivalMode())
+
+    expect(result.current.survivalState).toEqual({
+      currentStreak: 0,
+      longestStreak: 0,
+      isActive: false,
+      currentDifficulty: 40, // Clamped to MAX_DIFFICULTY
+    })
+  })
 })
