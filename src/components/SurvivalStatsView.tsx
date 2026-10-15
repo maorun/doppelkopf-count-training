@@ -14,10 +14,17 @@ const StatCard: React.FC<{
   suffix?: string
   colorClass: string
 }> = ({ icon, label, value, suffix, colorClass }) => (
-  <div className={`flex flex-col items-center p-4 ${colorClass} rounded-lg`}>
-    {icon}
+  <div
+    className={`flex flex-col items-center p-4 ${colorClass} rounded-lg`}
+    role="region"
+    aria-label={`${label}: ${value}${suffix ? ` ${suffix}` : ''}`}
+  >
+    <div aria-hidden="true">{icon}</div>
     <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{label}</p>
-    <p className={`text-3xl font-bold ${colorClass.includes('purple') ? 'text-purple-600 dark:text-purple-400' : colorClass.includes('yellow') ? 'text-yellow-800 dark:text-yellow-300' : 'text-blue-600 dark:text-blue-400'}`}>
+    <p
+      className={`text-3xl font-bold ${colorClass.includes('purple') ? 'text-purple-600 dark:text-purple-400' : colorClass.includes('yellow') ? 'text-yellow-800 dark:text-yellow-300' : 'text-blue-600 dark:text-blue-400'}`}
+      aria-live="polite"
+    >
       {value}
     </p>
     {suffix && <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{suffix}</p>}
@@ -25,16 +32,20 @@ const StatCard: React.FC<{
 )
 
 const HowItWorksSection: React.FC = () => (
-  <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+  <div
+    className="mt-6 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"
+    role="region"
+    aria-label="How Survival Mode Works"
+  >
     <h3 className="text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">
       How Survival Mode Works
     </h3>
-    <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-      <li>• Start with 15 cards to count</li>
-      <li>• Each correct answer increases difficulty by 2 cards</li>
-      <li>• Maximum difficulty is 40 cards</li>
-      <li>• One wrong answer ends your streak</li>
-      <li>• Your longest streak is saved</li>
+    <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1" role="list">
+      <li role="listitem">• Start with 15 cards to count</li>
+      <li role="listitem">• Each correct answer increases difficulty by 2 cards</li>
+      <li role="listitem">• Maximum difficulty is 40 cards</li>
+      <li role="listitem">• One wrong answer ends your streak</li>
+      <li role="listitem">• Your longest streak is saved</li>
     </ul>
   </div>
 )
@@ -98,7 +109,7 @@ export const SurvivalStatsView: React.FC = () => {
   const survivalHighscores = highscores.filter(entry => entry.gameMode === 'survival')
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="region" aria-label="Survival Mode Statistics View">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Survival Mode Statistics</CardTitle>
@@ -115,7 +126,7 @@ export const SurvivalStatsView: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <List className="h-5 w-5" />
+            <List className="h-5 w-5" aria-hidden="true" />
             Survival Highscores
           </CardTitle>
         </CardHeader>
