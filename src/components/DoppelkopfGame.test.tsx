@@ -483,4 +483,16 @@ describe('DoppelkopfGame', () => {
     fireEvent.click(within(bottomNav).getByRole('button', { name: 'Spiel' }))
     expect(screen.getByTestId('game-card')).toBeInTheDocument()
   })
+
+  it('toggles theme between light and dark from the header', () => {
+    render(<DoppelkopfGame />)
+    const themeButton = screen.getByTestId('theme-toggle')
+    expect(document.documentElement.classList.contains('dark')).toBe(false)
+
+    fireEvent.click(themeButton)
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
+
+    fireEvent.click(themeButton)
+    expect(document.documentElement.classList.contains('dark')).toBe(false)
+  })
 })
