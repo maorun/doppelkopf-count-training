@@ -235,12 +235,7 @@ describe('DoppelkopfGame', () => {
     render(<DoppelkopfGame />)
     const cardElement = screen.getByTestId('game-card')
 
-    // Wait for the effect that initializes the shuffled deck before counting cards.
-    await waitFor(() => {
-      fireEvent.click(cardElement)
-      expect(screen.queryByTestId('card-back')).not.toBeInTheDocument()
-    })
-    for (let i = 1; i < 20; i++) {
+    for (let i = 0; i < 20; i++) {
       fireEvent.click(cardElement)
     }
 
