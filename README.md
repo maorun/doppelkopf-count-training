@@ -99,7 +99,9 @@ that caches all static assets automatically.
   Incorrect) when checking your answer
 - **Play Again**: Quickly start a new round with a fresh shuffled deck
 - **Mobile-first interaction**: Responsive controls, comfortable touch targets,
-  keyboard-accessible card interaction, and readable dialogs on small screens
+  keyboard-accessible card interaction, dynamic viewport height (`100dvh`),
+  notch safe-area support, integrated on-screen numeric keypad for seamless
+  one-handed score entry, visual progress bar, and mobile bottom navigation
 
 ## How to Play
 

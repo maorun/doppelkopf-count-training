@@ -4,6 +4,7 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { calculateScore, GameResult } from '../lib/highscore'
+import { MobileNumPad } from './MobileNumPad'
 
 const InputForm: React.FC<{
   userInput: string
@@ -11,24 +12,29 @@ const InputForm: React.FC<{
   handleSubmit: () => void
   isCountdownMode: boolean
 }> = ({ userInput, setUserInput, handleSubmit, isCountdownMode }) => (
-  <div className="space-y-4 mt-4">
-    <div className="space-y-2">
-      <Label htmlFor="score-input">
+  <div className="space-y-3 mt-2 w-full max-w-xs mx-auto">
+    <div className="space-y-1.5">
+      <Label htmlFor="score-input" className="text-sm font-medium text-slate-700 dark:text-slate-300">
         {isCountdownMode ? 'Enter your remaining total:' : 'Enter your calculated result:'}
       </Label>
       <Input
         id="score-input"
         type="number"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={userInput}
         onChange={e => setUserInput(e.target.value)}
-        placeholder="Enter your result"
-        className="w-full max-w-xs mx-auto block"
+        placeholder="0"
+        className="w-full text-center text-3xl font-bold tracking-wider h-14 rounded-xl border-2 bg-white dark:bg-slate-800"
         onKeyDown={e => e.key === 'Enter' && userInput && handleSubmit()}
       />
     </div>
-    <Button onClick={handleSubmit} className="w-full max-w-xs">
-      Check Result
-    </Button>
+    <MobileNumPad
+      value={userInput}
+      onChange={setUserInput}
+      onSubmit={handleSubmit}
+      submitLabel="Check Result"
+    />
   </div>
 )
 
@@ -94,17 +100,17 @@ const ResultDisplay: React.FC<{
   timeRanOut = false,
   isCountdownMode = false,
 }) => (
-  <div className="space-y-4">
-    <div className={`text-xl font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+  <div className="space-y-4 w-full max-w-xs mx-auto">
+    <div className={`text-2xl font-bold py-1 ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
     </div>
-    <div className="bg-blue-100 dark:bg-blue-900 border-2 border-blue-400 dark:border-blue-600 rounded-lg p-4 space-y-2 transition-colors">
-      <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+    <div className="bg-blue-100 dark:bg-blue-900/60 border-2 border-blue-400 dark:border-blue-600 rounded-2xl p-4 space-y-1.5 shadow-sm">
+      <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">
         Score:
         {' '}
         {gameScore}
       </p>
-      <p className="text-sm text-blue-700 dark:text-blue-300">
+      <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
         {getResultMessage(isCorrect, isSurvivalMode, isTimedChallenge, timeRanOut)}
       </p>
     </div>
@@ -118,7 +124,10 @@ const ResultDisplay: React.FC<{
       {' '}
       {totalScore}
     </p>
-    <Button onClick={resetGame}>
+    <Button
+      onClick={resetGame}
+      className="w-full h-12 text-base font-semibold rounded-xl shadow-md active:scale-98"
+    >
       {getButtonText(isCorrect, isSurvivalMode, isTimedChallenge)}
     </Button>
   </div>
@@ -171,33 +180,30 @@ export const GameOverScreen: React.FC<{
     const score = calculateScore(result)
     setGameScore(score)
 
-    // Notify parent component about highscore
     if (onHighscoreSubmit) {
       onHighscoreSubmit(result)
     }
 
-    // Notify parent component about survival result
     if (onSurvivalResult) {
       onSurvivalResult(isCorrect)
     }
   }
 
-  // Reset state when game is reset
   useEffect(() => {
     setUserInput('')
     setShowResult(false)
     setGameScore(0)
-  }, [totalScore, cardsCount]) // Reset when new game starts
+  }, [totalScore, cardsCount])
 
   const isCorrect = showResult && parseInt(userInput) === totalScore
 
   return (
-    <div className="text-center space-y-4 w-full">
+    <div className="text-center space-y-3 w-full">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Game Over</h2>
-      <p className="text-base text-gray-600 dark:text-gray-400">
+      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
         Time:
         {' '}
-        <span className="font-semibold text-gray-900 dark:text-gray-100">
+        <span className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
           {(elapsedTime / 1000).toFixed(2)}
           s
         </span>

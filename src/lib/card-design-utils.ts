@@ -6,15 +6,15 @@ import { Suit } from './doppelkopf'
  * Get CSS classes for card container based on style
  */
 export const getCardContainerClasses = (style: CardStyle): string => {
-  const baseClasses = 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-colors'
+  const baseClasses = 'w-48 h-72 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center justify-center cursor-pointer transition-all select-none active:scale-[0.98]'
 
   switch (style) {
     case 'classic':
       return baseClasses
     case 'modern':
-      return 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer transition-all hover:scale-105'
+      return 'w-48 h-72 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-[0.98] select-none'
     case 'minimalist':
-      return 'w-44 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 flex items-center justify-center cursor-pointer transition-colors'
+      return 'w-48 h-72 sm:w-56 sm:h-80 md:w-64 md:h-96 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 flex items-center justify-center cursor-pointer transition-all select-none active:scale-[0.98]'
   }
 }
 
