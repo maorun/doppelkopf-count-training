@@ -100,12 +100,15 @@ const ResultDisplay: React.FC<{
   timeRanOut = false,
   isCountdownMode = false,
 }) => (
-  <div className="space-y-4 w-full max-w-xs mx-auto">
-    <div className={`text-2xl font-bold py-1 ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+  <div className="space-y-4 w-full max-w-xs mx-auto" role="region" aria-label="Game Result Summary">
+    <div
+      className={`text-2xl font-bold py-1 ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+      aria-live="polite"
+    >
       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
     </div>
     <div className="bg-blue-100 dark:bg-blue-900/60 border-2 border-blue-400 dark:border-blue-600 rounded-2xl p-4 space-y-1.5 shadow-sm">
-      <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">
+      <p className="text-3xl font-bold text-blue-900 dark:text-blue-100" aria-live="polite">
         Score:
         {' '}
         {gameScore}
@@ -133,7 +136,7 @@ const ResultDisplay: React.FC<{
   </div>
 )
 
-/* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines-per-function, complexity */
 export const GameOverScreen: React.FC<{
   totalScore: number
   elapsedTime: number
@@ -198,16 +201,50 @@ export const GameOverScreen: React.FC<{
   const isCorrect = showResult && parseInt(userInput) === totalScore
 
   return (
-    <div className="text-center space-y-3 w-full">
+    <div className="text-center space-y-4 w-full" role="region" aria-label="Game Over Screen">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Game Over</h2>
-      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-        Time:
-        {' '}
-        <span className="font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
-          {(elapsedTime / 1000).toFixed(2)}
-          s
-        </span>
-      </p>
+
+      <div
+        className="grid grid-cols-2 sm:grid-cols-3 gap-3 my-3 max-w-md mx-auto"
+        role="region"
+        aria-label="Game Summary Metrics"
+      >
+        <div
+          className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"
+          role="region"
+          aria-label={`Time: ${(elapsedTime / 1000).toFixed(2)} seconds`}
+        >
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Time:</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums" aria-live="polite">
+            {(elapsedTime / 1000).toFixed(2)}
+            s
+          </p>
+        </div>
+
+        <div
+          className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"
+          role="region"
+          aria-label={`Cards Count: ${cardsCount}`}
+        >
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Cards:</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums" aria-live="polite">
+            {cardsCount}
+          </p>
+        </div>
+
+        {hintsUsed > 0 && (
+          <div
+            className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm col-span-2 sm:col-span-1"
+            role="region"
+            aria-label={`Hints Used: ${hintsUsed}`}
+          >
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Hints Used:</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums" aria-live="polite">
+              {hintsUsed}
+            </p>
+          </div>
+        )}
+      </div>
 
       {!showResult ? (
         <InputForm
