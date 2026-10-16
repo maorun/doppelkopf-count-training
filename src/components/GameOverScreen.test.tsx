@@ -213,4 +213,15 @@ describe('GameOverScreen', () => {
     expect(screen.getByText(/Remaining total:/)).toBeInTheDocument()
     expect(screen.getByText('✓ Correct!')).toBeInTheDocument()
   })
+
+  it('renders game summary metrics and accessibility attributes correctly', () => {
+    render(<GameOverScreen {...defaultProps} hintsUsed={2} />)
+
+    expect(screen.getByRole('region', { name: 'Game Over Screen' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Game Summary Metrics' })).toBeInTheDocument()
+    expect(screen.getByText('Cards:')).toBeInTheDocument()
+    expect(screen.getByText('20')).toBeInTheDocument()
+    expect(screen.getByText('Hints Used:')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Hints Used: 2' })).toBeInTheDocument()
+  })
 })
