@@ -247,9 +247,9 @@ describe('DoppelkopfGame', () => {
     fireEvent.click(checkButton)
 
     // Check that result is displayed (either correct or incorrect)
-    expect(screen.getByText(/Your answer:/)).toBeInTheDocument()
-    expect(screen.getByText(/Actual total:/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Play Again' })).toBeInTheDocument()
+    expect(await screen.findByText(/Your answer:/)).toBeInTheDocument()
+    expect(await screen.findByText(/Actual total:/)).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Play Again' })).toBeInTheDocument()
   })
 
   it('resets the game when the "Play Again" button is clicked', () => {
