@@ -176,6 +176,27 @@ describe('SurvivalStatsView', () => {
     expect(currentStreakCard).toBeInTheDocument()
   })
 
+  it('updates status announcements when reset actions are triggered', () => {
+    mockSurvivalState = {
+      currentStreak: 2,
+      longestStreak: 5,
+      isActive: true,
+      currentDifficulty: 19,
+    }
+
+    render(<SurvivalStatsView />)
+
+    const resetButton = screen.getByRole('button', { name: /Reset Longest Streak/i })
+    fireEvent.click(resetButton)
+
+    expect(screen.getByText(/Longest streak has been reset\./i)).toBeInTheDocument()
+
+    const clearButton = screen.getByRole('button', { name: /Clear All Stats/i })
+    fireEvent.click(clearButton)
+
+    expect(screen.getByText(/All survival statistics have been cleared\./i)).toBeInTheDocument()
+  })
+
   it('handles robust rendering when survivalState properties are undefined/missing', () => {
     // @ts-expect-error testing incomplete state object
     mockSurvivalState = {}
