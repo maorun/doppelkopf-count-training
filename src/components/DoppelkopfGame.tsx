@@ -455,7 +455,7 @@ const DoppelkopfGame: React.FC = () => {
                     resetGame={settings.gameMode === 'timed-challenge' ? handleTimedChallengeReset : resetGame}
                     onHighscoreSubmit={addHighscore}
                     hintsUsed={hintsUsed}
-                    onSurvivalResult={handleSurvivalResult}
+                    onSurvivalResult={settings.gameMode === 'survival' ? handleSurvivalResult : undefined}
                     isSurvivalMode={settings.gameMode === 'survival'}
                     isTimedChallenge={settings.gameMode === 'timed-challenge'}
                     timeRanOut={settings.gameMode === 'timed-challenge' && timedChallengeState.isTimeUp}
