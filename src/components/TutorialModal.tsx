@@ -1,5 +1,5 @@
 // src/components/TutorialModal.tsx
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -300,10 +300,18 @@ const getTutorialSteps = (): TutorialStep[] => [
 ]
 
 const ProgressIndicator: React.FC<{ steps: TutorialStep[], currentStep: number }> = ({ steps, currentStep }) => (
-  <div className="flex gap-2 justify-center py-2">
+  <div
+    className="flex gap-2 justify-center py-2"
+    role="progressbar"
+    aria-valuenow={currentStep + 1}
+    aria-valuemin={1}
+    aria-valuemax={steps.length}
+    aria-label={`Tutorial-Fortschritt: Schritt ${currentStep + 1} von ${steps.length}`}
+  >
     {steps.map((_, index) => (
       <div
         key={index}
+        aria-hidden="true"
         className={`h-2 rounded-full transition-all ${
           index === currentStep
             ? 'w-8 bg-blue-600 dark:bg-blue-400'
@@ -356,9 +364,14 @@ const TutorialNavigation: React.FC<{
 /* eslint-disable max-lines-per-function */
 export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState(0)
+  const titleRef = useRef<HTMLHeadingElement>(null)
 
   const tutorialSteps = getTutorialSteps()
   const currentTutorialStep = tutorialSteps[currentStep]
+
+  useEffect(() => {
+    titleRef.current?.focus()
+  }, [currentStep])
 
   const handleNext = () => {
     if (currentStep < tutorialSteps.length - 1) {
@@ -376,6 +389,25 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
     setCurrentStep(0)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const stepNavMap: Record<string, number> = {
+      ArrowRight: Math.min(tutorialSteps.length - 1, currentStep + 1),
+      PageDown: Math.min(tutorialSteps.length - 1, currentStep + 1),
+      ArrowDown: Math.min(tutorialSteps.length - 1, currentStep + 1),
+      ArrowLeft: Math.max(0, currentStep - 1),
+      PageUp: Math.max(0, currentStep - 1),
+      ArrowUp: Math.max(0, currentStep - 1),
+      Home: 0,
+      End: tutorialSteps.length - 1,
+    }
+
+    const nextStep = stepNavMap[e.key]
+    if (nextStep !== undefined && nextStep !== currentStep) {
+      e.preventDefault()
+      setCurrentStep(nextStep)
+    }
+  }
+
   return (
     <Dialog
       onOpenChange={(open) => {
@@ -387,9 +419,18 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        onKeyDown={handleKeyDown}
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <DialogHeader>
-          <DialogTitle className="text-2xl dark:text-gray-100">
+          <DialogTitle
+            ref={titleRef}
+            tabIndex={-1}
+            className="text-2xl dark:text-gray-100 outline-none focus:ring-1 focus:ring-blue-500 rounded"
+          >
             {currentTutorialStep.title}
           </DialogTitle>
           <DialogDescription className="dark:text-gray-400">
@@ -397,7 +438,7 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({ children }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="py-4">
+        <div className="py-4" tabIndex={0} role="region" aria-label={currentTutorialStep.title}>
           {currentTutorialStep.content}
         </div>
 

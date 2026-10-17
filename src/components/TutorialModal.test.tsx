@@ -377,4 +377,62 @@ describe('TutorialModal', () => {
       }
     }
   })
+
+  it('supports keyboard navigation using arrow keys, PageUp/PageDown, Home, and End', async () => {
+    render(
+      <TutorialModal>
+        <button>Open Tutorial</button>
+      </TutorialModal>,
+    )
+
+    fireEvent.click(screen.getByText('Open Tutorial'))
+    await screen.findByText('Willkommen zum Tutorial')
+
+    const dialogContent = screen.getByRole('dialog')
+
+    // Navigate forward with ArrowRight
+    fireEvent.keyDown(dialogContent, { key: 'ArrowRight' })
+    expect(await screen.findByText('Kartenwerte')).toBeInTheDocument()
+
+    // Navigate forward with PageDown
+    fireEvent.keyDown(dialogContent, { key: 'PageDown' })
+    expect(await screen.findByText('Zähl-Beispiel')).toBeInTheDocument()
+
+    // Navigate backward with ArrowLeft
+    fireEvent.keyDown(dialogContent, { key: 'ArrowLeft' })
+    expect(await screen.findByText('Kartenwerte')).toBeInTheDocument()
+
+    // Navigate backward with PageUp
+    fireEvent.keyDown(dialogContent, { key: 'PageUp' })
+    expect(await screen.findByText('Willkommen zum Tutorial')).toBeInTheDocument()
+
+    // Jump to last step with End
+    fireEvent.keyDown(dialogContent, { key: 'End' })
+    expect(await screen.findByText('Tipps & Tricks')).toBeInTheDocument()
+
+    // Jump to first step with Home
+    fireEvent.keyDown(dialogContent, { key: 'Home' })
+    expect(await screen.findByText('Willkommen zum Tutorial')).toBeInTheDocument()
+  })
+
+  it('has correct ARIA attributes and progressbar implementation', async () => {
+    render(
+      <TutorialModal>
+        <button>Open Tutorial</button>
+      </TutorialModal>,
+    )
+
+    fireEvent.click(screen.getByText('Open Tutorial'))
+    await screen.findByText('Willkommen zum Tutorial')
+
+    const progressbar = screen.getByRole('progressbar')
+    expect(progressbar).toHaveAttribute('aria-valuenow', '1')
+    expect(progressbar).toHaveAttribute('aria-valuemin', '1')
+    expect(progressbar).toHaveAttribute('aria-valuemax', '6')
+    expect(progressbar).toHaveAttribute('aria-label', 'Tutorial-Fortschritt: Schritt 1 von 6')
+
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAttribute('aria-live', 'polite')
+    expect(dialog).toHaveAttribute('aria-atomic', 'true')
+  })
 })
