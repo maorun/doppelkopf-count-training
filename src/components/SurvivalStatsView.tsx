@@ -1,5 +1,5 @@
 // src/components/SurvivalStatsView.tsx
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { useSurvivalMode, type SurvivalState } from '../hooks/useSurvivalMode'
 import { Button } from './ui/button'
@@ -55,18 +55,36 @@ const HowItWorksSection: React.FC = () => (
   </div>
 )
 
-/* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines-per-function, complexity */
 const SurvivalStatsCardContent: React.FC<{
   survivalState?: Partial<SurvivalState>
   resetLongestStreak: () => void
   resetAllStats: () => void
 }> = ({ survivalState, resetLongestStreak, resetAllStats }) => {
+  const [announcement, setAnnouncement] = useState<string>('')
   const currentStreak = survivalState?.currentStreak ?? 0
   const longestStreak = survivalState?.longestStreak ?? 0
   const currentDifficulty = survivalState?.currentDifficulty ?? 15
 
+  const statusMessage = announcement
+    ? announcement
+    : `Current streak: ${currentStreak}. Longest streak: ${longestStreak}. Current difficulty: ${currentDifficulty} cards.`
+
+  const handleResetLongestStreak = () => {
+    resetLongestStreak()
+    setAnnouncement('Longest streak has been reset.')
+  }
+
+  const handleResetAllStats = () => {
+    resetAllStats()
+    setAnnouncement('All survival statistics have been cleared.')
+  }
+
   return (
     <div className="space-y-4">
+      <div className="sr-only" role="status" aria-live="polite">
+        {statusMessage}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatCard
           icon={<Target className="h-8 w-8 text-purple-600 dark:text-purple-400 mb-2" />}
@@ -94,7 +112,7 @@ const SurvivalStatsCardContent: React.FC<{
           <div className="flex justify-center">
             <Button
               variant="outline"
-              onClick={resetLongestStreak}
+              onClick={handleResetLongestStreak}
               className="text-sm"
               aria-label="Reset Longest Streak"
             >
@@ -104,7 +122,7 @@ const SurvivalStatsCardContent: React.FC<{
           <div className="flex justify-center">
             <Button
               variant="outline"
-              onClick={resetAllStats}
+              onClick={handleResetAllStats}
               className="text-sm"
               aria-label="Clear All Stats"
             >
