@@ -6,6 +6,9 @@ export interface SurvivalState {
   longestStreak: number
   isActive: boolean
   currentDifficulty: number // Starting card count for current round
+  totalCorrectAnswers: number
+  totalIncorrectAnswers: number
+  gamesPlayed: number
 }
 
 const DIFFICULTY_INCREMENT = 2 // Add 2 more cards after each correct answer
@@ -17,6 +20,9 @@ const getDefaultState = (): SurvivalState => ({
   longestStreak: 0,
   isActive: false,
   currentDifficulty: STARTING_DIFFICULTY,
+  totalCorrectAnswers: 0,
+  totalIncorrectAnswers: 0,
+  gamesPlayed: 0,
 })
 
 const validateStreak = (val: unknown): number =>
@@ -37,12 +43,18 @@ const validateSurvivalState = (parsed: unknown): SurvivalState => {
   const longestStreak = Math.max(validateStreak(p.longestStreak), currentStreak)
   const isActive = typeof p.isActive === 'boolean' ? p.isActive : false
   const currentDifficulty = validateDifficulty(p.currentDifficulty)
+  const totalCorrectAnswers = validateStreak(p.totalCorrectAnswers)
+  const totalIncorrectAnswers = validateStreak(p.totalIncorrectAnswers)
+  const gamesPlayed = validateStreak(p.gamesPlayed)
 
   return {
     currentStreak,
     longestStreak,
     isActive,
     currentDifficulty,
+    totalCorrectAnswers,
+    totalIncorrectAnswers,
+    gamesPlayed,
   }
 }
 
@@ -77,10 +89,11 @@ export const useSurvivalMode = () => {
 
   const startSurvival = useCallback(() => {
     setSurvivalState(prev => ({
+      ...validateSurvivalState(prev),
       currentStreak: 0,
-      longestStreak: Math.max(0, prev.longestStreak),
       isActive: true,
       currentDifficulty: STARTING_DIFFICULTY,
+      gamesPlayed: validateSurvivalState(prev).gamesPlayed + 1,
     }))
   }, [])
 
@@ -100,20 +113,26 @@ export const useSurvivalMode = () => {
         MAX_DIFFICULTY,
       )
       return {
+        ...validatedPrev,
         currentStreak: newStreak,
         longestStreak: Math.max(newStreak, validatedPrev.longestStreak),
         isActive: true,
         currentDifficulty: newDifficulty,
+        totalCorrectAnswers: validatedPrev.totalCorrectAnswers + 1,
       }
     })
   }, [])
 
   const recordIncorrectAnswer = useCallback(() => {
-    setSurvivalState(prev => ({
-      ...validateSurvivalState(prev),
-      currentStreak: 0,
-      isActive: false,
-    }))
+    setSurvivalState((prev) => {
+      const validatedPrev = validateSurvivalState(prev)
+      return {
+        ...validatedPrev,
+        currentStreak: 0,
+        isActive: false,
+        totalIncorrectAnswers: validatedPrev.totalIncorrectAnswers + 1,
+      }
+    })
   }, [])
 
   const resetLongestStreak = useCallback(() => {
