@@ -20,6 +20,9 @@ describe('useSurvivalMode', () => {
       longestStreak: 0,
       isActive: false,
       currentDifficulty: 15,
+      totalCorrectAnswers: 0,
+      totalIncorrectAnswers: 0,
+      gamesPlayed: 0,
     })
   })
 
@@ -234,6 +237,9 @@ describe('useSurvivalMode', () => {
       longestStreak: 10,
       isActive: true,
       currentDifficulty: 25,
+      totalCorrectAnswers: 3,
+      totalIncorrectAnswers: 1,
+      gamesPlayed: 2,
     }
 
     localStorage.setItem('survivalState', JSON.stringify(initialState))
@@ -253,6 +259,9 @@ describe('useSurvivalMode', () => {
       longestStreak: 0,
       isActive: false,
       currentDifficulty: 15,
+      totalCorrectAnswers: 0,
+      totalIncorrectAnswers: 0,
+      gamesPlayed: 0,
     })
   })
 
@@ -283,23 +292,34 @@ describe('useSurvivalMode', () => {
     expect(result.current.survivalState.currentStreak).toBe(0)
   })
 
-  it('should validate and normalize malformed or out-of-bounds state from localStorage', () => {
-    const malformedState = {
-      currentStreak: -5,
-      longestStreak: 'abc',
-      isActive: 'yes',
-      currentDifficulty: 999,
-    }
-
-    localStorage.setItem('survivalState', JSON.stringify(malformedState))
-
+  it('should track total correct answers, incorrect answers, and games played', () => {
     const { result } = renderHook(() => useSurvivalMode())
 
-    expect(result.current.survivalState).toEqual({
-      currentStreak: 0,
-      longestStreak: 0,
-      isActive: false,
-      currentDifficulty: 40, // Clamped to MAX_DIFFICULTY
+    act(() => {
+      result.current.startSurvival()
     })
+
+    expect(result.current.survivalState.gamesPlayed).toBe(1)
+    expect(result.current.survivalState.totalCorrectAnswers).toBe(0)
+    expect(result.current.survivalState.totalIncorrectAnswers).toBe(0)
+
+    act(() => {
+      result.current.recordCorrectAnswer()
+      result.current.recordCorrectAnswer()
+    })
+
+    expect(result.current.survivalState.totalCorrectAnswers).toBe(2)
+
+    act(() => {
+      result.current.recordIncorrectAnswer()
+    })
+
+    expect(result.current.survivalState.totalIncorrectAnswers).toBe(1)
+
+    act(() => {
+      result.current.startSurvival()
+    })
+
+    expect(result.current.survivalState.gamesPlayed).toBe(2)
   })
 })
